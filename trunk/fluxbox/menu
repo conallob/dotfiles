@@ -1,0 +1,93 @@
+# This is an automatically generated file.
+# Please see <file:/usr/share/doc/menu/README> for information.
+
+# to use your own menu, copy this to ~/.fluxbox/menu, then edit
+# ~/.fluxbox/init and change the session.menuFile path to ~/.fluxbox/menu
+
+[begin] (fluxbox)
+
+# Automatically generated file. Do not edit (see /usr/share/doc/menu/html/index.html)
+
+   [submenu] (Apps) {}
+      [submenu] (Editors) {}
+         [exec] (Nano) { x-terminal-emulator -T "Nano" -e /usr/bin/nano}
+         [exec] (Vim) { x-terminal-emulator -T "Vim" -e /usr/bin/vim}
+         [exec] (Xedit) {xedit}
+      [end]
+      [submenu] (Graphics) {}
+         [exec] (Bitmap) {bitmap}
+      [end]
+      [submenu] (Math) {}
+         [exec] (Xcalc) {xcalc}
+      [end]
+      [submenu] (Net) {}
+         [exec] (Links) { x-terminal-emulator -T "Links" -e /usr/bin/links}
+			[exec] (Mozilla Firebird) {/home/conall/bin/MozillaFirebird}
+			[exec] (Mozilla Thunderbird) {/home/conall/bin/thunderbird}
+         [exec] (Telnet) { x-terminal-emulator -T "Telnet" -e telnet}
+         [exec] (Xbiff) {xbiff}
+      [end]
+      [submenu] (Programming) {}
+         [exec] (Python (v2.3\)) { x-terminal-emulator -T "Python \(v2.3\)" -e /usr/bin/python2.3}
+      [end]
+      [submenu] (Shells) {}
+         [exec] (Ash) { x-terminal-emulator -T "Ash" -e /bin/ash -i}
+      [end]
+      [submenu] (System) {}
+         [exec] (Task selector) { x-terminal-emulator -T "Task selector" -e /usr/sbin/su-to-root -c /usr/bin/tasksel}
+         [exec] (Top) { x-terminal-emulator -T "Top" -e /usr/bin/top}
+         [exec] (Xconsole) {xconsole}
+         [exec] (Xload) {xload}
+         [exec] (Xvidtune) {xvidtune}
+         [exec] (aptitude) { x-terminal-emulator -T "aptitude" -e /usr/bin/aptitude}
+         [exec] (pstree) {x-terminal-emulator -e /usr/bin/pstree.x11}
+      [end]
+      [submenu] (Tools) {}
+         [exec] (Editres) {editres}
+         [exec] (Oclock) {oclock}
+         [exec] (X Window Snapshot) {xwd | xwud}
+         [exec] (Xclipboard) {xclipboard}
+         [exec] (Xclock (analog\)) {xclock -analog}
+         [exec] (Xclock (digital\)) {xclock -digital -update 1}
+         [exec] (Xcutsel) {xcutsel}
+         [exec] (Xev) {x-terminal-emulator -e xev}
+         [exec] (Xfontsel) {xfontsel}
+         [exec] (Xkill) {xkill}
+         [exec] (Xmag) {xmag}
+         [exec] (Xrefresh) {xrefresh}
+      [end]
+      [submenu] (Viewers) {}
+         [exec] (ImageMagick) {/usr/bin/display /usr/share/doc/imagemagick/examples/logo.png}
+         [exec] (Xditview) {xditview}
+      [end]
+   [end]
+   [submenu] (Help) {}
+      [exec] (Info) { x-terminal-emulator -T "Info" -e info}
+      [exec] (Xman) {xman}
+   [end]
+   [submenu] (Screen) {}
+      [submenu] (Root-window) {}
+         [exec] (Xsetroot) {xsetroot}
+      [end]
+      [submenu] (Save) {}
+         [exec] (Beforelight) {beforelight}
+      [end]
+   [end]
+   [submenu] (WindowManagers) {}
+      [restart] (FluxBox)  {/usr/bin/fluxbox}
+   [end]
+   [submenu] (XShells) {}
+      [exec] (Eterm) {/usr/bin/Eterm}
+      [exec] (XTerm (Unicode\)) {uxterm}
+   [end]
+   [config] (Configuration)
+   [submenu] (Styles) {}
+      [stylesdir] (/usr/share/fluxbox/styles)
+      [stylesdir] (~/.fluxbox/styles)
+   [end]
+   [workspaces] (Workspaces)
+   [reconfig] (Reconfigure)
+   [restart] (Restart)
+   [exit] (Exit)
+
+[end]

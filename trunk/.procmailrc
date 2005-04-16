@@ -1,0 +1,446 @@
+SHELL=/bin/sh 
+PMDIR=/home/conall
+LOGFILE=$PMDIR/procmaillog 
+VERBOSE=no 
+LOGABSTRACT=all 
+
+MAILDIR=/var/spool/mail 
+
+# Recode All mail to UTF-8 - Thanks to conor@mcdermottroe.com
+
+INCLUDERC="/home/conall/.procmailrc.recode"
+
+
+##############################################
+#				Spam And Virus Filters				#
+##############################################
+
+# Filter For Spam
+
+#:0:
+#* ^X-MailScanner-SpamCheck: spam
+#/home/conall/mail/spam
+
+:0fw
+| /usr/bin/spamassassin -a
+
+:0:
+* ^X-Spam-Flag: YES
+/home/conall/mail/spam
+
+
+:0:
+* ^X-MScan: .*Found to be infected
+/home/conall/mail/virus
+
+
+
+##############################################
+#					Debian Mailing Lists				#
+##############################################
+
+:0:
+* ^List-Id: .*debian-user
+/home/conall/mail/debian-user
+
+:0:
+* ^List-Id: .*debian-security-announce
+/home/conall/mail/debian-security-announce
+
+:0:
+* ^List-Id: .*debian-security
+/home/conall/mail/debian-security
+
+:0:
+* ^List-Id: .*debian-laptop
+/home/conall/mail/debian-laptop
+
+:0:
+* ^List-Id: .*debian-announce
+/home/conall/mail/debian-announce
+
+:0:
+* ^List-Id: .*debian-accessibility
+/home/conall/mail/debian-accessibility
+
+:0:
+* ^List-Id: .*debian-news
+/home/conall/mail/debian-news
+
+:0:
+* ^List-Id: .*debian-apache
+/home/conall/mail/debian-apache
+
+:0:
+* ^List-Id: .*debian-firewall
+/home/conall/mail/debian-firewall
+
+:0:
+* ^List-Id: .*debian-ipv6
+/home/conall/mail/debian-ipv6
+
+##############################################
+# 				Postfix Mailing Lists				#
+##############################################
+
+:0:
+* ^X-Original-To: .*postfix-users@cloud9.net
+/home/conall/mail/postfix-users
+
+:0:
+* ^X-Original-To: .*postfix-announce@cloud9.net
+/home/conall/mail/postfix-announce
+
+:0:
+* ^X-Original-To: .*postfix-rpm-announce@WL0.org
+/home/conall/mail/postfix-rpm-announce
+
+##############################################
+# 				Red Hat Mailing Lists				#
+##############################################
+
+:0:
+* ^List-Id: .*redhat-list.redhat.com
+/home/conall/mail/redhat-list
+
+:0:
+* ^List-Id: .*rhn-users.redhat.com
+/home/conall/mail/redhat-network
+
+:0:
+* ^List-Id: .*rpm-list.redhat.com
+/home/conall/mail/redhat-rpm-list
+
+:0:
+* ^List-ID: .*fedora-list.redhat.com
+/home/conall/mail/fedora-list
+
+##############################################
+# Subscription Emails and Vacation Responses #
+##############################################
+
+#:0 HB
+#* 1^0 ^Subject:.*(un)?su(b)?(s)?cribe
+#* 1^0 $ ^^${SPCNL}*(un)?su(b)?scribe
+#* -1^0 ^Subject:.*Re:
+#{
+#  LOG="(Un)?subscriber - "
+#  :0
+#  #/dev/null
+#  /home/conall/mail/crap
+#}
+
+:0:
+* ^Subject: ((UN)?SUBSCRIBE|(un)?subscribe)( .*@.*\..*)?$
+/home/conall/mail/crap
+
+##############################################
+#			Security Focus Mailing Lists			#
+##############################################
+
+:0:
+* ^List-Post: .*bugtraq.*@securityfocus.com
+/home/conall/mail/securityfocus-bugtraq
+
+:0:
+* ^List-Post: .*firewall.*@securityfocus.com
+/home/conall/mail/securityfocus-firewall
+
+:0:
+* ^List-Post: .*libnet@securityfocus.com
+/home/conall/mail/securityfocus-libnet
+
+:0:
+* ^List-Post: .*security-basics@securityfocus.com
+/home/conall/mail/securityfocus-basics
+
+:0:
+* ^List-Post: .*focus-linux@securityfocus.com
+/home/conall/mail/securityfocus-linux
+
+:0:
+* ^List-Post: .*focus-ms@securityfocus.com
+/home/conall/mail/securityfocus-ms
+
+:0:
+* ^List-Post: .*focus-virus@securityfocus.com
+/home/conall/mail/securityfocus-virus
+
+:0:
+* ^List-Post: .*incidents@securityfocus.com
+/home/conall/mail/securityfocus-incidents
+
+:0:
+* ^List-Post: .*secprog@securityfocus.com
+/home/conall/mail/securityfocus-secprog
+
+:0:
+* ^List-Post: .*secevents@securityfocus.com
+/home/conall/mail/securityfocus-events
+
+:0:
+* ^List-Post: .*secpapers@securityfocus.com
+/home/conall/mail/securityfocus-secpapers
+
+:0:
+* ^List-Post: .*sectools@securityfocus.com
+/home/conall/mail/securityfocus-sectools
+
+:0:
+* ^List-Post: .*vpn@securityfocus.com
+/home/conall/mail/securityfocus-vpn
+
+:0:
+* ^List-Post: .*webappsec@securityfocus.com
+/home/conall/mail/securityfocus-webappsec
+
+##############################################
+#					Apache Mailing Lists				#
+##############################################
+
+:0:
+* ^X-Original-To: .*announce@apache.org
+/home/conall/mail/apache-announce
+
+##############################################
+#						Linux Kernel 					#
+##############################################
+
+:0:
+* ^X-Mailing-List: .*linux-kernel@vger.kernel.org
+/home/conall/mail/linux-kernel
+
+:0:
+* ^X-Mailing-List: .*linux-kernel-announce@vger.kernel.org
+/home/conall/mail/linux-kernel-announce
+
+##############################################
+#			US CERT Tech Announce Lists			#
+##############################################
+
+:0:
+* ^List-Id: .*technical-alerts.us-cert.gov
+/home/conall/mail/cert-tech-alerts
+
+:0:
+* ^List-Id: .*security-bulletins.us-cert.gov
+/home/conall/mail/cert-tech-bulletins
+
+##############################################
+#					CVE Announcements					#
+##############################################
+
+:0:
+* ^X-Original-To: .*cve
+/home/conall/mail/cve-announce
+
+##############################################
+#					Irish Tech Lists					#
+##############################################
+
+# ILUG
+
+:0:
+* ^List-Id: .*linux.ie
+/home/conall/mail/ilug
+
+:0:
+* ^X-Original-To: .*ilug
+/home/conall/mail/ilug
+
+# SAGE-IE
+
+:0:
+* ^List-Id: .*sage-ie.org
+/home/conall/mail/sage-ie
+
+:0:
+* ^X-Original-To: .*sage-ie
+/home/conall/mail/sage-ie
+
+##############################################
+# 					TCD Mailing Lists					#
+##############################################
+
+# Undergrads and Class Mailing Lists
+
+#:0:
+#* ^X-Original-To: .*(ba.*|ug.*|019.|undergrads)@(cs\.tcd|tcd)\.ie
+#/home/conall/mail/tcd
+		  
+# TLUG
+
+:0:
+* ^Delivered-To: .*tcd-linux-users@tcd.ie
+/home/conall/mail/tlug
+
+##############################################
+#				Fluxbox Mailing Lists				#
+##############################################
+
+# Fluxbox Announce
+
+:0:
+* ^List-Id: .*fluxbox-announce.lists.sourceforge.net
+/home/conall/mail/fluxbox-users
+
+# Fluxbox Users
+
+:0:
+* ^List-Id: .*fluxbox-users.lists.sourceforge.net
+/home/conall/mail/fluxbox-users
+
+# Fluxbox Devel
+
+:0:
+* ^List-Id: .*fluxbox-devel.lists.sourceforge.net
+/home/conall/mail/fluxbox-users
+
+##############################################
+#				IPv6 Mailing Lists					#
+##############################################
+
+# SixXS Mailing List
+
+:0:
+* ^List-Id: .*ipv6.ipng.nl
+/home/conall/mail/sixxs
+
+# 6Bone Mailing List
+
+:0:
+* ^List-Id: .*6bone.mailman.isi.edu
+/home/conall/mail/6bone
+
+# ipv6.org Mailing List
+
+:0:
+* ^X-Original-To: .*ipv6-users
+/home/conall/mail/ipv6-users
+
+##############################################
+#					Linux Driver Lists				#
+##############################################
+
+# Prism54 Users
+
+:0:
+* ^List-Id: .*prism54-users
+/home/conall/mail/prism54-users
+
+# Prism54 Devel
+
+:0:
+* ^List-Id: .*prism54-devel
+/home/conall/mail/prism54-devel
+
+# IrDA
+
+:0:
+* ^List-Id: .*irda
+/home/conall/mail/irda
+
+# BlueZ Announce
+
+:0:
+* ^List-Id: .*bluez-announce
+/home/conall/mail/bluez-announce
+
+# BlueZ Users
+
+:0:
+* ^List-Id: .*bluez-users
+/home/conall/mail/bluez-users
+
+# BlueZ Devel
+
+:0:
+* ^List-Id: .*bluez-devel
+/home/conall/mail/bluez-devel
+
+##############################################
+#						Misc Filters					#
+##############################################
+
+# Horde Project Announcements
+
+:0:
+* ^List-Id: .*announce.lists.horde.org
+/home/conall/mail/horde-announce
+
+# Job Email Filtering
+
+:0:
+* X-Original-To: .*jobs
+/home/conall/mail/jobs
+
+:0:
+* ^Subject: .*[Ss]ummer [Jj]ob
+/home/conall/mail/jobs
+
+:0:
+* ^From: .*(sujobs@tcd.ie|@nixers.com|@reed\.(ie|co\.uk))
+/home/conall/mail/jobs
+
+# BitTorrent Tracker Websites
+
+:0:
+* ^X-Original-To: .*torrents@conall.net
+/home/conall/mail/torrents
+
+
+# SourceForge Filtering
+
+:0:
+* ^X-Original-To: .*conall@users.sourceforge.net
+/home/conall/mail/sourceforge
+
+# Mozilla Bugzilla Mail Filtering
+
+:0:
+* ^From: .*@mozilla.org
+/home/conall/mail/mozilla
+
+# Cronjob Report Filter
+
+:0:
+* ^(Subject: .*Output.*(C|c)ron|From: .*Cron Daemon|From: (conall|cgobrien|conallob)@.*)
+/home/conall/mail/cron
+
+# Adminning filters
+
+:0 c
+* ^From: .*@(odohh.iol.ie|designstrat.com|dublinschoolofarchitecture.com)
+/home/conall/mail/adminning
+#! conall@infocad.ie
+
+# Nestdesign.com filtering
+
+:0:
+* ^X-Original-To: .*ops@ns5.nestdesign.com
+#/var/spool/mail/conall
+! conall@nestdesign.com
+
+# mlterm Development List
+
+:0:
+* ^List-Id: .*mlterm-dev-en.lists.sourceforge.net
+/home/conall/mail/mlterm--dev-en
+
+# Blog Comments
+
+:0:
+* ^X-Original-To: .*movabletype@(conallobrien.com|conall.net)
+/home/conall/mail/blog-comments
+
+# Filter Email From Ciara
+
+:0:
+* ^From: .*(Ciara Brennan|cbrenna5@tcd.ie)
+/home/conall/mail/ciara
+
+# Root Mails
+
+:0:
+* ^X-Original-To: .*root@.*(conallobrien.com|conall.net)
+/home/conall/mail/root

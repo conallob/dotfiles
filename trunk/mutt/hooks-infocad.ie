@@ -1,0 +1,27 @@
+# $Id: hooks-infocad.ie,v 1.1 2004/04/18 19:42:43 conall Exp $
+
+# To allow multiple accouts and multiple maliboxes
+
+account-hook '.*infocad' 'set imap_user="conall#infocad.ie"'
+
+# For when I'm sending mail to an InfoCAD client
+
+# Designstrat
+
+send-hook '~t .*designstrat\.com' "source ~/.mutt/profile-infocad.ie"
+
+# Internal
+
+send-hook '~t .*infocad\.ie' "source ~/.mutt/profile-infocad.ie"
+
+# Dublin School Of Architecture
+
+send-hook '~t .*dublinschoolofarchitecture\.com' "source ~/.mutt/profile-infocad.ie"
+
+# ODOH (nee ODOHH)
+
+send-hook '~t .*odohh\.iol\.ie' "source ~/.mutt/profile-infocad.ie"
+
+# Peter Colquhoun
+
+send-hook '~t .*epcolquhoun@eircom\.net' "source ~/.mutt/profile-infocad.ie"

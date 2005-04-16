@@ -1,0 +1,531 @@
+# $Id$
+
+#
+# Infocad.ie Machines
+#
+
+# Gonzo
+
+Host gonzo
+User conall
+HostName gonzo.infocad.ie
+
+# Behemoth
+
+Host behemoth
+User conall
+HostName behemoth.infocad.ie
+
+# Thog
+
+Host thog.infocad
+User conall
+HostName thog.infocad.ie
+
+# Sweetums
+
+Host sweetums
+User conall
+HostName sweetums.infocad.ie
+
+# Waldorf
+
+Host waldorf
+User conall
+HostName waldorf.infocad.ie
+
+# Statler
+
+Host statler
+User conall
+HostName statler.infocad.ie
+
+#
+# Design Strategies Machines
+#
+
+Host rizzo
+User conall
+HostName rizzo.designstrat.com
+
+# Ayntk.net/Nestdesign.com Servers
+
+Host ns1
+User conall
+HostName ns1.ayntk.net
+
+Host ns2
+User conall
+HostName ns2.ayntk.net
+
+Host ns4
+User conall
+HostName ns4.ayntk.net
+
+Host ns5
+User conall
+HostName ns5.nestdesign.com
+
+# vHosts
+
+Host infocad.ie
+User conall#infocad.ie
+HostName infocad.ie
+
+Host eng78ucc
+User gerry#eng78ucc.net
+HostName eng78ucc.net
+
+Host designstrat
+User admin#designstrat.com
+HostName designstrat.com
+
+#
+# TCD Machines
+#
+
+#
+# IS Services Machines
+#
+
+
+# Alf2
+
+Host alf2
+User cgobrien
+HostName alf2.tcd.ie
+
+# Gemini
+
+Host gemini
+User cgobrien
+HostName gemini.tcd.ie
+
+# Web
+
+Host web
+User cgobrien
+HostName www.tcd.ie
+
+
+#
+# CS Dept Machines
+#
+
+# Macneill
+
+Host macneill
+User cgobrien
+HostName macneill.cs.tcd.ie
+
+# Decent Sun Machines
+
+Host melody
+User cgobrien
+HostName melody.cs.tcd.ie
+
+Host sun19
+User cgobrien
+HostName sun19.cs.tcd.ie
+
+Host sun20
+User cgobrien
+HostName sun20.cs.tcd.ie
+
+Host sun21
+User cgobrien
+HostName sun21.cs.tcd.ie
+
+Host sun22
+User cgobrien
+HostName sun22.cs.tcd.ie
+
+Host sun23
+User cgobrien
+HostName sun23.cs.tcd.ie
+
+Host sun24
+User cgobrien
+HostName sun24.cs.tcd.ie
+
+Host sun25
+User cgobrien
+HostName sun25.cs.tcd.ie
+
+Host sun26
+User cgobrien
+HostName sun26.cs.tcd.ie
+
+Host sun27
+User cgobrien
+HostName sunray9.cs.tcd.ie
+
+Host sun28
+User cgobrien
+HostName sun28.cs.tcd.ie
+
+Host sun28
+User cgobrien
+HostName sun28.cs.tcd.ie
+
+Host sun29
+User cgobrien
+HostName sun29.cs.tcd.ie
+
+Host sun30
+User cgobrien
+HostName sun30.cs.tcd.ie
+
+Host sun31
+User cgobrien
+HostName sun31.cs.tcd.ie
+
+Host sun32
+User cgobrien
+HostName sun32.cs.tcd.ie
+
+Host sun33
+User cgobrien
+HostName sun34.cs.tcd.ie
+
+Host sun35
+User cgobrien
+HostName sun35.cs.tcd.ie
+
+Host sun36
+User cgobrien
+HostName sun36.cs.tcd.ie
+
+Host sun37
+User cgobrien
+HostName sun37.cs.tcd.ie
+
+Host sun38
+User cgobrien
+HostName sun38.cs.tcd.ie
+
+Host sun39
+User cgobrien
+HostName sun39.cs.tcd.ie
+
+Host sun40
+User cgobrien
+HostName sun40.cs.tcd.ie
+
+Host sun41
+User cgobrien
+HostName sun41.cs.tcd.ie
+
+Host sun42
+User cgobrien
+HostName sun42.cs.tcd.ie
+
+Host sun43
+User cgobrien
+HostName sun43.cs.tcd.ie
+
+Host sun44
+User cgobrien
+HostName sun44.cs.tcd.ie
+
+Host sun45
+User cgobrien
+HostName sun45.cs.tcd.ie
+
+Host sun46
+User cgobrien
+HostName sun46.cs.tcd.ie
+
+Host sun47
+User cgobrien
+HostName sun47.cs.tcd.ie
+
+Host sun48
+User cgobrien
+HostName sun48.cs.tcd.ie
+
+Host sun49
+User cgobrien
+HostName sun49.cs.tcd.ie
+
+Host sun50
+User cgobrien
+HostName sun50.cs.tcd.ie
+
+Host sun51
+User cgobrien
+HostName sun51.cs.tcd.ie
+
+Host sun52
+User cgobrien
+HostName sun52.cs.tcd.ie
+
+Host sun53
+User cgobrien
+HostName sun53.cs.tcd.ie
+
+Host sun54
+User cgobrien
+HostName sun54.cs.tcd.ie
+
+Host sun55
+User cgobrien
+HostName sun55.cs.tcd.ie
+
+Host sun56
+User cgobrien
+HostName sun56.cs.tcd.ie
+
+# LG12 Machines
+
+Host lg12x21
+User cgobrien
+HostName lg12x21.cs.tcd.ie
+
+Host lg12x22
+User cgobrien
+HostName lg12x22.cs.tcd.ie
+
+Host lg12x23
+User cgobrien
+HostName lg12x23.cs.tcd.ie
+
+Host lg12x24
+User cgobrien
+
+Host lg12x25
+User cgobrien
+HostName lg12x25.cs.tcd.ie
+
+Host lg12x26
+User cgobrien
+HostName lg12x26.cs.tcd.ie
+
+Host lg12x27
+User cgobrien
+HostName lg12x27.cs.tcd.ie
+
+Host lg12x28
+User cgobrien
+HostName lg12x28.cs.tcd.ie
+
+Host lg12x29
+User cgobrien
+HostName lg12x29.cs.tcd.ie
+
+Host lg12x30
+User cgobrien
+HostName lg12x30.cs.tcd.ie
+
+Host lg12x31
+User cgobrien
+HostName lg12x31.cs.tcd.ie
+
+Host lg12x32
+User cgobrien
+HostName lg12x32.cs.tcd.ie
+
+Host lg12x33
+User cgobrien
+HostName lg12x33.cs.tcd.ie
+
+Host lg12x34
+User cgobrien
+HostName lg12x34.cs.tcd.ie
+
+Host lg12x35
+User cgobrien
+HostName lg12x35.cs.tcd.ie
+
+Host lg12x36
+User cgobrien
+HostName lg12x36.cs.tcd.ie
+
+Host lg12x37
+User cgobrien
+HostName lg12x37.cs.tcd.ie
+
+Host lg12x38
+User cgobrien
+HostName lg12x38.cs.tcd.ie
+
+Host lg12x39
+User cgobrien
+HostName lg12x39.cs.tcd.ie
+
+Host lg12x40
+User cgobrien
+HostName lg12x40.cs.tcd.ie
+
+#
+# Netsoc Machines
+#
+
+# Matrix
+
+Host matrix
+User conall
+HostName matrix.netsoc.tcd.ie
+
+Host matrix.ipv6
+User conall
+HostName 2001:770:10:100:a00:20ff:feab:e0e6
+
+# Murdock
+
+Host murdock
+User conall
+HostName murdock.netsoc.tcd.ie
+
+#
+# Maths Machines
+#
+
+# General Access Servers
+
+Host astro
+User conallob
+HostName astro.maths.tcd.ie
+
+Host bell
+User conallob
+HostName bell.maths.tcd.ie
+
+Host boole
+User conallob
+HostName boole.maths.tcd.ie
+
+Host gosset
+User conallob
+HostName gosset.maths.tcd.ie
+
+Host graham
+User conallob
+HostName graham.maths.tcd.ie
+
+Host graves
+User conallob
+HostName graves.maths.tcd.ie
+
+Host hamilton
+User conallob
+HostName hamilton.maths.tcd.ie
+
+Host lanczos
+User conallob
+HostName lanczos.maths.tcd.ie
+
+Host salmon
+User conallob
+HostName salmon.maths.tcd.ie
+
+Host stokes
+User conallob
+HostName stokes.maths.tcd.ie
+
+Host synge
+User conallob
+HostName synge.maths.tcd.ie
+
+Host turing
+User conallob
+HostName turing.maths.tcd.ie
+
+Host walton
+User conallob
+HostName walton.maths.tcd.ie
+
+# Restricted Access - Temp Servers, 
+# Admin Servers, Workstations, etc...
+
+Host maccullagh
+User conallob
+HostName maccullagh.maths.tcd.ie
+
+Host mathgate
+User conallob
+HostName mathgate.tcd.ie
+
+Host wavegate
+User conallob
+HostName wavegate.maths.tcd.ie
+
+Host mathplex
+User conallob
+HostName mathplex.maths.tcd.ie
+
+Host stewie
+User conallob
+HostName stewie.maths.tcd.ie
+
+Host temp1
+User conallob
+HostName temp1.maths.tcd.ie
+
+Host bluestreak
+User conallob
+HostName bluestreak.maths.tcd.ie
+
+Host scarlet
+User conallob
+HostName scarlet.maths.tcd.ie
+
+Host cancun
+User conallob
+HostName cancun.maths.tcd.ie
+
+Host tijuana
+User conallob
+HostName tijuana.maths.tcd.ie
+
+Host thog.maths
+User conall
+HostName thog.maths.tcd.ie
+
+#
+# HPC Machines
+#
+
+Host moloch
+User conallob
+HostName moloch.tchpc.tcd.ie
+
+Host aegir
+User conall
+HostName aegir.maths.tcd.ie
+
+Host impulse
+User conall
+HostName impulse.tchpc.tcd.ie
+
+#
+# Misc Servers
+#
+
+Host addict
+User conall
+HostName addict.virtualprozac.com
+
+Host trastevere
+User conall
+HostName trastevere.conall.net
+
+Host godot
+User conall
+HostName dmz.ie
+
+Host morpheus
+User conall
+HostName morpheus.nerdchic.net
+
+#
+# Global Settings
+#
+
+Host *
+	Protocol 2,1
+	IdentityFile ~/.ssh/id_rsa
+	Compression yes
+	ForwardX11 yes
+	ForwardAgent yes
+	PreferredAuthentications publickey,keyboard-interactive,password

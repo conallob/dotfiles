@@ -1,0 +1,171 @@
+:0 fhbw
+* ^Content-Type: .*charset="?ISO-8859-15
+| /home/conall/bin/recode ISO-8859-15..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?ISO-8859-14
+| /home/conall/bin/recode ISO-8859-14..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?ISO-8859-13
+| /home/conall/bin/recode ISO-8859-13..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?ISO-8859-12
+| /home/conall/bin/recode ISO-8859-12..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?ISO-8859-11
+| /home/conall/bin/recode ISO-8859-11..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?ISO-8859-10
+| /home/conall/bin/recode ISO-8859-10..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?ISO-8859-9
+| /home/conall/bin/recode ISO-8859-9..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?ISO-8859-8
+| /home/conall/bin/recode ISO-8859-8..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?ISO-8859-7
+| /home/conall/bin/recode ISO-8859-7..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?ISO-8859-6
+| /home/conall/bin/recode ISO-8859-6..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?ISO-8859-5
+| /home/conall/bin/recode ISO-8859-5..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?ISO-8859-4
+| /home/conall/bin/recode ISO-8859-4..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?ISO-8859-3
+| /home/conall/bin/recode ISO-8859-3..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?ISO-8859-2
+| /home/conall/bin/recode ISO-8859-2..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?ISO-8859-1
+| /home/conall/bin/recode ISO-8859-1..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?iso-8859-15
+| /home/conall/bin/recode ISO-8859-15..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?iso-8859-14
+| /home/conall/bin/recode ISO-8859-14..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?iso-8859-13
+| /home/conall/bin/recode ISO-8859-13..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?iso-8859-12
+| /home/conall/bin/recode ISO-8859-12..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?iso-8859-11
+| /home/conall/bin/recode ISO-8859-11..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?iso-8859-10
+| /home/conall/bin/recode ISO-8859-10..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?iso-8859-9
+| /home/conall/bin/recode ISO-8859-9..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?iso-8859-8
+| /home/conall/bin/recode ISO-8859-8..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?iso-8859-7
+| /home/conall/bin/recode ISO-8859-7..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?iso-8859-6
+| /home/conall/bin/recode ISO-8859-6..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?iso-8859-5
+| /home/conall/bin/recode ISO-8859-5..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?iso-8859-4
+| /home/conall/bin/recode ISO-8859-4..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?iso-8859-3
+| /home/conall/bin/recode ISO-8859-3..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?iso-8859-2
+| /home/conall/bin/recode ISO-8859-2..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?iso-8859-1
+| /home/conall/bin/recode ISO-8859-1..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?EUC-KR
+| /home/conall/bin/recode EUC-KR..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?euc-kr
+| /home/conall/bin/recode EUC-KR..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?KOI8-R
+| /home/conall/bin/recode KOI8-R..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?koi8-r
+| /home/conall/bin/recode KOI8-R..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?windows-1250
+| /home/conall/bin/recode windows-1250..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?windows-1251
+| /home/conall/bin/recode windows-1251..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?windows-1252
+| /home/conall/bin/recode windows-1252..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?windows-1253
+| /home/conall/bin/recode windows-1253..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?windows-1254
+| /home/conall/bin/recode windows-1254..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?windows-1255
+| /home/conall/bin/recode windows-1255..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?windows-1256
+| /home/conall/bin/recode windows-1256..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?windows-1257
+| /home/conall/bin/recode windows-1257..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
+
+:0 fhbw
+* ^Content-Type: .*charset="?ks_c_5601-1987
+| /home/conall/bin/recode KSC_5601..UTF-8 | /usr/bin/formail -i "Content-Type: text/plain; charset=UTF-8"
