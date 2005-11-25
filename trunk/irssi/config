@@ -1,9 +1,7 @@
-# $Id: config,v 1.8 2004/06/17 00:46:30 conall Exp $
-
 servers = (
   {
     address = "irc.linux.ie";
-    chatnet = "linux.ie";
+    chatnet = "ilug";
     port = "6667";
     use_ssl = "no";
     autoconnect = "yes";
@@ -15,27 +13,46 @@ servers = (
     use_ssl = "no";
     autoconnect = "yes";
   },
-
+  {
+    address = "irc.netsoc.itcarlow.ie";
+    chatnet = "intersocs";
+    port = "6667";
+    use_ssl = "no";
+    autoconnect = "yes";
+  }
 );
 
 chatnets = {
-  ie = { type = "IRC"; max_kicks = "4"; max_modes = "4"; max_msgs = "10"; };
+  ilug = {
+    type = "IRC";
+    max_kicks = "4";
+    max_modes = "3";
+    max_msgs = "5";
+    max_whois = "4";
+    max_query_chans = "5";
+  };
   intersocs = {
     type = "IRC";
     max_kicks = "4";
-    max_modes = "4";
-    max_msgs = "10";
+    max_modes = "3";
+    max_msgs = "5";
+    max_whois = "4";
+    max_query_chans = "5";
   };
-  SILC = { type = "SILC"; };
-  "linux.ie" = { type = "IRC"; };
-  freenode = { type = "IRC"; };
+  freenode = {
+    type = "IRC";
+    max_kicks = "4";
+    max_modes = "4";
+    max_msgs = "1";
+    max_whois = "1";
+  };
 };
 
 channels = (
-  { name = "#linux"; chatnet = "linux.ie"; autojoin = "Yes"; },
-  { name = "#ipv6"; chatnet = "linux.ie"; autojoin = "Yes"; },
-  { name = "#fluxbox"; chatnet = "freenode"; autojoin = "Yes"; },
-  { name = "#svn"; chatnet = "freenode"; autojoin = "Yes"; },
+  { name = "#linux"; chatnet = "ilug"; autojoin = "Yes"; },
+  { name = "#ipv6"; chatnet = "ilug"; autojoin = "Yes"; },
+  { name = "#bugi"; chatnet = "freenode"; autojoin = "Yes"; },
+  { name = "#Intersocs"; chatnet = "intersocs"; autojoin = "Yes"; }
 );
 
 aliases = {
@@ -195,6 +212,7 @@ statusbar = {
     };
   };
 };
+
 settings = {
   core = {
     real_name = "Conall O'Brien";
@@ -211,14 +229,37 @@ settings = {
     autolog_path = "~/.irssi/logs/%Y/$tag/$0.%m-%d.log";
     autolog_level = "all";
   };
+  "perl/core/scripts" = {
+    screen_away_nick = "conall";
+    screen_away_active = "no";
+  };
 };
+
 notifies = {
-  eth0 = { };
   colmmacc = { };
   bbrazil = { };
-  Baud = { ircnets = ( "Stewie" ); };
+  brazil = { };
+  Baud = { };
   Stewie = { };
-  ann = { };
+  moonbean = { };
+  rach = { };
+  ianoc = { };
+  Chode = { };
+  noirin = { };
   firebird = { };
+  SeanOS = { };
+  SoS = { };
+  pron = { };
+  reilly = { };
+  looney = { };
+  shortword = { };
+  bkarthur = { };
+  nick = { };
+  FRlinux = { };
+  dredg = { };
+  ann = { };
+  colin = { };
+  moonbeam = { };
 };
+
 logs = { };

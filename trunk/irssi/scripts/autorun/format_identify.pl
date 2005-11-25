@@ -1,0 +1,1 @@
+/usr/share/irssi/scripts/format_identify.pl
