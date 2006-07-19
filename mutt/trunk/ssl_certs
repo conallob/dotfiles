@@ -1,4 +1,4 @@
-# $Id: ssl_certs,v 1.1.1.1 2004/04/18 19:42:43 conall Exp $
+# $Id$
 
 -----BEGIN CERTIFICATE-----
 MIIEDDCCA3WgAwIBAgIBADANBgkqhkiG9w0BAQQFADCBuzELMAkGA1UEBhMCLS0x
