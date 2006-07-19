@@ -1,0 +1,135 @@
+# $Id: muttrc,v 1.8 2004/05/16 23:39:43 conall Exp $
+
+# Set my name on outgoing emails
+
+set realname = "Conall O'Brien"
+set reply_to = ask-yes
+
+# My Default Address
+
+source "~/.mutt/profile-conall.net"
+
+# Various address that go to me
+
+#set alternates="conall@(conall.net|conallobrien.com|infocad.ie|gw1.infocad.ie|nestdesign.com|netsoc.tcd.ie)|conallob@maths.tcd.i|cgobrien@tcd.ie"
+
+#
+# General mutt options
+#
+
+# Where My mail is stored
+
+set folder = "~/mail"
+set move = no
+
+# Allow 8bit mails
+
+set allow_8bit = yes
+
+# Never timeout
+
+set timeout = "0"
+set connect_timeout = "-1"
+
+# Yes, let's use threads
+
+set pager_index_lines = "20"
+set sort = "threads"
+
+# Suppress annoying questions
+
+set abort_unmodified = "ask-no"
+set abort_nosubject = "ask-yes" 
+
+# I like Unicode, everyone should use Unicode...
+
+set locale = "en_IE.UTF-8"
+set charset = "utf-8"
+set send_charset = "utf-8:iso-8859-15"
+
+# Use ViM to write my mail, wrapping at 72 char per line and without AI
+
+set editor="vim -X -c 'set tw=72 ft=mail noautoindent noai syntax=on'"
+
+macro index \cb |urlview\n
+
+# Set the order of visible headers
+
+ignore *
+
+unignore From: To: Cc Reply-To: Mail-Followup-To: X-Original-To: Subject: User-Agent: X-Mailer: Date: X-Spam-Status: X-Spam-Report:
+
+hdr_order Date: From: To: Cc: Reply-To: Mail-Follup-To: X-Original-To: Subject: User-Agent: X-Mailer: X-Spam-Status: X-Spam-Report: 
+
+# Let's colour Mutt extensively...
+
+source "~/.mutt/colours"
+
+# Set my tmp directory
+
+set tmpdir = "~/tmp/"
+
+# Display Filters
+
+set display_filter="t-prot -cemt -M=mutt"
+
+#
+# Mailboxes
+#
+
+# Mail On Gonzo
+
+#source "~/.mutt/mailboxes-gw1.infocad.ie"
+
+# conall.net Mail
+
+#source "~/.mutt/mailboxes-conall.net"
+source "~/.mutt/mailboxes"
+
+# InfoCAD Mail
+
+#source "~/.mutt/mailboxes-infocad.ie"
+
+#
+# Aliases
+#
+
+set mask = ""
+
+# How I like my aliases
+
+set sort_alias = alias
+
+# My Addressbook
+
+source "~/.mutt/alias"
+
+# Include my GPG Settings
+
+source "~/.mutt/gpg"
+
+#set certificate_file = "~/.mutt/ssl_certs"
+
+
+#
+# Assorted Macros
+#
+
+# Move selected mail to my spam mailbox
+
+# Unlearn message as spam
+
+# Choose which account settings I want
+
+macro   index   <F5>    ":source ~/.mutt/profile-conall.net\n" "Load conall.net profile"
+macro   index   <F6>    ":source ~/.mutt/profile-conall.ie\n" "Load conall.ie profile"
+macro   index   <F7>    ":source ~/.mutt/profile-asclepian.ie\n" "Load asclepian.ie profile"
+macro   index   <F8>    ":source ~/.mutt/profile-ie.sage.org\n" "Load ie.sage.org profile"
+
+#
+# Tell Mutt what mailing lists I'm on
+#
+
+source "~/.mutt/mailinglists"
+
+# EOF

@@ -1,0 +1,43 @@
+# $Id: hooks-conall.net,v 1.3 2004/05/05 20:37:20 conall Exp $
+
+# To allow multiple accouts and multiple maliboxes
+
+# Set my defaults
+
+folder-hook '.*conall' 'source ~/.mutt/profile-conall.net'
+
+# Reset some things if it's an infocad.ie mailbox
+
+folder-hook '.*infocad' "source ~/.mutt/profile-infocad.ie"
+
+# For when I'm mailing ILUG or SAGE-IE
+
+send-hook '~C ^ilug@linux\.ie$' "my_hdr From: Conall O'Brien <conall+ilug@conall.net>"
+send-hook '~C ^ilug@linux\.ie$' 'my_hdr "Reply-To: conall+ilug@conall.net"'
+
+send-hook '~C ^.*@lists\.sage-ie\.org$' "my_hdr From: Conall O'Brien <conall@ie.sage.org>"
+send-hook '~C ^.*@lists\.sage-ie\.org$' 'my_hdr "Reply-To: conall@ie.sage.org"'
+
+# Fink lists
+
+send-hook '~C ^fink.*@lists\.sourceforge\.net$' "my_hdr From: Conall O'Brien <conall+fink@conall.net>"
+send-hook '~C ^fink.*@lists\.sourceforge\.net$' 'my_hdr "Reply-To: conall+fink@conall.net"'
+send-hook '~C fink.*@lists\.sourceforge\.net$' 'set signature=~/.signature_list'
+
+# Debian Hooks
+
+send-hook '~C debian\.org$' "my_hdr From: Conall O'Brien <conall+debian@conall.net>"
+send-hook '~C debian\.org$' 'my_hdr "Reply-To: conall+debian@conall.net"'
+send-hook '~C debian\.org$' 'set signature=~/.signature_list'
+
+# Ubuntu Hooks
+
+send-hook '~C ubuntu\.com$' "my_hdr From: Conall O'Brien <conall+ubuntu@conall.net>"
+send-hook '~C ubuntu\.com$' 'my_hdr "Reply-To: conall+ubuntu@conall.net"'
+send-hook '~C ubuntu\.com$' 'set signature=~/.signature_list'
+
+# SVK Hooks
+
+send-hook '~C svk-dev@lists.openfoundry.org$' "my_hdr From: Conall O'Brien <conall+svk@conall.net>"
+send-hook '~C svk-dev@lists.openfoundry.org$' 'my_hdr "Reply-To: conall+svk@conall.net"'
+send-hook '~C svk-dev@lists.openfoundry.org$' 'set signature=~/.signature_list'

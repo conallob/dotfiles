@@ -1,0 +1,26 @@
+# $Id: profile-conall.net,v 1.2 2004/04/28 22:18:31 conall Exp $
+
+# conall@conall.net Settings Profile
+
+unmy_hdr *
+
+my_hdr From: Conall O\'Brien <conall@ie.sage.org>
+
+my_hdr X-Operating-System: `uname -a`
+my_hdr X-GPG-FingerPrint: E3D4 A863 33E4 69FD 3FA9  C7DC 560D 0861 EE7D C74E
+my_hdr X-GPG-Key-ID: EE7DC74E http://pgp.mit.edu/
+
+set pgp_sign_as = "0xEE7DC74E"
+
+set attribution = "On %d, %n said:\n"
+
+set signature = "~/.signature/sage-ie"
+
+set realname = "Conall O'Brien"
+set from = "conall@ie.sage.org"
+
+set record = "~/mail/sent/`date +%Y-%m/`"
+
+set status_format="%r %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b? %?l? %l?]-(%s/%S)-ie.sage.org-%>-(%P)-"
+
+#source "~/.mutt/hooks-e.sage.org"

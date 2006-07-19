@@ -1,0 +1,39 @@
+# To allow multiple accouts and multiple maliboxes
+
+account-hook '.*conall' 'set imap_user="conall#conall.net"'
+account-hook '.*infocad' 'set imap_user="conall#infocad.ie"'
+
+# Set my defaults
+
+folder-hook '.*conall' 'source ~/.mutt/profile-conall.net'
+
+# Reset some things if it's an infocad.ie mailbox
+
+folder-hook '.*infocad' "source ~/.mutt/profile-infocad.ie"
+
+# For when I'm emailing ISS or CS Helpdesk and they want me to use my tcd email address.
+
+send-hook '~t ^helpdesk@tcd\.ie$' "my_hdr From: Conall O'Brien <cgobrien@tcd.ie>"
+send-hook '~t ^helpdesk@tcd\.ie$' 'set pgp_autosign=no'
+send-hook '~t ^help@cs\.tcd\.ie$' 'set attribution = "On %D, %n \n<%a> said:\n"'
+send-hook '~t ^help@cs\.tcd\.ie$' "my_hdr From: Conall O'Brien <cgobrien@cs.tcd.ie>"
+send-hook '~t ^help@cs\.tcd\.ie$' 'set pgp_autosign=no'
+send-hook '~t ^help@cs\.tcd\.ie$' 'set attribution = "On %D, %n \n<%a> said:\n"'
+
+# For when I'm emailing my class list
+
+send-hook '~t ^ba.-list@cs\.tcd\.ie$' "my_hdr From: Conall O'Brien <cgobrien@tcd.ie>"
+send-hook '~t ^ba.-list@cs\.tcd\.ie$' 'set pgp_autosign=no'
+
+# For When I'm Emailing someone from my conall.net address on a business matter:
+
+send-hook '~t ^pareilly@tcd\.ie$' 'set attribution = "On %D, %n \n<%a> said:\n"'
+send-hook '~t ^paulr@maths\.tcd\.ie$' 'set attribution = "On %D, %n \n<%a> said:\n"'
+
+# For when I'm sending mail to an InfoCAD client
+
+send-hook '~t .*designstrat\.com' "source ~/.mutt/profile-infocad.ie"
+send-hook '~t .*infocad\.ie' "source ~/.mutt/profile-infocad.ie"
+send-hook '~t .*dublinschoolofarchitecture\.com' "source ~/.mutt/profile-infocad.ie"
+send-hook '~t .*odohh\.iol\.ie' "source ~/.mutt/profile-infocad.ie"
+send-hook '~t .*epcolquhoun@eircom\.net' "source ~/.mutt/profile-infocad.ie"
