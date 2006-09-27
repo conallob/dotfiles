@@ -22,22 +22,22 @@ send-hook '~C ^.*@lists\.sage-ie\.org$' 'my_hdr "Reply-To: conall@ie.sage.org"'
 
 send-hook '~C ^fink.*@lists\.sourceforge\.net$' "my_hdr From: Conall O'Brien <conall+fink@conall.net>"
 send-hook '~C ^fink.*@lists\.sourceforge\.net$' 'my_hdr "Reply-To: conall+fink@conall.net"'
-send-hook '~C fink.*@lists\.sourceforge\.net$' 'set signature=~/.signature_list'
+send-hook '~C fink.*@lists\.sourceforge\.net$' 'set signature=~/.signature/list'
 
-# Debian Hooks
+# Debian List Hooks
 
-send-hook '~C debian\.org$' "my_hdr From: Conall O'Brien <conall+debian@conall.net>"
-send-hook '~C debian\.org$' 'my_hdr "Reply-To: conall+debian@conall.net"'
-send-hook '~C debian\.org$' 'set signature=~/.signature_list'
+send-hook '~C lists.debian\.org$' "my_hdr From: Conall O'Brien <conall+debian@conall.net>"
+send-hook '~C lists.debian\.org$' 'my_hdr "Reply-To: conall+debian@conall.net"'
+send-hook '~C lists.debian\.org$' 'set signature=~/.signature/list'
 
 # Ubuntu Hooks
 
 send-hook '~C ubuntu\.com$' "my_hdr From: Conall O'Brien <conall+ubuntu@conall.net>"
 send-hook '~C ubuntu\.com$' 'my_hdr "Reply-To: conall+ubuntu@conall.net"'
-send-hook '~C ubuntu\.com$' 'set signature=~/.signature_list'
+send-hook '~C ubuntu\.com$' 'set signature=~/.signature/list'
 
 # SVK Hooks
 
 send-hook '~C svk-dev@lists.openfoundry.org$' "my_hdr From: Conall O'Brien <conall+svk@conall.net>"
 send-hook '~C svk-dev@lists.openfoundry.org$' 'my_hdr "Reply-To: conall+svk@conall.net"'
-send-hook '~C svk-dev@lists.openfoundry.org$' 'set signature=~/.signature_list'
+send-hook '~C svk-dev@lists.openfoundry.org$' 'set signature=~/.signature/list'
