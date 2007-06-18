@@ -2,21 +2,28 @@ servers = (
   {
     address = "irc.linux.ie";
     chatnet = "ilug";
-    port = "6667";
+    port = "6668";
     use_ssl = "no";
     autoconnect = "yes";
   },
   {
-    address = "irc.ipv6.eu.freenode.net";
+    address = "irc.freenode.net";
     chatnet = "freenode";
-    port = "6667";
+    port = "7000";
     use_ssl = "no";
     autoconnect = "yes";
   },
   {
-    address = "irc.netsoc.itcarlow.ie";
-    chatnet = "intersocs";
-    port = "6667";
+    address = "irc.quakenet.org";
+    chatnet = "quakenet";
+    port = "6668";
+    use_ssl = "no";
+    autoconnect = "yes";
+  },
+  {
+    address = "irc.lopsa.org";
+    chatnet = "lopsa";
+    port = "6668";
     use_ssl = "no";
     autoconnect = "yes";
   }
@@ -31,7 +38,7 @@ chatnets = {
     max_whois = "4";
     max_query_chans = "5";
   };
-  intersocs = {
+  quakenet = {
     type = "IRC";
     max_kicks = "4";
     max_modes = "3";
@@ -46,13 +53,15 @@ chatnets = {
     max_msgs = "1";
     max_whois = "1";
   };
+  lopsa = { type = "IRC"; };
 };
 
 channels = (
   { name = "#linux"; chatnet = "ilug"; autojoin = "Yes"; },
-  { name = "#ipv6"; chatnet = "ilug"; autojoin = "Yes"; },
+  { name = "#refugees"; chatnet = "ilug"; autojoin = "Yes"; },
+  { name = "#lopsa"; chatnet = "lopsa"; autojoin = "Yes"; },
+  { name = "#sysadmin.ie"; chatnet = "lopsa"; autojoin = "Yes"; },
   { name = "#bugi"; chatnet = "freenode"; autojoin = "Yes"; },
-  { name = "#Intersocs"; chatnet = "intersocs"; autojoin = "Yes"; }
 );
 
 aliases = {
@@ -87,7 +96,6 @@ aliases = {
   IG = "ignore";
   UNIG = "unignore";
   SB = "scrollback";
-  UMODE = "mode $N";
   WC = "window close";
   WN = "window new hide";
   SV = "say Irssi $J ($V) - http://irssi.org/";
@@ -218,6 +226,8 @@ settings = {
     real_name = "Conall O'Brien";
     user_name = "conall";
     nick = "conall";
+    override_coredump_limit = "no";
+    hostname = "daedalus.asclepian.ie";
   };
   "fe-common/core" = {
     beep_when_window_active = "yes";
@@ -237,23 +247,18 @@ settings = {
 
 notifies = {
   colmmacc = { };
-  bbrazil = { };
-  brazil = { };
   Baud = { };
   Stewie = { };
   moonbean = { };
   rach = { };
   ianoc = { };
   Chode = { };
+  Colm = { };
   noirin = { };
   firebird = { };
   SeanOS = { };
-  SoS = { };
   pron = { };
-  reilly = { };
   looney = { };
-  shortword = { };
-  bkarthur = { };
   nick = { };
   FRlinux = { };
   dredg = { };
