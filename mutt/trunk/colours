@@ -28,9 +28,11 @@ color attachment        magenta         default
 color tilde             brightgreen     default
 color markers           brightblue      default
 
+color index  cyan  default  ~F         # Flagged 
+
 # Highlighted text like *thwap*, _thwap_ or a smilie
 
-color body              brightyellow    default         "/\*.*\*/"
+#color body              brightyellow    default         "/\*.*\*/"
 color body              magenta         default         "/_.*_/"
 color body              green           default         "(:[-^]?[][)(><}{|/DP])"
 
@@ -91,7 +93,7 @@ color body 					brightred   	default "mailto: *[^ ]+\(\\?subject=[^ ]+\)?"
 #  color body brightgreen black "\\~?\(/[-_.,a-zA-Z0-9{}]+\)+"
 #  this variant includes umlauts, too (damn those krauts! ;-):
 
-color body 					brightgreen 	default 	"\\~?\(/[-_.,a-zA-Z0-9{}дцья]+\)+"
+#color body 					brightgreen 	default 	"\\~?\(/[-_.,a-zA-Z0-9{}дцья]+\)+"
 
 #  Example:  /usr/src/linux/include/{asm,linux}
 
