@@ -4,7 +4,7 @@
 
 unmy_hdr *
 
-my_hdr From: Conall O\'Brien <conall@ie.sage.org>
+my_hdr From: Conall O\'Brien <conall@sysadmin.ie>
 
 my_hdr X-Operating-System: `uname -a`
 my_hdr X-GPG-FingerPrint: E3D4 A863 33E4 69FD 3FA9  C7DC 560D 0861 EE7D C74E
@@ -17,7 +17,7 @@ set attribution = "On %d, %n said:\n"
 set signature = "~/.signature/sage-ie"
 
 set realname = "Conall O'Brien"
-set from = "conall@ie.sage.org"
+set from = "conall@sysadmin.ie"
 
 set record = "~/mail/sent/`date +%Y-%m/`"
 
