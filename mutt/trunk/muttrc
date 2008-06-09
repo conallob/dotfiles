@@ -115,6 +115,9 @@ source "~/.mutt/gpg"
 # Assorted Macros
 #
 
+# Jump to the next flagged message
+macro 	index 	\C<tab>  "<search>~F<enter>" "Find next flagged message"
+
 # Move selected mail to my spam mailbox
 
 # Unlearn message as spam
@@ -124,7 +127,7 @@ source "~/.mutt/gpg"
 macro   index   <F5>    ":source ~/.mutt/profile-conall.net\n" "Load conall.net profile"
 macro   index   <F6>    ":source ~/.mutt/profile-conall.ie\n" "Load conall.ie profile"
 macro   index   <F7>    ":source ~/.mutt/profile-asclepian.ie\n" "Load asclepian.ie profile"
-macro   index   <F8>    ":source ~/.mutt/profile-ie.sage.org\n" "Load ie.sage.org profile"
+macro   index   <F8>    ":source ~/.mutt/profile-sysadmin.ie\n" "Load sysadmin.ie profile"
 
 #
 # Tell Mutt what mailing lists I'm on
