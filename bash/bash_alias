@@ -1,0 +1,15 @@
+
+# Enable OSX aliases
+if [ "$(uname -r)" == "Darwin" ];
+  source .bash_alias.osx
+fi
+
+# Enable FreeBSD aliases
+if [ "$(uname -r)" == "FreeBSD" ];
+  source .bash_alias.freebsd
+fi
+
+# Enable host specific aliases
+if [ -e "~/.bash_alias.$(hostname -s)" ];
+  source ".bash_alias.$(hostname -s)"
+fi

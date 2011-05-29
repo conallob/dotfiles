@@ -1,0 +1,3 @@
+alias eject="diskutil eject"
+alias qsb="open /Applications/Quick\ Search\ Box.app"
+alias rh-sync="rsync -Pvar rehab3:done/* ~/Movies/"

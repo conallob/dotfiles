@@ -1,0 +1,17 @@
+# Common
+export PATH=$PATH:$HOME/bin
+
+# Enable OSX aliases
+if [ "$(uname -r)" == "Darwin" ];
+  source .bashenv.osx
+fi
+
+# Enable FreeBSD aliases
+if [ "$(uname -r)" == "FreeBSD" ];
+  source .bashenv.freebsd
+fi
+
+# Enable host specific aliases
+if [ -e "~/.bashenv.$(hostname -s)" ];
+  source ".bashenv.$(hostname -s)"
+fi
