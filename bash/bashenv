@@ -11,6 +11,9 @@ export LC_MESSAGES=C
 
 source "~/.bash_alias"
 
+# For mercurial usage
+export HGUSER="Conall O'Brien <conall@conall.net>"
+
 # Let's make /tmp/conall
 
 if [ -d /tmp/conall ]
