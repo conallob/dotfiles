@@ -1,0 +1,7 @@
+alias f="finger"
+
+alias gf="vodasms gf"
+
+alias man="LC_ALL=C man"
+
+alias gmutt="mutt -f imaps://conall@gmail.com@imap.gmail.com"

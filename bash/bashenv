@@ -1,17 +1,36 @@
 # Common
 export PATH=$PATH:$HOME/bin
 
-# Enable OSX aliases
+export TERM="xterm-color"
+export EDITOR="vim"
+export PAGER="less"
+
+export LANG=en_IE.UTF-8
+export LC_CTYPE=en_IE.UTF-8
+export LC_MESSAGES=C
+
+source "~/.bash_alias"
+
+# Let's make /tmp/conall
+
+if [ -d /tmp/conall ]
+then
+   /usr//bin/true
+else
+   mkdir /tmp/conall
+fi
+
+# Enable OSX env settings
 if [ "$(uname -r)" == "Darwin" ];
   source .bashenv.osx
 fi
 
-# Enable FreeBSD aliases
+# Enable FreeBSD env settings
 if [ "$(uname -r)" == "FreeBSD" ];
   source .bashenv.freebsd
 fi
 
-# Enable host specific aliases
+# Enable host specific env settings
 if [ -e "~/.bashenv.$(hostname -s)" ];
   source ".bashenv.$(hostname -s)"
 fi

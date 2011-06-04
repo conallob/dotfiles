@@ -1,4 +1,3 @@
-
 # Enable OSX aliases
 if [ "$(uname -r)" == "Darwin" ];
   source .bash_alias.osx
@@ -13,3 +12,5 @@ fi
 if [ -e "~/.bash_alias.$(hostname -s)" ];
   source ".bash_alias.$(hostname -s)"
 fi
+
+alias vim="vim -X"
