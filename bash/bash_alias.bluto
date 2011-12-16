@@ -1,3 +1,2 @@
-alias daedalus-via-frenzy="sudo route add 213.133.100.226/32 212.17.45.226"
 alias check_dns="host www.google.com"
-alias update_library="rsync -Pvar ~/Desktop/deliciouslibrary/ daedalus:/www/conall.net/library/"
+alias update_library="rsync -Pvar ~/Desktop/deliciouslibrary/ library.conall.net:/www/conall.net/library/"
