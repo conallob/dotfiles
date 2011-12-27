@@ -12,7 +12,7 @@ export LC_MESSAGES=C
 source "~/.bash_alias"
 
 # For mercurial usage
-export HGUSER="Conall O'Brien <conall@conall.net>"
+export HGUSER="Conall O'Brien <conall@$(hostname -s)>"
 
 # Let's make /tmp/conall
 
