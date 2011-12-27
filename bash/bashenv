@@ -18,22 +18,25 @@ export HGUSER="Conall O'Brien <conall@$(hostname -s)>"
 
 if [ -d /tmp/conall ]
 then
-   /usr//bin/true
+   /usr/bin/true
 else
    mkdir /tmp/conall
 fi
 
 # Enable OSX env settings
 if [ "$(uname -s)" == "Darwin" ];
-  source .bashenv.osx
+then
+  source ~/.bashenv.osx
 fi
 
 # Enable FreeBSD env settings
 if [ "$(uname -s)" == "FreeBSD" ];
-  source .bashenv.freebsd
+then
+  source ~/.bashenv.freebsd
 fi
 
 # Enable host specific env settings
 if [ -e "~/.bashenv.$(hostname -s)" ];
-  source ".bashenv.$(hostname -s)"
+then
+  source ~/.bashenv.$(hostname -s)
 fi
