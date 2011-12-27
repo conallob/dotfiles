@@ -24,12 +24,12 @@ else
 fi
 
 # Enable OSX env settings
-if [ "$(uname -r)" == "Darwin" ];
+if [ "$(uname -s)" == "Darwin" ];
   source .bashenv.osx
 fi
 
 # Enable FreeBSD env settings
-if [ "$(uname -r)" == "FreeBSD" ];
+if [ "$(uname -s)" == "FreeBSD" ];
   source .bashenv.freebsd
 fi
 
