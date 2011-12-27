@@ -1,2 +1,2 @@
-source "~/.bashenv"
-source "~/.bash_alias"
+source ~/.bashenv
+source ~/.bash_alias
