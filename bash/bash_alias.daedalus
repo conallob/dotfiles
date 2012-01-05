@@ -1,3 +1,5 @@
+# vim: sy=bash
+
 alias f="finger"
 
 alias gf="vodasms gf"
