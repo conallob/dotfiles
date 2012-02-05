@@ -1,5 +1,9 @@
+# vim: sy=bash
+
 # Common
 export PATH=$PATH:/opt/local/bin:$HOME/bin
+
+export CONFIGS="${HOME}/workspace/configs/bash"
 
 export TERM="xterm-color"
 export EDITOR="vim"
@@ -24,17 +28,17 @@ fi
 # Enable OSX env settings
 if [ "$(uname -s)" == "Darwin" ];
 then
-  source ~/.bashenv.osx
+  source "${CONFIGS}/bashenv.osx"
 fi
 
 # Enable FreeBSD env settings
 if [ "$(uname -s)" == "FreeBSD" ];
 then
-  source ~/.bashenv.freebsd
+  source "${CONFIGS}/bashenv.freebsd"
 fi
 
 # Enable host specific env settings
-if [ -e "~/.bashenv.$(hostname -s)" ];
+if [ -e "${CONFIGS}/bashenv.$(hostname -s)" ];
 then
-  source ~/.bashenv.$(hostname -s)
+  source "${CONFIGS}/bashenv.$(hostname -s)"
 fi
