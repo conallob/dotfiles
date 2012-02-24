@@ -1,2 +1,4 @@
-source ~/.bashenv
-source ~/.bash_alias
+# vim: fyletype=sh
+
+source ${CONFIGS}/bashenv
+source ${CONFIGS}/bash_alias
