@@ -1,0 +1,8 @@
+#
+
+[ui]
+conall = Conall O'Brien <conall@conall.net>
+
+
+[extensions]
+hgext.convert=
