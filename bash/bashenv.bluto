@@ -1,3 +1,3 @@
-# vim: sy=bash
+# vim: filetype=sh
 
 export PS1='bluto:\W \u\$ '

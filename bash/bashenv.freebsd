@@ -1,4 +1,4 @@
-# vim: sy=bash
+# vim: filetype=sh
 
 # For sending PRs to FreeBSD
 export PR_FROM="Conall O'Brien <conall@conall.net>"

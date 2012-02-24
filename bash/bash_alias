@@ -1,4 +1,4 @@
-# vim: sy=bash
+# vim: filetype=sh
 
 alias vim="vim -X"
 
