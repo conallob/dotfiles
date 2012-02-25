@@ -1,0 +1,143 @@
+:set ts=3
+:set number
+:set ai
+:set nowrap
+":highlight Comment term=bold ctermfg=6 guifg=Cyan
+
+"set scriptencoding utf-8
+set fileencoding=utf-8
+
+" * Text Formatting -- Specific File Formats
+
+" enable filetype detection:
+filetype on
+
+" recognize anything in my .Postponed directory as a news article, and anything
+" at all with a .txt extension as being human-language text [this clobbers the
+" `help' filetype, but that doesn't seem to prevent help from working
+" properly]:
+augroup filetype
+autocmd BufNewFile,BufRead */.Postponed/* set filetype=mail
+autocmd BufNewFile,BufRead *.txt set filetype=human
+augroup END
+
+" in human-language files, automatically format everything at 72 chars:
+autocmd FileType mail,human,tex set formatoptions+=t textwidth=72
+
+" for C-like programming, have automatic indentation:	 
+autocmd FileType c,cpp,slang set cindent
+
+" for actual C (not C++) programming where comments have explicit end
+" characters, if starting a new line in the middle of a comment automatically
+" insert the comment leader characters:
+autocmd FileType c set formatoptions+=ro
+
+" for Perl programming, have things in braces indenting themselves:
+autocmd FileType perl set smartindent
+
+" for CSS, also have things in braces indented:
+autocmd FileType css set smartindent
+
+" for HTML, generally format text, but if a long line has been created leave it
+" alone when editing:
+autocmd FileType html set formatoptions+=tl
+
+" for both CSS and HTML, use genuine tab characters for indentation, to make
+" files a few bytes smaller:
+autocmd FileType html,css set noexpandtab tabstop=2
+
+" in makefiles, don't expand tabs to spaces, since actual tab characters are
+" needed, and have indentation at 8 chars to be sure that all indents are tabs
+" (despite the mappings later):
+autocmd FileType make set noexpandtab shiftwidth=8
+
+" python
+autocmd FileType python set ts=2 sw=2 expandtab
+
+" * Search & Replace
+
+" make searches case-insensitive, unless they contain upper-case letters:
+set ignorecase
+set smartcase
+
+" show the `best match so far' as search strings are typed:
+set incsearch
+
+" assume the /g flag on :s substitutions to replace all matches in a line:
+set gdefault
+
+set paste
+
+" * Spelling
+
+" define `Ispell' language and personal dictionary, used in several places
+" below:
+let IspellLang = 'british'
+let PersonalDict = '~/.ispell_' . IspellLang
+" try to avoid misspelling words in the first place -- have the insert mode
+" <Ctrl>+N/<Ctrl>+P keys perform completion on partially-typed words by
+" checking the Linux word list and the personal `Ispell' dictionary; sort out
+" case sensibly (so that words at starts of sentences can still be completed
+" with words that are in the dictionary all in lower case):
+
+execute 'set dictionary+=' . PersonalDict
+set dictionary+=/usr/dict/words
+set complete=.,w,k
+set infercase
+
+" correct my common typos without me even noticing them:
+abbreviate teh the
+abbreviate cirriculum cirriculum
+abbreviate vsp \vspace{10mm}
+
+
+" Spell checking operations are defined next.  They are all set to normal mode
+" keystrokes beginning \s but function keys are also mapped to the most common
+" ones.  The functions referred to are defined at the end of this .vimrc.
+
+" \si ("spelling interactive") saves the current file then spell checks it
+" interactively through `Ispell' and reloads the corrected version:
+execute 'nnoremap \si :w<CR>:!ispell -x -d ' . IspellLang . '%<CR>:e<CR><CR>'
+
+" \sl ("spelling list") lists all spelling mistakes in the current buffer,
+" but excludes any in news/mail headers or in ("> ") quoted text:
+" execute "nnoremap \sl :w ! grep -v "^>" <Bar> grep -E -v "^[[:alpha:]-]+:
+
+" ' . \ '<Bar> ispell -l -d ' . IspellLang . ' <Bar> sort <Bar> uniq<CR>'
+
+" \sh ("spelling highlight") highlights (in red) all misspelt words in the
+" current buffer, and also excluding the possessive forms of any valid words
+" (EG "Lizzy's" won't be highlighted if "Lizzy" is in the dictionary); with
+" mail and news messages it ignores headers and quoted text; for HTML it
+" ignores tags and only checks words that will appear, and turns off	other
+" syntax highlighting to make the errors more apparent [function at end	of
+" file]:
+
+nnoremap \sh :call HighlightSpellingErrors()<CR><CR>
+nmap <F9> \sh
+
+" \sc ("spelling clear") clears all highlighted misspellings; for HTML it
+" restores regular syntax highlighting:
+nnoremap \sc :if &ft == 'html' <Bar> sy on <Bar>
+\ else <Bar> :sy clear SpellError <Bar> endif<CR>
+nmap <F10> \sc
+
+" \sa ("spelling add") adds the word at the cursor position to the personal
+" dictionary (but for possessives adds the base word, so that when the cursor
+" is on "Ceri's" only "Ceri" gets added to the dictionary), and stops
+" highlighting that word as an error (if appropriate) [function at end of
+" file]:
+
+nnoremap \sa :call AddWordToDictionary()<CR><CR>
+nmap <F8> \sa
+
+au BufNewFile,BufRead   .mutt_*    so $VIMRUNTIME/syntax/muttrc.vim
+
+syntax on
+
+augroup BufNewFileFromTemplate
+au!
+autocmd BufNewFile * silent! 0r $HOME/.vim/templates/%:e.tpl
+autocmd BufNewFile * normal! G"_dd1G
+autocmd BufNewFile * silent! match Todo /TODO/
+augroup BufNewFileFromTemplate
