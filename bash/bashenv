@@ -22,7 +22,8 @@ if [ -d /tmp/conall ]
 then
    /usr/bin/true
 else
-   mkdir /tmp/conall
+   mkdir /tmp/conall 2>&1 /dev/null
+   chmod 700 /tmp/conall
 fi
 
 # Enable OSX env settings
