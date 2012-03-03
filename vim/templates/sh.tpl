@@ -1,5 +1,5 @@
 #!/bin/bash
-# vim:ts=2:sw=2:expandtab:ft=python:fileencoding=utf-8
+# vim:ts=2:sw=2:expandtab:ft=sh:fileencoding=utf-8
 
 # $Id$
 
