@@ -176,6 +176,10 @@ hash tmutil &> /dev/null && sudo tmutil disablelocal
 #[ -e "$file" ] && mv -f "$file" "$file.bak"
 #unset file
 
+# Completely disable spotlight and remove it from the menybar
+launchctl unload -w /System/Library/LaunchDaemons/com.apple.metadata.mds.plist
+chmod 600 /System/Library/CoreServices/Search.bundle/Contents/MacOS/Search
+
 # Fix for the ancient UTF-8 bug in QuickLook (http://mths.be/bbo)
 # Commented out, as this is known to cause problems when saving files in Adobe Illustrator CS5 :(
 #echo "0x08000100:0" > ~/.CFUserTextEncoding
