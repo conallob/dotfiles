@@ -163,7 +163,10 @@ defaults write com.apple.iTunes NSUserKeyEquivalents -dict-add "Target Search Fi
 defaults write com.apple.dashboard devmode -bool true
 
 # Reset Launchpad
-[ -e ~/Library/Application\ Support/Dock/*.db ] && rm ~/Library/Application\ Support/Dock/*.db
+if [ -e "~/Library/Application\ Support/Dock/*.db" ]
+then
+  rm ~/Library/Application\ Support/Dock/*.db
+fi
 
 # Show the ~/Library folder
 chflags nohidden ~/Library
