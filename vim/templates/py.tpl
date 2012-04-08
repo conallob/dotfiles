@@ -1,9 +1,10 @@
-#!/usr/local/bin/python2.6
+#!/usr/local/bin/python2.7
 # vim:ts=2:sw=2:expandtab:ft=python:fileencoding=utf-8
 
 # $Id$
 
 # Copyright (c) 2012, Conall O'Brien
+# Released under the BSD license
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
