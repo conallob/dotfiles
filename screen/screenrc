@@ -1,4 +1,4 @@
-bind bs 008
+#bind bs 008
 
 # Enable UTF-8
 utf8 on
