@@ -3,9 +3,11 @@
 # Common
 export PATH=$PATH:/opt/local/bin:$HOME/bin
 
+# Useful variables for understanding the machine specific configs
 export CONFIGS="${HOME}/workspace/configs/bash"
+export MYHOSTNAME=$(hostname -s)
 
-export TERM="xterm-color"
+#export TERM="xterm-color"
 export EDITOR="vim"
 export PAGER="less"
 
