@@ -1,0 +1,2 @@
+
+export PS1="ESC[31m\]\u@\h:\W\$ ESC[0m\]"
