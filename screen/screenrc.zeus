@@ -1,0 +1,12 @@
+# ssh-agent setup
+
+setenv SSH_AUTH_SOCK "$HOME/.ssh/agent-forwarded"
+
+# zeus specific setup
+
+screen -t zeus       		0
+screen -t andromeda     	1	ssh andromeda
+screen -t hermes		     	2	ssh hermes
+screen -t galvatron		  	3	ssh galvatron
+screen -t frenzy				4	ssh frenzy
+screen -t rehab3				5	ssh rehab3

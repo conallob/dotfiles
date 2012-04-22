@@ -12,12 +12,8 @@ export PYTHONPATH=$PYTHONPATH:$HOME/lib/python/
 #
 # Create a prefictable path to the socket created by remote ssh-agent
 #
-if [ $WINDOW ]
+if [ ! $WINDOW ]; # Only update the symlink when outside of screen
 then
-	# Inside screen, just look at the symlink
-	export SSH_AUTH_SOCK=~/.ssh/agent-forwarded
-else
-	# Outside of screen, just symlink to the socket to the agent
-	ln -sf $SSH_AUTH_SOCK ~/.ssh/agent-forwarded
+  test $SSH_AUTH_SOCK && ln -sf $SSH_AUTH_SOCK ~/.ssh/agent-forwarded && \
+    export SSH_AUTH_SOCK=~/.ssh/agent-forwarded
 fi
-

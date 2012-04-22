@@ -1,4 +1,5 @@
-#!/bin/bash
-for f in $(ls -1 . | grep -v install.sh);
-  cp $f ~/.$f
-done 
+#!/usr/bin/env bash
+
+for f in bashrc bash_alias bashenv bash_profile; do
+	ln -s ${PWD}/${f} ~/.${f}
+done
