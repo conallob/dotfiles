@@ -141,3 +141,8 @@ autocmd BufNewFile * silent! 0r $HOME/.vim/templates/%:e.tpl
 autocmd BufNewFile * normal! G"_dd1G
 autocmd BufNewFile * silent! match Todo /TODO/
 augroup BufNewFileFromTemplate
+
+
+" Disable modeline to protext against trojan'ed files
+" http://people.freebsd.org/~eik/portaudit/81f127a8-0038-11da-86bc-000e0c2e438a.html
+set nomodeline
