@@ -1,0 +1,2 @@
+alias open_cd="drutil tray eject"
+alias close_cd="drutil tray close"

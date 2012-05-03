@@ -1,1 +1,2 @@
 alias update_library="rsync -Pvar ~/scratch/deliciouslibrary/ library.conall.net:/www/conall.net/library/"
+alias rh-sync="rsync -Pvar rehab3:done/* ~/Movies/"
