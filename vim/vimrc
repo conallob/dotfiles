@@ -1,7 +1,18 @@
-:set ts=3
-:set number
-:set ai
-:set nowrap
+set sw=2
+set ts=2
+set number
+set ai
+set nowrap
+set bs=2
+set expandtab
+
+" Assume we're going to be expected to receive the contents of a clipboard
+" from time to time
+set paste
+
+" Fix delete key, per http://panic.com/prompt/support.html
+:fixdel 
+
 ":highlight Comment term=bold ctermfg=6 guifg=Cyan
 
 "set scriptencoding utf-8
@@ -65,8 +76,6 @@ set incsearch
 
 " assume the /g flag on :s substitutions to replace all matches in a line:
 set gdefault
-
-set paste
 
 " * Spelling
 
