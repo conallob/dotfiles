@@ -9,4 +9,4 @@ vbell on
 vbell_msg " Ack! "
 
 # Include host specific settings
-source "$HOME/workspace/configs/screen/screenrc.$(hostname -s)"
+source $HOME/workspace/configs/screen/screenrc.$MYHOSTNAME
