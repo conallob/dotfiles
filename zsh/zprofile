@@ -1,5 +1,5 @@
 # vim: fyletype=sh
 export CONFIGS="${HOME}/workspace/configs/zsh"
 
-source ${CONFIGS}/env
+source ${CONFIGS}/zshenv
 source ${CONFIGS}/alias
