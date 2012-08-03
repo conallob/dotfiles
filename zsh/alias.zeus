@@ -1,0 +1,7 @@
+alias f="finger"
+alias m="mutt"
+
+alias gf="vodasms ciara"  # legacy
+alias wf="vodasms ciara"
+
+alias gmutt="mutt -f imaps://conall@gmail.com@imap.gmail.com"

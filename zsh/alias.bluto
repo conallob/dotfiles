@@ -1,0 +1,4 @@
+# vim: filetype=sh
+
+alias check_dns="host www.google.com"
+alias update_library="rsync -Pvar ~/Desktop/deliciouslibrary/ library.conall.net:/www/conall.net/library/"
