@@ -1,0 +1,4 @@
+# vim: filetype=sh
+
+alias eject="diskutil eject"
+alias qsb="open /Applications/Quick\ Search\ Box.app"

@@ -1,0 +1,3 @@
+# set ft=sh
+
+alias rh-sync="rsync -Pvar rehab3:done/* /media/video/to-sort/"
