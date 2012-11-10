@@ -1,7 +1,21 @@
-# vim: filetype=sh
+# vim: ft=sh
 
-# Common
-export PATH=$PATH:/opt/local/bin:$HOME/bin
+#
+# Setup path, with OS and/or role specifics catered for
+#
+
+export mydomain=$(hostname | cut -d'.' -f2)
+
+if [ -e "/opt/local/" ]; then
+  export x="/opt/local/bin"
+fi
+
+if [ -e "/usr/local/$mydomain" ]; then
+  export x="/usr/local/$mydomain/bin"
+fi
+
+export PATH=$PATH:$x:$HOME/bin
+unset x mydomain
 
 # Useful variables for understanding the machine specific configs
 export CONFIGS="${HOME}/workspace/configs/bash"
