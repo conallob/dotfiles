@@ -16,9 +16,6 @@ vbell_msg " Ack! "
 # Decent, long scrollback
 defscrollback 10000
 
-# Don't kill a screen if it's child task dies
-zombie "^["
-
 # Mouse scrolling, per http://www.noah.org/wiki/Screen_notes
 # Tell screen that xterm can scroll.
 termcapinfo xterm ti@:te@
