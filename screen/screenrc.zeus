@@ -4,10 +4,10 @@ setenv SSH_AUTH_SOCK "$HOME/.ssh/agent-forwarded"
 
 # zeus specific setup
 
-screen -t zeus       		0 titlebar zeus
-screen -t dionysus     	1	titlebar dionysus
-screen -t hermes		   	2	titlebar hermes
-screen -t galvatron		 	3	titlebar galvatron
-screen -t galvatron		 	4	titlebar galvatron
-screen -t rodimus		    5	title rodimus
-screen -t rehab3				6	titlebar rehab3
+screen -t zeus       		0 
+screen -t dionysus     	1
+screen -t hermes		   	2	
+screen -t galvatron		 	3
+screen -t galvatron		 	4
+screen -t rodimus		    5
+screen -t rehab3				6
