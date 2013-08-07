@@ -10,4 +10,4 @@ screen -t hermes		   	2
 screen -t megatron		 	3
 screen -t megatron		 	4
 screen -t rodimus		    5
-screen -t rehab3				6
+screen -t coldturkey	  6
