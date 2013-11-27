@@ -3,3 +3,12 @@ export CONFIGS="${HOME}/workspace/configs/bash"
 
 source ${CONFIGS}/bashenv
 source ${CONFIGS}/bash_alias
+
+##
+# Your previous /Users/conall/.bash_profile file was backed up as /Users/conall/.bash_profile.macports-saved_2013-09-25_at_12:40:51
+##
+
+# MacPorts Installer addition on 2013-09-25_at_12:40:51: adding an appropriate PATH variable for use with MacPorts.
+export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+# Finished adapting your PATH environment variable for use with MacPorts.
+
