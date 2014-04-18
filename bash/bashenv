@@ -29,6 +29,17 @@ export LANG=en_IE.UTF-8
 export LC_CTYPE=en_IE.UTF-8
 export LC_MESSAGES=C
 
+#
+# ssh-agent+screen magic
+#
+# Create a prefictable path to the socket created by remote ssh-agent
+#
+if [ ! $WINDOW ]; # Only update the symlink when outside of screen
+then
+  test $SSH_AUTH_SOCK && ln -sf $SSH_AUTH_SOCK ~/.ssh/agent-forwarded && \
+    export SSH_AUTH_SOCK=~/.ssh/agent-forwarded
+fi
+
 # For mercurial usage
 export HGUSER="Conall O'Brien <conall@$(hostname -s)>"
 
