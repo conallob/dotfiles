@@ -2,3 +2,5 @@
 
 alias check_dns="host www.google.com"
 alias update_library="rsync -Pvar ~/Desktop/deliciouslibrary/ library.conall.net:/www/conall.net/library/"
+
+alias print_emergency_creds="cat /private/tmp/ironkey-conall/creds"
