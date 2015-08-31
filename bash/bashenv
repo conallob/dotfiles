@@ -11,7 +11,7 @@ if [ -e "/opt/local/" ]; then
 fi
 
 if [ -e "/usr/local/$mydomain" ]; then
-  export x="/usr/local/$mydomain/bin"
+  export x="/usr/local/$mydomain/bin:/usr/local/$mydomain/sbin"
 fi
 
 export PATH=$PATH:$x:$HOME/bin
