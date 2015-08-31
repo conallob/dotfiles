@@ -6,3 +6,5 @@ conall = Conall O'Brien <conall@conall.net>
 
 [extensions]
 hgext.convert=
+# USe hggit to publish to Github
+hggit= 
