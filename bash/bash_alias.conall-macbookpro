@@ -2,4 +2,5 @@
 
 # Setup panic room env
 alias "now-panic"="gnubbyemergency --emergency=true"
+alias "stop-panic"="gnubbyemergency --emergency=false"
 
