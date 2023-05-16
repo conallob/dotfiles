@@ -1,3 +1,6 @@
+[user]
+	email = conall@conall.net
+	name = Conall O'Brien
 [branch "master"]
     # Avoid mere bubbles: http://stevenharman.net/git-pull-with-automatic-rebase
     rebase = true
