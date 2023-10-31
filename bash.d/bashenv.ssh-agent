@@ -1,7 +1,7 @@
 # Create a prefictable path to the socket created by remote ssh-agent across
 # all systems
 
-# OSX ssh-agent is launched using launchd
+# OSX ssh-agent is launched using Secretive and/or 1Password
 if [ "$(uname -s)" == "Darwin" ];
 then
   export SSH_AUTH_SOCK=$(launchctl getenv SSH_AUTH_SOCK)
