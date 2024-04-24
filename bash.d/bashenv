@@ -44,6 +44,12 @@ else
    chmod 700 /tmp/conall
 fi
 
+# Enable Linux env settings
+if [ "$(uname -s)" == "Linux" ];
+then
+  source "${CONFIGS}/bashenv.linux"
+fi
+
 # Enable OSX env settings
 if [ "$(uname -s)" == "Darwin" ];
 then
