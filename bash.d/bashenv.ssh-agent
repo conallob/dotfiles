@@ -1,12 +1,6 @@
 # Create a prefictable path to the socket created by remote ssh-agent across
 # all systems
 
-# OSX ssh-agent is launched using Secretive and/or 1Password
-if [ "$(uname -s)" == "Darwin" ];
-then
-  export SSH_AUTH_SOCK=$(launchctl getenv SSH_AUTH_SOCK)
-fi
-
 if [ ! $WINDOW ]; # Only update the symlink when outside of screen
 then
   test $SSH_AUTH_SOCK && ln -sf $SSH_AUTH_SOCK ~/.ssh/agent-forwarded && \
