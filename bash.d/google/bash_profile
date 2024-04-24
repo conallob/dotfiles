@@ -1,0 +1,6 @@
+# ENsure we have loas credentials before reading the rest of the configs
+loas_check --loas_check_retry_attempts=0 >/dev/null || \
+  gcert --ssh_cert
+
+# Include the proper config
+# source /google/data/rw/users/co/conall/configs/.bash_profile

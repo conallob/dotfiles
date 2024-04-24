@@ -1,0 +1,62 @@
+export EDITOR="vim"
+
+#export PS1="\u@\h:\W$ "
+export PS1="[\[[0;31m\]\t\[[0;0m]\]\[[0;32m\] \u@\h:\W$\[[0m\] "
+
+#export PRINTER="lordsutch-color.dub.corp.google.com"
+export PRINTER="sledgehammer"
+
+export PATH=$HOME/bin:$PATH
+
+export DEBFULLNAME="Conall O'Brien"
+export DEBEMAIL="conall@google.com"
+
+export HOSTNAME=$(hostname)
+
+export LANG="en_IE.utf8"
+export LC_COLLATE="C"
+
+export P4CONFIG=.p4config
+export P4DIFF="/home/build/public/google/tools/p4diff -b"
+export P4MERGE=/home/build/public/eng/perforce/mergep4.tcl
+export P4EDITOR=$EDITOR
+P4DIFF="${HOME}/bin/tdiff"
+
+export NNTPSERVER="news.corp.google.com"
+
+#export GOOGLE_USE_CORP_SSL_AGENT=true
+
+# My SSL keys live in my glucid-secure system these days
+#if [ "$HOSTNAME" != "dock.dub.corp.google.com" ]; then
+#  export GOOGLE_LOAS_TESTING=true
+#fi
+
+export HISTSIZE=15000
+export HISTTIMEFORMAT='%Y-%m-%d %H:%M:%S    '
+
+# SSL Cert Setup
+export P4_CERT_PATH=/home/conall/depot/ops/data/certs
+
+export EMAIL="conall@google.com"
+export HGUSER="conall"
+
+# for pcr_verify
+export OPS="~/depot/disables"
+
+# Run prodmon tests automatically, not manually
+export PRODMON_PRESUBMIT_AUTORUN=yes
+
+# Always auto-upload to critique
+export G4AUTOMONDRIANUPLOAD=1
+
+#
+# ssh-agent+screen magic
+#
+# Create a prefictable path to the socket created by remote ssh-agent
+#
+if [ ! $WINDOW ]; # Only update the symlink when outside of screen
+then
+  test $SSH_AUTH_SOCK && ln -sf $SSH_AUTH_SOCK ~/.ssh/agent-forwarded && \
+    export SSH_AUTH_SOCK=~/.ssh/agent-forwarded
+fi
+

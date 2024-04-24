@@ -1,0 +1,6 @@
+# ~/.bash_logout
+
+[ $(who | grep -c $(whoami)) -eq 0 ] && (/usr/kerberos/bin/kdestroy ||
+/usr/bin/kdestroy)
+
+clear

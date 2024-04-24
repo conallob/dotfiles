@@ -1,0 +1,13 @@
+alias rm >/dev/null 2>&1 && unalias rm
+alias mv >/dev/null 2>&1 && unalias mv
+
+alias show_hw="mdb -E ri --show-hardware"
+alias count_mach="mdb ri -N"
+
+alias pa-emergency="/google/data/ro/teams/netsec/netsre_ecredz_tool/live/netsre_ecredz_tool --action=generate"
+
+alias pa-emergency="gcert -s --emergency"
+
+alias reqreboot="mdb rqrb"
+
+alias "tacacs_enable"="/google/data/ro/teams/netsec/munger_client/munger_client.par --realm=prod --action=enable_account"

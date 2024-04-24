@@ -1,0 +1,45 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# User specific aliases and functions go here (override system defaults)
+#
+
+source ~/.bashenv
+source ~/.bash_alias
+
+# Shamelessly yoinked from ~trevors/.bashrc
+
+###BEGIN SSH-AGENT ENVIRONMENT SETUP###
+# determine if ssh-agent is running properly
+ssh-add -l > /dev/null 2>&1
+if [ $? != 0 ]; then
+ export SSH_AGENT_FILE=/usr/local/google/home/$USER/.ssh/agent.$(hostname)
+
+ # Copy the existing agent stuff into the environment
+#   . $SSH_AGENT_FILE
+fi
+
+# again determine if ssh-agent is running properly
+#if [ "$HOSTNAME" = "dock.dub.corp.google.com" ]; then
+    #"$HOSTNAME" = "deerfly.dub.corp.google.com" -o \
+    #"$HOSTNAME" = "hpgntai-ubiq32.eem.corp.google.com" -o \
+if [ $? != 0 ]; then
+# start ssh-agent, and put stuff into the environment
+  ssh-agent | /bin/grep -v "^echo Agent pid" > $SSH_AGENT_FILE
+  . $SSH_AGENT_FILE
+#  source /usr/local/google/home/$USER/.ssh/agent.$(hostname)
+fi
+   # add keys to ssh-agent, rotating as necessary.
+#   ~/bin/rotate-ssh-keys.sh
+#fi
+###END SSH-AGENT ENVIRONMENT SETUP###
+
+# enable programmable completion features
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+      . /etc/bash_completion
+fi
+
