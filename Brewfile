@@ -1,5 +1,8 @@
 # Documented checklist at https://github.com/conallob/New-Machine/blob/master/osx-setup.md
 
+# specify a directory to install
+cask_args appdir: '/Applications'
+
 # Coding Languages & Tools
 
 brew "go" 
