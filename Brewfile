@@ -28,7 +28,7 @@ cask "bartender"
 cask "spotify"
 cask "displaylink"
 
-# Personal
+# Productivity
 
 mas "Omnifocus", id: 1542143627
 mas "FlyCut" id: 442160987
