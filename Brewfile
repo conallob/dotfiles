@@ -6,7 +6,7 @@ cask_args appdir: '/Applications'
 # Coding Languages & Tools
 
 brew "go" 
-brew "python311"
+brew "python@3.12"
 brew "git"
 
 # Customize Env
@@ -31,14 +31,14 @@ cask "displaylink"
 # Productivity
 
 mas "Omnifocus", id: 1542143627
-mas "FlyCut" id: 442160987
-cask "remarkabie"
+mas "Flycut", id: 442160987
+cask "remarkable"
 
 ## Personal
 
-mas "Home Assistant" id: 1099568401
-mas "Tailscale" id: 1475387142
-cask "snapmaker-luban"
+mas "Home Assistant", id: 1099568401
+mas "Tailscale", id: 1475387142
+#cask "snapmaker-luban"
 cask "8bitdo-ultimate-software"
 
 ### Productivity
