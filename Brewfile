@@ -41,7 +41,7 @@ mas "Remarkable", id: 1276493162
 
 mas "Home Assistant", id: 1099568401
 mas "Tailscale", id: 1475387142
-#cask "snapmaker-luban"
+cask "snapmaker-luban"
 cask "8bitdo-ultimate-software"
 
 ### Productivity
