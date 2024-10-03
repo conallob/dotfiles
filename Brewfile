@@ -28,6 +28,9 @@ cask "bartender"
 cask "spotify"
 cask "displaylink"
 
+cash "signal"
+cash "whatsapp"
+
 # Productivity
 
 mas "Omnifocus", id: 1542143627
