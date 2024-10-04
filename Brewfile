@@ -3,16 +3,17 @@
 # specify a directory to install
 cask_args appdir: '/Applications'
 
+# Customize Env
+
+brew "chezmoi"
+brew "mas"
+
 # Coding Languages & Tools
 
 brew "go" 
 brew "python@3.12"
 brew "git"
-
-# Customize Env
-
-brew "chezmoi"
-brew "mas"
+cask "goland"
 
 # Utilities
 
