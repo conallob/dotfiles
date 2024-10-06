@@ -2,8 +2,3 @@
 
 # For sending PRs to FreeBSD
 export PR_FROM="Conall O'Brien <conall@conall.net>"
-
-# SSH agent stuff
-#export SSH_AGENT_FILE=$HOME/.ssh/agent-stuff.$HOSTNAME
-#ssh-agent | grep -v "^echo Agent pid" > $SSH_AGENT_FILE
-#. $SSH_AGENT_FILE
