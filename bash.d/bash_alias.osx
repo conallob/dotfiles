@@ -1,6 +1,3 @@
 # vim: filetype=sh
 
 alias eject="diskutil eject"
-
-# Prefer a modern GPG2 from MacPorts over GPG1 which Apple Neglect
-alias gpg="/opt/local/bin/gpg2"
