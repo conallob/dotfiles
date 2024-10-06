@@ -1,6 +1,3 @@
 # vim: filetype=sh
 
-# ssh-agent from MacPorts, with with keychain support
-export SSH_AUTH_SOCK=~/.ssh/1password.agent.sock
-
 export PATH=$(PATH):/opt/homebrew/bin:~/bin
