@@ -32,9 +32,6 @@ export LC_MESSAGES=C
 # ssh-agent+screen magic
 source "${CONFIGS}/bashenv.ssh-agent"
 
-# For mercurial usage
-export HGUSER="Conall O'Brien <conall@$(hostname -s)>"
-
 # Let's make /tmp/conall
 if [ -d /tmp/conall ]
 then
