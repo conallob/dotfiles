@@ -6,3 +6,10 @@ then
   test $SSH_AUTH_SOCK && ln -sf $SSH_AUTH_SOCK ~/.ssh/agent-forwarded && \
     export SSH_AUTH_SOCK=~/.ssh/agent-forwarded
 fi
+
+Enable MacOS env settings
+if [ "$(uname -s)" == "Darwin" ];
+then
+  # Use 1Password's ssh-agent when on MacOS
+  export SSH_AUTH_SOCK=~/.ssh/1password.agent.sock
+fi
