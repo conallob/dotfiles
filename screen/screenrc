@@ -24,4 +24,4 @@ bindkey -m "^[[5;2~" stuff ^b
 bindkey -m "^[[6;2~" stuff ^f
 
 # Include host specific settings
-source $HOME/workspace/configs/screen/screenrc.$MYHOSTNAME
+source screenrc.$MYHOSTNAME
