@@ -14,6 +14,7 @@ brew "go"
 brew "python@3.12"
 brew "git"
 cask "goland"
+cask "chatgpt"
 
 # Utilities
 
