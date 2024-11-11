@@ -50,3 +50,4 @@ cask "8bitdo-ultimate-software"
 
 cask "timeular"
 cask "elgato-stream-deck"
+cask "goland"
