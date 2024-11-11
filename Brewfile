@@ -15,6 +15,7 @@ brew "python@3.12"
 brew "git"
 cask "goland"
 cask "chatgpt"
+brew "powerlevel10k"
 
 # Utilities
 
@@ -50,4 +51,3 @@ cask "8bitdo-ultimate-software"
 
 cask "timeular"
 cask "elgato-stream-deck"
-cask "goland"
