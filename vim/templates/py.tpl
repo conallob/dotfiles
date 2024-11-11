@@ -3,7 +3,7 @@
 
 # $Id$
 
-# Copyright (c) 2023, Conall O'Brien
+# Copyright (c) 2024, Conall O'Brien
 # Released under the BSD license
 #
 # Redistribution and use in source and binary forms, with or without
