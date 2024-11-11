@@ -1,0 +1,6 @@
+Host *
+  ServerAliveInterval 60
+  Protocol 2,1
+  Compression yes
+  ForwardAgent yes
+  ForwardX11 no
