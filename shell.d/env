@@ -30,7 +30,7 @@ export LC_CTYPE=en_IE.UTF-8
 export LC_MESSAGES=C
 
 # ssh-agent+screen magic
-source "${CONFIGS}/bashenv.ssh-agent"
+source "${CONFIGS}/env.ssh-agent"
 
 # Let's make /tmp/conall
 if [ -d /tmp/conall ]
@@ -44,23 +44,23 @@ fi
 # Enable Linux env settings
 if [ "$(uname -s)" == "Linux" ];
 then
-  source "${CONFIGS}/bashenv.linux"
+  source "${CONFIGS}/env.linux"
 fi
 
 # Enable OSX env settings
 if [ "$(uname -s)" == "Darwin" ];
 then
-  source "${CONFIGS}/bashenv.osx"
+  source "${CONFIGS}/env.osx"
 fi
 
 # Enable FreeBSD env settings
 if [ "$(uname -s)" == "FreeBSD" ];
 then
-  source "${CONFIGS}/bashenv.freebsd"
+  source "${CONFIGS}/env.freebsd"
 fi
 
 # Enable host specific env settings
-if [ -e "${CONFIGS}/bashenv.$(hostname -s)" ];
+if [ -e "${CONFIGS}/env.$(hostname -s)" ];
 then
-  source "${CONFIGS}/bashenv.$(hostname -s)"
+  source "${CONFIGS}/env.$(hostname -s)"
 fi
