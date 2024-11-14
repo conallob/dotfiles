@@ -5,17 +5,23 @@ alias vim="vim -X"
 # Enable OSX aliases
 if [ "$(uname -s)" == "Darwin" ];
 then
-  source "${CONFIGS}/bash_alias.osx"
+  source "${CONFIGS}/alias.osx"
 fi
 
 # Enable FreeBSD aliases
 if [ "$(uname -s)" == "FreeBSD" ];
 then
-  source "${CONFIGS}/bash_alias.freebsd"
+  source "${CONFIGS}/alias.freebsd"
+fi
+
+# Enable Linux aliases
+if [ "$(uname -s)" == "Linux" ];
+then
+  source "${CONFIGS}/alias.linux"
 fi
 
 # Enable host specific aliases
-if [ -e "${CONFIGS}/bash_alias.$(hostname -s)" ];
+if [ -e "${CONFIGS}/alias.$(hostname -s)" ];
 then
-  source "${CONFIGS}/bash_alias.$(hostname -s)"
+  source "${CONFIGS}/alias.$(hostname -s)"
 fi
