@@ -1,5 +1,0 @@
-# vim: fyletype=sh
-export CONFIGS="${HOME}/workspace/configs/bash"
-
-source ${CONFIGS}/bashenv
-source ${CONFIGS}/bash_alias
