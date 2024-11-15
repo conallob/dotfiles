@@ -1,0 +1,12 @@
+eval "$(/opt/homebrew/bin/atuin init zsh)"
+
+# Machine Specific zshrc
+source zsh/zshrc.$(uname -p)
+
+# Shell agnostic variables and aliases
+shell_configs=shell.d/
+
+source ${shell_configs}/env
+source ${shell_configs}/alias
+
+
