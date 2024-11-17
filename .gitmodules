@@ -1,3 +1,5 @@
 [submodule "ssh"]
 	path = dot_ssh
 	url = git@github.com:conallob/ssh.git
+[submodule "dot_ssh"]
+	branch = master
