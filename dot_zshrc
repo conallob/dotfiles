@@ -1,10 +1,9 @@
-eval "$(/opt/homebrew/bin/atuin init zsh)"
+eval "$(atuin init zsh)"
 
 # Machine Specific zshrc
-source zsh/zshrc.$(uname -s)
+source $(chezmoi source-path)/zsh/zshrc.$(uname -s)
 
 # Shell agnostic variables and aliases
-shell_configs=shell.d/
 
-source ${shell_configs}/env
-source ${shell_configs}/alias
+source $(chezmoi source-path)/env
+source $(chezmoi source-path)/alias
