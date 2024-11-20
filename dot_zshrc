@@ -1,3 +1,26 @@
+#
+# Setup path, with OS and/or role specifics catered for
+#
+
+export mydomain=$(hostname | cut -d'.' -f2)
+
+if [ -e "/opt/local/" ]; then
+  export x="/opt/local/bin"
+fi
+
+if [ -e "/opt/homebrew/" ]; then
+  export x="/opt/homebrew/bin"
+fi
+
+if [ -e "/usr/local/$mydomain" ]; then
+  export x="/usr/local/$mydomain/bin:/usr/local/$mydomain/sbin"
+fi
+
+export PATH=$PATH:$x:$HOME/bin
+unset x mydomain
+
+# atuin, for shell history
+
 eval "$(atuin init zsh)"
 
 # Machine Specific zshrc
