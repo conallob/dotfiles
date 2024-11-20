@@ -5,5 +5,5 @@ source $(chezmoi source-path)/zsh/zshrc.$(uname -s)
 
 # Shell agnostic variables and aliases
 
-source $(chezmoi source-path)/env
-source $(chezmoi source-path)/alias
+source $(chezmoi source-path)/shell.d/env
+source $(chezmoi source-path)/shell.d/alias
