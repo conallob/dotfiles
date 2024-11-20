@@ -1,7 +1,7 @@
 eval "$(atuin init zsh)"
 
 # Machine Specific zshrc
-source $(chezmoi source-path)/zsh/zshrc.$(uname -s)
+source $(chezmoi source-path)/dot_zsh/zshrc.$(uname -s)
 
 # Shell agnostic variables and aliases
 
