@@ -1,25 +1,8 @@
 # vim: ft=sh
 
 #
-# Setup path, with OS and/or role specifics catered for
+# Path should already be set in ~/.zshrc
 #
-
-export mydomain=$(hostname | cut -d'.' -f2)
-
-if [ -e "/opt/local/" ]; then
-  export x="/opt/local/bin"
-fi
-
-if [ -e "/opt/homebrew/" ]; then
-  export x="/opt/homebrew/bin"
-fi
-
-if [ -e "/usr/local/$mydomain" ]; then
-  export x="/usr/local/$mydomain/bin:/usr/local/$mydomain/sbin"
-fi
-
-export PATH=$PATH:$x:$HOME/bin
-unset x mydomain
 
 # Useful variables for understanding the machine specific configs
 export CONFIGS="${HOME}/workspace/configs/bash"
