@@ -1,0 +1,1 @@
+machine gitlab.com login cobrien@crusoe.ai password {{- onepasswordDocument "lsksvlvfxemt7ti4vcsu47ayjy" -}}
