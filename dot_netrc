@@ -1,1 +1,1 @@
-machine gitlab.com login cobrien@crusoe.ai password {{- onepasswordDocument "lsksvlvfxemt7ti4vcsu47ayjy" -}}
+machine gitlab.com login {{- (onepasswordDetailsFields "lrqnefejh7v23v54lvajoa4x2q").username.value }} password {{- onepasswordDocument "lrqnefejh7v23v54lvajoa4x2q" -}}
