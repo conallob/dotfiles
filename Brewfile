@@ -10,12 +10,18 @@ brew "mas"
 
 # Coding Languages & Tools
 
-brew "go" 
+brew "go"
 brew "python@3.12"
 brew "git"
+cask "ghostty"
 cask "goland"
-cask "chatgpt"
+brew "atuin"
 brew "powerlevel10k"
+
+# AI Chatbots
+# TODO(conallob): There can only be one
+cask "chatgpt"
+cask "claude"
 
 # Utilities
 
@@ -31,23 +37,21 @@ cask "bartender"
 cask "spotify"
 cask "displaylink"
 
-cash "signal"
-cash "whatsapp"
+cask "signal"
+cask "whatsapp"
 
 # Productivity
 
+cask "timeular"
+cask "elgato-stream-deck"
 mas "Omnifocus", id: 1542143627
 mas "Flycut", id: 442160987
 mas "Remarkable", id: 1276493162
 
 ## Personal
 
+mas "Pixelmator Pro", id: 1289583905
 mas "Home Assistant", id: 1099568401
 mas "Tailscale", id: 1475387142
 cask "snapmaker-luban"
 cask "8bitdo-ultimate-software"
-
-### Productivity
-
-cask "timeular"
-cask "elgato-stream-deck"
