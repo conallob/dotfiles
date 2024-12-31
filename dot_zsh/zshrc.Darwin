@@ -1,4 +1,4 @@
-eval "$(/opt/homebrew/atuin init zsh)"
+eval "$(/opt/homebrew/bin/atuin init zsh)"
 source $(/opt/homebrew/bin/brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme
 
 # Load 1Password CLI plugins
