@@ -1,2 +1,5 @@
 background = #0d0d0d
 background-opacity = 0.3
+
+window-height = 58
+window-width = 80
