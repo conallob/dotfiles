@@ -13,10 +13,16 @@ brew "mas"
 brew "go"
 brew "python@3.12"
 brew "git"
-cask "ghostty"
 cask "goland"
+
+# Terminal
+cask "ghostty"
+
+# ZSH & Shell Environment
+
 brew "atuin"
 brew "powerlevel10k"
+brew "zsh-autosuggestions"
 
 # AI Chatbots
 # TODO(conallob): There can only be one
