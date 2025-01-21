@@ -1,5 +1,8 @@
 eval "$(/opt/homebrew/bin/atuin init zsh)"
 source $(/opt/homebrew/bin/brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme
 
+# zsh-autosuggestions
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
 # Load 1Password CLI plugins
 source $HOME/.config/op/plugins.sh
