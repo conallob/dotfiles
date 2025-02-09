@@ -6,3 +6,12 @@ source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # Load 1Password CLI plugins
 source $HOME/.config/op/plugins.sh
+
+# Copy ghostty termcap to new hosts
+function ssh () {
+  if [ $# -eq 1 ] && grep -q "^${1}" ~/.ssh/known_hosts ; then
+    echo New machine..copying termcap
+    infocmp -x | /usr/bin/ssh $1 -- "tic -x - 2> /dev/null"
+  fi
+  /usr/bin/ssh $*
+}
