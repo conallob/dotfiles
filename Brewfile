@@ -24,9 +24,7 @@ brew "atuin"
 brew "powerlevel10k"
 brew "zsh-autosuggestions"
 
-# AI Chatbots
-# TODO(conallob): There can only be one
-cask "chatgpt"
+# AI Chatbot
 cask "claude"
 
 # Utilities
