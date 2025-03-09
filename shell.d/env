@@ -30,19 +30,19 @@ else
 fi
 
 # Enable Linux env settings
-if [ "$(uname -s)" == "Linux" ];
+if [ "$(uname -s)" = "Linux" ];
 then
   source "${CONFIGS}/env.linux"
 fi
 
 # Enable OSX env settings
-if [ "$(uname -s)" == "Darwin" ];
+if [ "$(uname -s)" = "Darwin" ];
 then
   source "${CONFIGS}/env.osx"
 fi
 
 # Enable FreeBSD env settings
-if [ "$(uname -s)" == "FreeBSD" ];
+if [ "$(uname -s)" = "FreeBSD" ];
 then
   source "${CONFIGS}/env.freebsd"
 fi
