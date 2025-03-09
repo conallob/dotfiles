@@ -18,6 +18,20 @@ set paste
 "set scriptencoding utf-8
 set fileencoding=utf-8
 
+" * Plugins
+
+call plug#begin()
+
+Plug 'tpope/vim-sensible'
+" Github Copilot
+Plug 'github/copilot.vim'
+" ALE linters and Language Server Protocol
+" https://github.com/dense-analysis/ale
+Plug 'dense-analysis/ale'
+
+call plug#end()
+
+
 " * Text Formatting -- Specific File Formats
 
 " enable filetype detection:
