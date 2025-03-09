@@ -5,7 +5,7 @@
 #
 
 # Useful variables for understanding the machine specific configs
-export CONFIGS="${HOME}/workspace/configs/bash"
+export CONFIGS=$(chezmoi source-path)
 export MYHOSTNAME=$(hostname -s)
 
 export EDITOR="vim"
