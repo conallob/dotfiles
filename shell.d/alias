@@ -3,19 +3,19 @@
 alias vim="vim -X"
 
 # Enable OSX aliases
-if [ "$(uname -s)" == "Darwin" ];
+if [ "$(uname -s)" = "Darwin" ];
 then
   source "${CONFIGS}/alias.osx"
 fi
 
 # Enable FreeBSD aliases
-if [ "$(uname -s)" == "FreeBSD" ];
+if [ "$(uname -s)" = "FreeBSD" ];
 then
   source "${CONFIGS}/alias.freebsd"
 fi
 
 # Enable Linux aliases
-if [ "$(uname -s)" == "Linux" ];
+if [ "$(uname -s)" = "Linux" ];
 then
   source "${CONFIGS}/alias.linux"
 fi
