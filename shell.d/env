@@ -8,7 +8,6 @@
 export CONFIGS="${HOME}/workspace/configs/bash"
 export MYHOSTNAME=$(hostname -s)
 
-#export TERM="xterm-color"
 export EDITOR="vim"
 export PAGER="less"
 
@@ -16,8 +15,10 @@ export LANG=en_IE.UTF-8
 export LC_CTYPE=en_IE.UTF-8
 export LC_MESSAGES=C
 
+# Disable ssh-agent config
+#
 # ssh-agent+screen magic
-source "${CONFIGS}/env.ssh-agent"
+# source "${CONFIGS}/env.ssh-agent"
 
 # Let's make /tmp/conall
 if [ -d /tmp/conall ]
