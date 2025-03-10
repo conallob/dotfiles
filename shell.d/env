@@ -29,22 +29,10 @@ else
    chmod 700 /tmp/conall
 fi
 
-# Enable Linux env settings
-if [ "$(uname -s)" = "Linux" ];
+# Enable platform env settings
+if [ -e "${CONFIGS}/env.$(uname -s)" ];
 then
-  source "${CONFIGS}/env.linux"
-fi
-
-# Enable OSX env settings
-if [ "$(uname -s)" = "Darwin" ];
-then
-  source "${CONFIGS}/env.osx"
-fi
-
-# Enable FreeBSD env settings
-if [ "$(uname -s)" = "FreeBSD" ];
-then
-  source "${CONFIGS}/env.freebsd"
+  source "${CONFIGS}/env.$(uname -s)"
 fi
 
 # Enable host specific env settings
