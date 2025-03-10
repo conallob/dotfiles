@@ -5,7 +5,7 @@
 #
 
 # Useful variables for understanding the machine specific configs
-export CONFIGS=$(chezmoi source-path)
+export CONFIGS="$(chezmoi source-path)/shell.d"
 export MYHOSTNAME=$(hostname -s)
 
 export EDITOR="vim"
