@@ -14,6 +14,7 @@ brew "go"
 brew "python@3.12"
 brew "git"
 cask "goland"
+brew "podman"
 
 # Terminal
 cask "ghostty"
