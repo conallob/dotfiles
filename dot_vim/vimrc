@@ -24,7 +24,7 @@ call plug#begin()
 
 Plug 'tpope/vim-sensible'
 " Windsurf AI Coding Assistant, https://github.com/Exafunction/windsurf.vim
-Plug 'Exafunction/windsurf.vim'
+Plug 'Exafunction/windsurf.vim', { 'branch': 'main' }
 " ALE linters and Language Server Protocol
 " https://github.com/dense-analysis/ale
 Plug 'dense-analysis/ale'
