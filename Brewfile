@@ -20,6 +20,19 @@ cask "jetbrains-toolbox"
 brew "podman"
 cask "podman-desktop"
 
+# Kubernetes tools
+brew "kubectl"
+brew "krew"
+brew "kustomize"
+brew "k9s"
+brew "kubectx"
+
+# General Utilities
+brew "jq"
+brew "protobuf"
+brew "pssh"
+brew "yq"
+
 # Terminal
 cask "ghostty"
 
