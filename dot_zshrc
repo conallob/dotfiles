@@ -16,7 +16,11 @@ if [ -e "/usr/local/$mydomain" ]; then
   export x="/usr/local/$mydomain/bin:/usr/local/$mydomain/sbin"
 fi
 
+# Enable local tools
 export PATH=$PATH:$x:$HOME/bin
+# Enable kubectl krew plugins
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+
 unset x mydomain
 
 # Disable the powerlevel10k wizard at first start
