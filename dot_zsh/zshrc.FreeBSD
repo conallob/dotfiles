@@ -1,4 +1,4 @@
-eval "$(/usr/bin/atuin init zsh)"
+eval "$(/usr/local/bin/atuin init zsh)"
 
 # TODO(conallob): Install powerlevel10k on FreeBSD
 # powerlevel10k/powerlevel10k.zsh-theme
