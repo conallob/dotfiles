@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "obsidian-mcp-tools": {
+      "command": "Users/conall/Documents/Multiverse/.obsidian/plugins/mcp-tools/bin/mcp-server",
+      "env": {
+        "OBSIDIAN_API_KEY": "2d98e28de8766c1485a2448819343a78e84fef6ae1a8c165d4e9bb43c04f0c35"
+      }
+    }
+  }
+}
