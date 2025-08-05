@@ -1,10 +1,16 @@
 {
   "mcpServers": {
+    # Obsidian.md via MCP
     "obsidian-mcp-tools": {
-      "command": "Users/cobrien/Documents/Multiverse/.obsidian/plugins/mcp-tools/bin/mcp-server",
+      "command": "Users/{{- .chezmoi.username -}}/Documents/Multiverse/.obsidian/plugins/mcp-tools/bin/mcp-server",
       "env": {
-        "OBSIDIAN_API_KEY": '{{ onepasswordRead "op://xe6ncd3wlggzxt6lq7zv3mduly" }}'
+        "OBSIDIAN_API_KEY": '{{- onepasswordRead "op://xe6ncd3wlggzxt6lq7zv3mduly" -}}'
       }
+    },
+    # Omnifocus via MCP
+    "omnifocus": {
+      "command": "npx",
+      "args": ["-y", "omnifocus-mcp"]
     }
   }
 }
