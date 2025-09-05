@@ -1,1 +1,1 @@
-machine gitlab.com login {{- (onepasswordDetailsFields "lrqnefejh7v23v54lvajoa4x2q").username.value }} password {{- onepasswordDocument "lrqnefejh7v23v54lvajoa4x2q" -}}
+machine gitlab.com login {{- (onepasswordDetailsFields "op://Crusoe/Employee/GitLab Personal Access Token").username.value }} password {{- onepasswordDocument "op://Crusoe/Employee/GitLab Personal Access Token" -}}
