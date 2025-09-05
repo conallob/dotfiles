@@ -31,6 +31,9 @@
 [[ssh-keys]]
 vault = "Private"
 
+[[ssh-keys]]
+vault = "Home Lab"
+
 # Add my ssh key from my Crusoe vaults
 [[ssh-keys]]
 vault = "Crusoe"
