@@ -7,7 +7,7 @@
 alias vim="vim -X"
 
 # rsync + ssh flags per https://gist.github.com/KartikTalwar/4393116
-alias gigabit-rsync="rsync -Pvar --numeric-ids --progress -e "ssh -T -c aes128-gcm@openssh.com -o Compression=no -x""
+alias gigabit-rsync="rsync -Pvar --numeric-ids --progress -e 'ssh -T -c aes128-gcm@openssh.com -o Compression=no -x'"
 
 # Enable per platform aliases
 if [ -e "${CONFIGS}/alias.$(uname -s)" ];
