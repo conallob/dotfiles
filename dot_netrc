@@ -1,1 +1,4 @@
+# Only to take effect on a work machine
+{{- if eq .chezmoi.username "cobrien" }}
 machine gitlab.com login {{- (onepasswordDetailsFields "op://Crusoe/Employee/GitLab Personal Access Token").username.value }} password {{- onepasswordDocument "op://Crusoe/Employee/GitLab Personal Access Token" -}}
+{{- end }}
