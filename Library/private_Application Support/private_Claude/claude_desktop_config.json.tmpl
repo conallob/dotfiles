@@ -4,7 +4,7 @@
     "obsidian-mcp-tools": {
       "command": "Users/{{- .chezmoi.username -}}/Documents/Multiverse/.obsidian/plugins/mcp-tools/bin/mcp-server",
       "env": {
-        "OBSIDIAN_API_KEY": '{{- onepasswordRead "op://xe6ncd3wlggzxt6lq7zv3mduly" -}}'
+        "OBSIDIAN_API_KEY": '{{- (onepasswordDetailsFields "xe6ncd3wlggzxt6lq7zv3mduly").credential.value }}'
       }
     },
     # Omnifocus via MCP
@@ -18,7 +18,7 @@
         "https://api.taku.ie/mcp_server/sse"
       ],
       "env": {
-        "API_ACCESS_TOKEN": '{{- onepasswordRead "op://mtsvdobrdd3qsztkds33okg6by" -}}'
+        "API_ACCESS_TOKEN": '{{- (onepasswordDetailsFields "mtsvdobrdd3qsztkds33okg6by").credential.value }}'
       }
     }
   }
