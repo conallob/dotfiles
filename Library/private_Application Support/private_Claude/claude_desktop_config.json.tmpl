@@ -13,9 +13,13 @@
       "args": ["-y", "omnifocus-mcp"]
     },
     "Home Assistant - Taku": {
-      "type": "url",
-      "url": "https://api.taku.ie/mcp_server/sse",
-      "authorization_token": "{{- onepasswordRead "op://mtsvdobrdd3qsztkds33okg6by" -}}"
+      "command": "mcp-proxy",
+      "args": [
+        "https://api.taku.ie/mcp_server/sse"
+      ],
+      "env": {
+        "API_ACCESS_TOKEN": '{{- onepasswordRead "op://mtsvdobrdd3qsztkds33okg6by" -}}'
+      }
     }
   }
 }
