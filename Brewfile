@@ -47,7 +47,7 @@ brew "zellij"
 cask "claude"
 
 ## Personally Developed MCPs
-tap "conallob/homebrew-tap"
+tap "conallob/tap"
 brew "mcp-ssh-wingman"
 
 # Utilities
