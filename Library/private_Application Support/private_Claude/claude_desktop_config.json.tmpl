@@ -1,14 +1,14 @@
 {
   "mcpServers": {
-    "$comment": "Personal MCP Servers",
-    "$comment": "Obsidian.md via MCP",
+    "_comment": "Personal MCP Servers",
+    "_comment": "Obsidian.md via MCP",
     "obsidian-mcp-tools": {
       "command": "/Users/{{- .chezmoi.username -}}/Documents/Multiverse/.obsidian/plugins/mcp-tools/bin/mcp-server",
       "env": {
         "OBSIDIAN_API_KEY": "{{- (onepasswordDetailsFields "xe6ncd3wlggzxt6lq7zv3mduly").credential.value }}"
       }
     },
-    "$comment": "Omnifocus via MCP, https://github.com/themotionmachine/OmniFocus-MCP",
+    "_comment": "Omnifocus via MCP, https://github.com/themotionmachine/OmniFocus-MCP",
     "omnifocus": {
       "command": "npx",
       "args": ["-y", "omnifocus-mcp"]
@@ -22,7 +22,7 @@
         "API_ACCESS_TOKEN": "{{- (onepasswordDetailsFields "mtsvdobrdd3qsztkds33okg6by").credential.value }}"
       }
     },
-    "$comment": "Installed by GoLand",
+    "_comment": "Installed by GoLand",
     "jetbrains": {
       "command": "/Applications/GoLand.app/Contents/jbr/Contents/Home/bin/java",
       "args": [
@@ -34,7 +34,7 @@
         "IJ_MCP_SERVER_PORT": "64342"
       }
     },
-    "$comment": "Work Related MCPs, Only to take effect on a work machine",
+    "_comment": "Work Related MCPs, Only to take effect on a work machine",
     {{- if eq .chezmoi.username "cobrien" }}
     "$comment": "https://github.com/incident-io/incidentio-mcp-golang",
     "incidentio": {
@@ -44,7 +44,7 @@
       }
     },
     {{- end }}
-    "$comment": "https://github.com/conallob/mcp-ssh-wingman",
+    "_comment": "https://github.com/conallob/mcp-ssh-wingman",
     "ssh-wingman": {
       "command": "/usr/local/bin/mcp-ssh-wingman",
       "args": ["--session", "mcp-wingman"]
