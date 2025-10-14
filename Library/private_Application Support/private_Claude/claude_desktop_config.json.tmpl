@@ -7,7 +7,7 @@
         "OBSIDIAN_API_KEY": '{{- (onepasswordDetailsFields "xe6ncd3wlggzxt6lq7zv3mduly").credential.value }}'
       }
     },
-    # Omnifocus via MCP
+    # Omnifocus via MCP, https://github.com/themotionmachine/OmniFocus-MCP
     "omnifocus": {
       "command": "npx",
       "args": ["-y", "omnifocus-mcp"]
@@ -20,6 +20,11 @@
       "env": {
         "API_ACCESS_TOKEN": '{{- (onepasswordDetailsFields "mtsvdobrdd3qsztkds33okg6by").credential.value }}'
       }
+    },
+    # https://github.com/conallob/mcp-ssh-wingman
+    "ssh-wingman": {
+      "command": "/usr/local/bin/mcp-ssh-wingman",
+      "args": ["--session", "mcp-wingman"]
     }
   }
 }
