@@ -28,19 +28,11 @@
 #
 # More examples can be found here:
 #  https://developer.1password.com/docs/ssh/agent/config
-[[ssh-keys]]
-vault = "Private"
+{{ (onepasswordDetailsFields "e5kn5ias2uvchycghwkt4aaddq").notesPlain.value }}
 
-[[ssh-keys]]
-vault = "Home Lab"
+{{- if eq .chezmoi.username "cobrien" }}
+# Add my ssh key from my work vaults
+  {{- (onepasswordDetailsFields "oqvxrd4e73sxizwjg6x7yadj6e").notesPlain.value }}
+{{- end }}
 
-# Add my ssh key from my Crusoe vaults
-[[ssh-keys]]
-vault = "Crusoe"
 
-[[ssh-keys]]
-vault = "Employee"
-
-[[ssh-keys]]
-vault = "sre-island"
-#item = "emcc34n7qfqowe3huiu264nxmm"
