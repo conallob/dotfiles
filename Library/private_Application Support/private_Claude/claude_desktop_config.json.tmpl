@@ -9,7 +9,7 @@
     },
     {{/* Omnifocus via MCP, https://github.com/themotionmachine/OmniFocus-MCP */}}
     "omnifocus": {
-      "command": "npx",
+      "command": "/opt/homebrew/bin/npx",
       "args": ["-y", "omnifocus-mcp"]
     },
     "Home Assistant - Taku": {
@@ -45,7 +45,7 @@
     {{- end }}
     {{/* Personal MCPs, Ready Only Tmux Session, https://github.com/conallob/mcp-ssh-wingman */}}
     "ssh-wingman": {
-      "command": "/usr/local/bin/mcp-ssh-wingman",
+      "command": "/opt/homebrew/bin/mcp-ssh-wingman",
       "args": ["--session", "mcp-wingman"]
     }
   }
