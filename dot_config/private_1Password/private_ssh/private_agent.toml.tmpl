@@ -32,7 +32,9 @@
 
 {{- if eq .chezmoi.username "cobrien" }}
 # Add my ssh key from my work vaults
-  {{- (onepasswordDetailsFields "oqvxrd4e73sxizwjg6x7yadj6e").notesPlain.value }}
+
+{{ (onepasswordDetailsFields "oqvxrd4e73sxizwjg6x7yadj6e").notesPlain.value }}
+
 {{- end }}
 
 
