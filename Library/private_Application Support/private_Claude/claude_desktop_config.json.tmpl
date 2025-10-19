@@ -7,11 +7,6 @@
         "OBSIDIAN_API_KEY": "{{- (onepasswordDetailsFields "xe6ncd3wlggzxt6lq7zv3mduly").credential.value }}"
       }
     },
-    {{/* Omnifocus via MCP, https://github.com/themotionmachine/OmniFocus-MCP */}}
-    "omnifocus": {
-      "command": "/opt/homebrew/bin/npx",
-      "args": ["-y", "omnifocus-mcp"]
-    },
     "Home Assistant - Taku": {
       "command": "mcp-proxy",
       "args": [
@@ -43,7 +38,12 @@
       }
     },
     {{- end }}
-    {{/* Personal MCPs, Ready Only Tmux Session, https://github.com/conallob/mcp-ssh-wingman */}}
+    {{/* Personal MCPs */}}
+    {{/* Ready Only Tmux Session, https://github.com/conallob/mcp-ssh-wingman */}}
+    "omnifocus": {
+      "command": "/opt/homebrew/bin/mcp-omnifocus",
+    },
+    {{/* Ready Only Tmux Session, https://github.com/conallob/mcp-ssh-wingman */}}
     "ssh-wingman": {
       "command": "/opt/homebrew/bin/mcp-ssh-wingman",
       "args": ["--session", "mcp-wingman"]
