@@ -39,7 +39,7 @@
     },
     {{- end }}
     {{/* Personal MCPs */}}
-    {{/* Ready Only Tmux Session, https://github.com/conallob/mcp-ssh-wingman */}}
+    {{/* Omnifocus MCP, in a static binary 0 https://github.com/conallob/mcp-omnifocus */}}
     "omnifocus": {
       "command": "/opt/homebrew/bin/mcp-omnifocus",
       "args": [
@@ -47,7 +47,11 @@
         "-cache-ttl", "60"
       ]
     },
-    {{/* Ready Only Tmux Session, https://github.com/conallob/mcp-ssh-wingman */}}
+    {{/* Google Sheets API, https://github.com/conallob/mcp-google-sheets */}}
+    "google-sheets": {
+      "command": "/opt/homebrew/bin/mcp-google-sheets"
+    }.
+    {{/* Read Only Tmux Session, https://github.com/conallob/mcp-ssh-wingman */}}
     "ssh-wingman": {
       "command": "/opt/homebrew/bin/mcp-ssh-wingman",
       "args": ["--session", "mcp-wingman"]
