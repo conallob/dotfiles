@@ -3,3 +3,4 @@ background-opacity = 0.3
 cursor-invert-fg-bg = true
 window-height = 58
 window-width = 80
+keybind = shift+enter=text:\n
