@@ -1,60 +1,8 @@
 {
   "mcpServers": {
-    {{/* Obsidian.md via MCP */}}
-    "obsidian-mcp-tools": {
-      "command": "/Users/{{- .chezmoi.username -}}/Documents/Multiverse/.obsidian/plugins/mcp-tools/bin/mcp-server",
-      "env": {
-        "OBSIDIAN_API_KEY": "{{- (onepasswordDetailsFields "xe6ncd3wlggzxt6lq7zv3mduly").credential.value }}"
-      }
-    },
-    "Home Assistant - Taku": {
-      "command": "mcp-proxy",
-      "args": [
-        "https://api.taku.ie/mcp_server/sse"
-      ],
-      "env": {
-        "API_ACCESS_TOKEN": "{{- (onepasswordDetailsFields "mtsvdobrdd3qsztkds33okg6by").credential.value }}"
-      }
-    },
-    {{/* Installed by GoLand */}}
-    "jetbrains": {
-      "command": "/Applications/GoLand.app/Contents/jbr/Contents/Home/bin/java",
-      "args": [
-        "-classpath",
-        "/Applications/GoLand.app/Contents/plugins/mcpserver/lib/mcpserver-frontend.jar:/Applications/GoLand.app/Contents/lib/util-8.jar",
-        "com.intellij.mcpserver.stdio.McpStdioRunnerKt"
-      ],
-      "env": {
-        "IJ_MCP_SERVER_PORT": "64342"
-      }
-    },
-    {{/* Work Related MCPs, Only to take effect on a work machine */}}
-    {{- if eq .chezmoi.username "cobrien" }}
-    {{/* Incident.io MCP, https://github.com/incident-io/incidentio-mcp-golang */}}
-    "incidentio": {
-      "command": "/Users/{{- .chezmoi.username -}}/bin/incident-io-mcp-server",
-      "env": {
-        "INCIDENT_IO_API_KEY": "{{- (onepasswordDetailsFields "jqnzasyqfhkqf7iza5vspjwboa").credential.value }}"
-      }
-    },
-    {{- end }}
-    {{/* Personal MCPs */}}
-    {{/* Omnifocus MCP, in a static binary 0 https://github.com/conallob/mcp-omnifocus */}}
-    "omnifocus": {
-      "command": "/opt/homebrew/bin/mcp-omnifocus",
-      "args": [
-        "-scripts", "/opt/homebrew/share/mcp-omnifocus",
-        "-cache-ttl", "60"
-      ]
-    },
-    {{/* Google Sheets API, https://github.com/conallob/mcp-google-sheets */}}
-    "google-sheets": {
-      "command": "/opt/homebrew/bin/mcp-google-sheets"
-    },
-    {{/* Read Only Tmux Session, https://github.com/conallob/mcp-ssh-wingman */}}
-    "ssh-wingman": {
-      "command": "/opt/homebrew/bin/mcp-ssh-wingman",
-      "args": ["--session", "mcp-wingman"]
-    }
+    {{- /* Personal and Third-party MCP Servers */ -}}
+    {{- includeTemplate "dot_claude/mcp-servers-personal.json.tmpl" . -}}
+    {{- /* Work Related MCP Servers */ -}}
+    {{- includeTemplate "dot_claude/mcp-servers-work.json.tmpl" . }}
   }
 }
