@@ -1,9 +1,9 @@
 {
-  "alwaysThinkingEnabled": false
+  "alwaysThinkingEnabled": false,
   "mcpServers": {
-    {{- /* Personal and Third-party MCP Servers */ -}}
-    {{- includeTemplate "dot_claude/mcp-servers-personal.json.tmpl" . -}}
-    {{- /* Work Related MCP Servers */ -}}
-    {{- includeTemplate "dot_claude/mcp-servers-work.json.tmpl" . }}
+    {{- /* Personal and Third-party MCP Servers */ }}
+{{ includeTemplate "dot_claude/mcp-servers-personal.json.tmpl" . | indent 4 -}}
+    {{- /* Work Related MCP Servers */ }}
+{{ includeTemplate "dot_claude/mcp-servers-work.json.tmpl" . | indent 4 }}
   }
 }
