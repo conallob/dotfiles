@@ -16,6 +16,32 @@ brew "git"
 cask "goland"
 cask "jetbrains-toolbox"
 
+# Vim & Editor Tools
+brew "vim"  # Modern Vim with LSP support
+brew "ripgrep"  # Fast grep alternative for searching
+brew "fzf"  # Fuzzy finder
+brew "fd"  # Fast find alternative
+cask "font-hack-nerd-font"  # Nerd Font for vim-devicons
+
+# Language Servers (LSP)
+brew "gopls"  # Go language server
+brew "basedpyright"  # Python language server (faster than pyright)
+brew "marksman"  # Markdown language server
+brew "yaml-language-server"  # YAML language server
+brew "texlab"  # LaTeX language server
+
+# Linters & Formatters
+brew "golangci-lint"  # Go meta-linter
+brew "ruff"  # Fast Python linter & formatter
+brew "mypy"  # Python static type checker
+brew "black"  # Python code formatter
+brew "isort"  # Python import sorter
+brew "shellcheck"  # Shell script linter
+brew "markdownlint-cli"  # Markdown linter
+brew "hadolint"  # Dockerfile linter
+brew "yamllint"  # YAML linter
+brew "prettier"  # Multi-language code formatter
+
 # Container tools
 brew "podman"
 cask "podman-desktop"

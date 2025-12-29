@@ -1,0 +1,6 @@
+" Modern Vim Configuration Loader
+" This file ensures the main configuration at ~/.vim/vimrc is loaded
+" regardless of whether vim looks for ~/.vimrc or ~/.vim/vimrc first
+
+" Source the main configuration
+source ~/.vim/vimrc

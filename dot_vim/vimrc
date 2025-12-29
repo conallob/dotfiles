@@ -1,171 +1,582 @@
-set sw=2
-set ts=2
-set number
-set ai
-set nowrap
-set bs=2
-set expandtab
+" ============================================================================
+" Modern Vim Configuration
+" Optimized for Go, Python, and documentation development
+" ============================================================================
 
-" Assume we're going to be expected to receive the contents of a clipboard
-" from time to time
-set paste
+" ============================================================================
+" Basic Settings
+" ============================================================================
+set sw=2                      " Shift width
+set ts=2                      " Tab stop
+set number                    " Line numbers
+set relativenumber            " Relative line numbers for easy navigation
+set ai                        " Auto indent
+set nowrap                    " Don't wrap lines
+set bs=2                      " Backspace behavior
+set expandtab                 " Use spaces instead of tabs
+set fileencoding=utf-8        " UTF-8 encoding
+set hidden                    " Allow hidden buffers
+set updatetime=300            " Faster completion (default is 4000ms)
+set signcolumn=yes            " Always show sign column for LSP diagnostics
+set completeopt=menuone,noinsert,noselect,preview
+set shortmess+=c              " Don't show completion messages
+set cmdheight=2               " More space for messages
+set mouse=a                   " Enable mouse support
+set clipboard=unnamedplus     " Use system clipboard
+set laststatus=2              " Always show status line
+set showcmd                   " Show command in bottom bar
+set wildmenu                  " Visual autocomplete for command menu
+set lazyredraw                " Redraw only when needed
+set showmatch                 " Highlight matching brackets
+set cursorline                " Highlight current line
+set splitright                " Vertical splits to the right
+set splitbelow                " Horizontal splits below
+set termguicolors             " True color support
 
 " Fix delete key, per http://panic.com/prompt/support.html
-:fixdel 
+:fixdel
 
-":highlight Comment term=bold ctermfg=6 guifg=Cyan
+" ============================================================================
+" Search & Replace
+" ============================================================================
+set ignorecase                " Case-insensitive search
+set smartcase                 " Unless uppercase is used
+set incsearch                 " Incremental search
+set hlsearch                  " Highlight search results
+set gdefault                  " Global replace by default
 
-"set scriptencoding utf-8
-set fileencoding=utf-8
+" Clear search highlighting with <leader>/
+nnoremap <leader>/ :nohlsearch<CR>
 
-" * Plugins
+" ============================================================================
+" Plugins (via vim-plug)
+" ============================================================================
+call plug#begin('~/.vim/plugged')
 
-call plug#begin()
+" --- Core Plugins ---
+Plug 'tpope/vim-sensible'                           " Sensible defaults
+Plug 'tpope/vim-repeat'                             " Better . repeat
 
-Plug 'tpope/vim-sensible'
-" Windsurf AI Coding Assistant, https://github.com/Exafunction/windsurf.vim
-Plug 'Exafunction/windsurf.vim', { 'branch': 'main' }
-" ALE linters and Language Server Protocol
-" https://github.com/dense-analysis/ale
-Plug 'dense-analysis/ale'
+" --- LSP and Completion ---
+Plug 'prabirshrestha/vim-lsp'                       " LSP client
+Plug 'mattn/vim-lsp-settings'                       " Auto LSP server installation
+Plug 'prabirshrestha/asyncomplete.vim'              " Async completion
+Plug 'prabirshrestha/asyncomplete-lsp.vim'          " LSP source for asyncomplete
+Plug 'dense-analysis/ale'                           " Linting and fixing
+Plug 'honza/vim-snippets'                           " Snippet collection
+Plug 'SirVer/ultisnips'                             " Snippet engine
+
+" --- AI Assistance ---
+Plug 'Exafunction/windsurf.vim', { 'branch': 'main' } " Windsurf AI (keeping existing)
+Plug 'madox2/vim-ai'                                " Claude/OpenAI integration
+
+" --- Git Integration ---
+Plug 'tpope/vim-fugitive'                           " Git wrapper
+Plug 'airblade/vim-gitgutter'                       " Git diff in gutter
+Plug 'tpope/vim-rhubarb'                            " GitHub integration for fugitive
+Plug 'shumphrey/fugitive-gitlab.vim'                " GitLab integration for fugitive
+
+" --- File Navigation ---
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } " Fuzzy finder
+Plug 'junegunn/fzf.vim'                             " FZF vim integration
+Plug 'preservim/nerdtree'                           " File tree explorer
+Plug 'Xuyuanp/nerdtree-git-plugin'                  " Git status in NERDTree
+
+" --- Language Support ---
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go' }  " Go development
+Plug 'sheerun/vim-polyglot'                         " Multi-language support
+Plug 'cespare/vim-toml', { 'for': 'toml' }         " TOML syntax
+Plug 'vim-python/python-syntax', { 'for': 'python' } " Enhanced Python syntax
+
+" --- Documentation Languages ---
+Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }  " Markdown
+Plug 'lervag/vimtex', { 'for': 'tex' }              " LaTeX
+Plug 'google/vim-maktaba'                           " Required for vim-codefmt
+Plug 'google/vim-codefmt'                           " Code formatting
+Plug 'google/vim-glaive'                            " Required for vim-codefmt config
+
+" --- UI Enhancements ---
+Plug 'vim-airline/vim-airline'                      " Status line
+Plug 'vim-airline/vim-airline-themes'               " Status line themes
+Plug 'ryanoasis/vim-devicons'                       " File icons (requires Nerd Font)
+Plug 'morhetz/gruvbox'                              " Color scheme
+Plug 'arcticicestudio/nord-vim'                     " Nord color scheme
+
+" --- Productivity ---
+Plug 'preservim/nerdcommenter'                      " Easy commenting
+Plug 'tpope/vim-surround'                           " Surround text objects
+Plug 'jiangmiao/auto-pairs'                         " Auto-close brackets
+Plug 'yggdroot/indentline'                          " Show indent guides
+Plug 'editorconfig/editorconfig-vim'                " EditorConfig support
 
 call plug#end()
 
+" ============================================================================
+" Color Scheme
+" ============================================================================
+set background=dark
+try
+    colorscheme gruvbox
+catch
+    colorscheme desert
+endtry
 
-" * Text Formatting -- Specific File Formats
+" ============================================================================
+" LSP Configuration
+" ============================================================================
 
-" enable filetype detection:
+" Enable LSP for specific file types
+function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    setlocal signcolumn=yes
+    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+
+    " Key mappings for LSP features
+    nmap <buffer> gd <plug>(lsp-definition)
+    nmap <buffer> gs <plug>(lsp-document-symbol-search)
+    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
+    nmap <buffer> gr <plug>(lsp-references)
+    nmap <buffer> gi <plug>(lsp-implementation)
+    nmap <buffer> gt <plug>(lsp-type-definition)
+    nmap <buffer> <leader>rn <plug>(lsp-rename)
+    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+    nmap <buffer> K <plug>(lsp-hover)
+    nmap <buffer> <leader>ca <plug>(lsp-code-action)
+
+    " Format on save (can be disabled per filetype if needed)
+    autocmd BufWritePre <buffer> LspDocumentFormatSync
+endfunction
+
+augroup lsp_install
+    au!
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
+
+" LSP settings
+let g:lsp_diagnostics_enabled = 1
+let g:lsp_diagnostics_echo_cursor = 1
+let g:lsp_diagnostics_virtual_text_enabled = 1
+let g:lsp_diagnostics_signs_enabled = 1
+let g:lsp_document_highlight_enabled = 1
+let g:lsp_fold_enabled = 0
+let g:lsp_semantic_enabled = 1
+
+" Diagnostic signs
+let g:lsp_diagnostics_signs_error = {'text': '✗'}
+let g:lsp_diagnostics_signs_warning = {'text': '⚠'}
+let g:lsp_diagnostics_signs_hint = {'text': '💡'}
+let g:lsp_diagnostics_signs_information = {'text': 'ℹ'}
+
+" ============================================================================
+" ALE Configuration (Linting alongside LSP)
+" ============================================================================
+let g:ale_disable_lsp = 1  " Disable ALE's LSP, use vim-lsp instead
+let g:ale_sign_error = '✗'
+let g:ale_sign_warning = '⚠'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_linters_explicit = 1
+
+" Linters by filetype
+let g:ale_linters = {
+\   'go': ['golangci-lint', 'gofmt'],
+\   'python': ['ruff', 'mypy'],
+\   'markdown': ['markdownlint'],
+\   'sh': ['shellcheck'],
+\   'yaml': ['yamllint'],
+\   'dockerfile': ['hadolint'],
+\}
+
+" Fixers by filetype
+let g:ale_fixers = {
+\   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\   'go': ['gofmt', 'goimports'],
+\   'python': ['black', 'isort'],
+\   'javascript': ['prettier'],
+\   'typescript': ['prettier'],
+\   'json': ['prettier'],
+\   'yaml': ['prettier'],
+\   'markdown': ['prettier'],
+\   'html': ['prettier'],
+\}
+
+let g:ale_fix_on_save = 1
+
+" ============================================================================
+" Asyncomplete Configuration
+" ============================================================================
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <CR>    pumvisible() ? asyncomplete#close_popup() : "\<CR>"
+
+" ============================================================================
+" UltiSnips Configuration
+" ============================================================================
+let g:UltiSnipsExpandTrigger="<c-j>"
+let g:UltiSnipsJumpForwardTrigger="<c-j>"
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+
+" ============================================================================
+" AI Integration (vim-ai for Claude)
+" ============================================================================
+" vim-ai uses OPENAI_API_KEY by default, but can be configured for Claude
+" Set environment variables in your shell or use 1Password integration
+let g:vim_ai_chat = {
+\  "options": {
+\    "model": "claude-3-5-sonnet-20241022",
+\    "endpoint_url": "https://api.anthropic.com/v1/messages",
+\    "max_tokens": 4096,
+\    "temperature": 0.7,
+\  },
+\}
+
+" AI keybindings
+nnoremap <leader>ai :AI
+vnoremap <leader>ai :AI
+nnoremap <leader>ae :AIEdit
+vnoremap <leader>ae :AIEdit
+nnoremap <leader>ac :AIChat<CR>
+
+" ============================================================================
+" FZF Configuration
+" ============================================================================
+nnoremap <C-p> :Files<CR>
+nnoremap <leader>b :Buffers<CR>
+nnoremap <leader>f :Rg<CR>
+nnoremap <leader>t :Tags<CR>
+nnoremap <leader>m :Marks<CR>
+nnoremap <leader>h :History<CR>
+
+" Customize FZF colors to match gruvbox
+let g:fzf_colors = {
+  \ 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment']
+  \ }
+
+" ============================================================================
+" NERDTree Configuration
+" ============================================================================
+nnoremap <leader>n :NERDTreeToggle<CR>
+nnoremap <leader>nf :NERDTreeFind<CR>
+
+let g:NERDTreeShowHidden = 1
+let g:NERDTreeMinimalUI = 1
+let g:NERDTreeIgnore = ['^\.git$', '^\.DS_Store$', '\.pyc$', '__pycache__']
+let g:NERDTreeQuitOnOpen = 0
+
+" Close vim if NERDTree is the only window remaining
+autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+" ============================================================================
+" Git Integration (Fugitive & GitGutter)
+" ============================================================================
+nnoremap <leader>gs :Git<CR>
+nnoremap <leader>gc :Git commit<CR>
+nnoremap <leader>gp :Git push<CR>
+nnoremap <leader>gl :Git pull<CR>
+nnoremap <leader>gd :Gdiffsplit<CR>
+nnoremap <leader>gb :Git blame<CR>
+nnoremap <leader>gh :GBrowse<CR>
+
+" GitGutter settings
+let g:gitgutter_enabled = 1
+let g:gitgutter_map_keys = 0
+let g:gitgutter_sign_added = '+'
+let g:gitgutter_sign_modified = '~'
+let g:gitgutter_sign_removed = '-'
+
+" Navigate between git hunks
+nmap [h <Plug>(GitGutterPrevHunk)
+nmap ]h <Plug>(GitGutterNextHunk)
+
+" Stage/undo hunks
+nmap <leader>hs <Plug>(GitGutterStageHunk)
+nmap <leader>hu <Plug>(GitGutterUndoHunk)
+nmap <leader>hp <Plug>(GitGutterPreviewHunk)
+
+" ============================================================================
+" Airline Configuration
+" ============================================================================
+let g:airline_powerline_fonts = 1
+let g:airline_theme = 'gruvbox'
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail'
+let g:airline#extensions#ale#enabled = 1
+let g:airline#extensions#branch#enabled = 1
+
+" ============================================================================
+" Go Configuration (vim-go)
+" ============================================================================
+let g:go_fmt_command = "goimports"
+let g:go_auto_type_info = 1
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_generate_tags = 1
+let g:go_metalinter_enabled = []  " Use ALE/LSP instead
+let g:go_list_type = "quickfix"
+let g:go_def_mode='gopls'
+let g:go_info_mode='gopls'
+
+" Go keybindings (additional to LSP bindings)
+autocmd FileType go nmap <leader>gb <Plug>(go-build)
+autocmd FileType go nmap <leader>gr <Plug>(go-run)
+autocmd FileType go nmap <leader>gt <Plug>(go-test)
+autocmd FileType go nmap <leader>gc <Plug>(go-coverage-toggle)
+autocmd FileType go nmap <leader>ga <Plug>(go-alternate-edit)
+autocmd FileType go nmap <leader>gd <Plug>(go-doc)
+autocmd FileType go nmap <leader>gi :GoImpl<CR>
+autocmd FileType go nmap <leader>gf :GoFillStruct<CR>
+
+" ============================================================================
+" Python Configuration
+" ============================================================================
+let g:python_highlight_all = 1
+autocmd FileType python setlocal ts=4 sw=4 expandtab
+
+" ============================================================================
+" Markdown Configuration
+" ============================================================================
+let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_frontmatter = 1
+let g:vim_markdown_toml_frontmatter = 1
+let g:vim_markdown_json_frontmatter = 1
+let g:vim_markdown_conceal = 0
+let g:vim_markdown_conceal_code_blocks = 0
+let g:vim_markdown_auto_insert_bullets = 1
+let g:vim_markdown_new_list_item_indent = 2
+
+" ============================================================================
+" LaTeX Configuration (vimtex)
+" ============================================================================
+let g:vimtex_view_method = 'skim'  " macOS PDF viewer, adjust for Linux
+let g:vimtex_compiler_method = 'latexmk'
+let g:tex_flavor = 'latex'
+
+" ============================================================================
+" CI/CD Integration
+" ============================================================================
+" GitLab CI integration via fugitive-gitlab
+let g:fugitive_gitlab_domains = ['https://gitlab.com']
+
+" GitHub integration via rhubarb
+" Use :GBrowse to open current file/line in GitHub
+" Use :'<,'>GBrowse to open visual selection in GitHub
+
+" ============================================================================
+" NERDCommenter Configuration
+" ============================================================================
+let g:NERDSpaceDelims = 1
+let g:NERDCompactSexyComs = 1
+let g:NERDDefaultAlign = 'left'
+let g:NERDCommentEmptyLines = 1
+let g:NERDTrimTrailingWhitespace = 1
+let g:NERDToggleCheckAllLines = 1
+
+" ============================================================================
+" IndentLine Configuration
+" ============================================================================
+let g:indentLine_char = '│'
+let g:indentLine_first_char = '│'
+let g:indentLine_showFirstIndentLevel = 1
+let g:indentLine_setColors = 1
+
+" ============================================================================
+" File Type Specific Settings
+" ============================================================================
+
+" Enable filetype detection
 filetype on
+filetype plugin on
+filetype indent on
 
-" recognize anything in my .Postponed directory as a news article, and anything
-" at all with a .txt extension as being human-language text [this clobbers the
-" `help' filetype, but that doesn't seem to prevent help from working
-" properly]:
+" Mail and news
 augroup filetype
 autocmd BufNewFile,BufRead */.Postponed/* set filetype=mail
 autocmd BufNewFile,BufRead *.txt set filetype=human
 augroup END
 
-" in human-language files, automatically format everything at 72 chars:
 autocmd FileType mail,human,tex set formatoptions+=t textwidth=72
 
-" for C-like programming, have automatic indentation:	 
+" C/C++ programming
 autocmd FileType c,cpp,slang set cindent
-
-" for actual C (not C++) programming where comments have explicit end
-" characters, if starting a new line in the middle of a comment automatically
-" insert the comment leader characters:
 autocmd FileType c set formatoptions+=ro
 
-" for Perl programming, have things in braces indenting themselves:
-autocmd FileType perl set smartindent
+" Perl, CSS
+autocmd FileType perl,css set smartindent
 
-" for CSS, also have things in braces indented:
-autocmd FileType css set smartindent
-
-" for HTML, generally format text, but if a long line has been created leave it
-" alone when editing:
+" HTML
 autocmd FileType html set formatoptions+=tl
-
-" for both CSS and HTML, use genuine tab characters for indentation, to make
-" files a few bytes smaller:
 autocmd FileType html,css set noexpandtab tabstop=2
 
-" in makefiles, don't expand tabs to spaces, since actual tab characters are
-" needed, and have indentation at 8 chars to be sure that all indents are tabs
-" (despite the mappings later):
+" Makefiles
 autocmd FileType make set noexpandtab shiftwidth=8
 
-" python
-autocmd FileType python set ts=2 sw=2 expandtab
+" YAML (common for CI configs)
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 
-" * Search & Replace
+" Dockerfile
+autocmd FileType dockerfile setlocal ts=4 sts=4 sw=4 expandtab
 
-" make searches case-insensitive, unless they contain upper-case letters:
-set ignorecase
-set smartcase
+" Protobuf
+autocmd FileType proto setlocal ts=2 sts=2 sw=2 expandtab
 
-" show the `best match so far' as search strings are typed:
-set incsearch
+" GraphViz DOT
+autocmd FileType dot setlocal ts=2 sts=2 sw=2 expandtab
 
-" assume the /g flag on :s substitutions to replace all matches in a line:
-set gdefault
+" Nginx
+au BufRead,BufNewFile /usr/local/etc/nginx/*,/usr/local/etc/nginx/*/* if &ft == '' | setfiletype nginx | endif
 
-" * Spelling
+" Mutt
+au BufNewFile,BufRead .mutt_* so $VIMRUNTIME/syntax/muttrc.vim
 
-" define `Ispell' language and personal dictionary, used in several places
-" below:
+" ============================================================================
+" Templates for New Files
+" ============================================================================
+augroup BufNewFileFromTemplate
+au!
+autocmd BufNewFile * silent! 0r $HOME/.vim/templates/%:e.tpl
+autocmd BufNewFile * normal! G"_dd1G
+autocmd BufNewFile * silent! match Todo /TODO/
+augroup END
+
+" ============================================================================
+" Spell Checking (Enhanced)
+" ============================================================================
+set spelllang=en_gb
 let IspellLang = 'british'
 let PersonalDict = '~/.ispell_' . IspellLang
-" try to avoid misspelling words in the first place -- have the insert mode
-" <Ctrl>+N/<Ctrl>+P keys perform completion on partially-typed words by
-" checking the Linux word list and the personal `Ispell' dictionary; sort out
-" case sensibly (so that words at starts of sentences can still be completed
-" with words that are in the dictionary all in lower case):
 
 execute 'set dictionary+=' . PersonalDict
 set dictionary+=/usr/dict/words
 set complete=.,w,k
 set infercase
 
-" correct my common typos without me even noticing them:
+" Enable spell check for certain file types
+autocmd FileType markdown,text,gitcommit setlocal spell
+
+" Spell checking keybindings
+nnoremap <leader>ss :setlocal spell!<CR>
+nnoremap <leader>sn ]s
+nnoremap <leader>sp [s
+nnoremap <leader>sa zg
+nnoremap <leader>s? z=
+
+" Common typos
 abbreviate teh the
-abbreviate cirriculum cirriculum
+abbreviate cirriculum curriculum
 abbreviate vsp \vspace{10mm}
 
+" ============================================================================
+" Custom Keybindings
+" ============================================================================
 
-" Spell checking operations are defined next.  They are all set to normal mode
-" keystrokes beginning \s but function keys are also mapped to the most common
-" ones.  The functions referred to are defined at the end of this .vimrc.
+" Set leader key
+let mapleader = ","
+let maplocalleader = "\\"
 
-" \si ("spelling interactive") saves the current file then spell checks it
-" interactively through `Ispell' and reloads the corrected version:
-execute 'nnoremap \si :w<CR>:!ispell -x -d ' . IspellLang . '%<CR>:e<CR><CR>'
+" Quick save and quit
+nnoremap <leader>w :w<CR>
+nnoremap <leader>q :q<CR>
+nnoremap <leader>x :x<CR>
 
-" \sl ("spelling list") lists all spelling mistakes in the current buffer,
-" but excludes any in news/mail headers or in ("> ") quoted text:
-" execute "nnoremap \sl :w ! grep -v "^>" <Bar> grep -E -v "^[[:alpha:]-]+:
+" Split navigation
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
 
-" ' . \ '<Bar> ispell -l -d ' . IspellLang . ' <Bar> sort <Bar> uniq<CR>'
+" Buffer navigation
+nnoremap <leader>bn :bnext<CR>
+nnoremap <leader>bp :bprevious<CR>
+nnoremap <leader>bd :bdelete<CR>
 
-" \sh ("spelling highlight") highlights (in red) all misspelt words in the
-" current buffer, and also excluding the possessive forms of any valid words
-" (EG "Lizzy's" won't be highlighted if "Lizzy" is in the dictionary); with
-" mail and news messages it ignores headers and quoted text; for HTML it
-" ignores tags and only checks words that will appear, and turns off	other
-" syntax highlighting to make the errors more apparent [function at end	of
-" file]:
+" Tab navigation
+nnoremap <leader>tn :tabnew<CR>
+nnoremap <leader>tc :tabclose<CR>
+nnoremap <leader>th :tabprevious<CR>
+nnoremap <leader>tl :tabnext<CR>
 
-nnoremap \sh :call HighlightSpellingErrors()<CR><CR>
-nmap <F9> \sh
+" Quick editing of vimrc
+nnoremap <leader>ev :vsplit $MYVIMRC<CR>
+nnoremap <leader>sv :source $MYVIMRC<CR>
 
-" \sc ("spelling clear") clears all highlighted misspellings; for HTML it
-" restores regular syntax highlighting:
-nnoremap \sc :if &ft == 'html' <Bar> sy on <Bar>
-\ else <Bar> :sy clear SpellError <Bar> endif<CR>
-nmap <F10> \sc
+" Format entire file
+nnoremap <leader>= ggVG=<CR>
 
-" \sa ("spelling add") adds the word at the cursor position to the personal
-" dictionary (but for possessives adds the base word, so that when the cursor
-" is on "Ceri's" only "Ceri" gets added to the dictionary), and stops
-" highlighting that word as an error (if appropriate) [function at end of
-" file]:
+" Toggle paste mode
+set pastetoggle=<F2>
 
-nnoremap \sa :call AddWordToDictionary()<CR><CR>
-nmap <F8> \sa
-
-au BufNewFile,BufRead   .mutt_*    so $VIMRUNTIME/syntax/muttrc.vim
-
-syntax on
-
-augroup BufNewFileFromTemplate
-au!
-autocmd BufNewFile * silent! 0r $HOME/.vim/templates/%:e.tpl
-autocmd BufNewFile * normal! G"_dd1G
-autocmd BufNewFile * silent! match Todo /TODO/
-augroup BufNewFileFromTemplate
-
-
-" Disable modeline to protext against trojan'ed files
+" ============================================================================
+" Security
+" ============================================================================
+" Disable modeline to protect against trojaned files
 " http://people.freebsd.org/~eik/portaudit/81f127a8-0038-11da-86bc-000e0c2e438a.html
 set nomodeline
+
+" ============================================================================
+" Performance
+" ============================================================================
+" Syntax highlighting for large files
+set synmaxcol=500  " Only syntax highlight first 500 columns
+
+" ============================================================================
+" Syntax Highlighting
+" ============================================================================
+syntax on
+syntax enable
+
+" ============================================================================
+" Additional Features
+" ============================================================================
+
+" Return to last edit position when opening files
+autocmd BufReadPost *
+  \ if line("'\"") > 1 && line("'\"") <= line("$") |
+  \   exe "normal! g`\"" |
+  \ endif
+
+" Automatically equalize splits when vim is resized
+autocmd VimResized * wincmd =
+
+" Highlight yanked text
+augroup highlight_yank
+    autocmd!
+    autocmd TextYankPost * silent! lua vim.highlight.on_yank {higroup="IncSearch", timeout=300}
+augroup END
+
+" ============================================================================
+" Custom Commands
+" ============================================================================
+
+" Remove trailing whitespace
+command! TrimWhitespace %s/\s\+$//e
+
+" Convert tabs to spaces
+command! TabsToSpaces %s/\t/  /g
+
+" Show syntax highlighting groups for word under cursor
+command! SynStack echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+
+" ============================================================================
+" vim-glaive configuration (must be after plug#end)
+" ============================================================================
+call glaive#Install()
+
+" Optional: configure vim-codefmt with glaive
+" Glaive codefmt plugin[mappings]
