@@ -1,5 +1,8 @@
 # Documented checklist at https://github.com/conallob/New-Machine/blob/master/osx-setup.md
 
+# To install on a new machine:
+# brew bundle --file=./Brewfile
+
 # specify a directory to install
 cask_args appdir: '/Applications'
 
