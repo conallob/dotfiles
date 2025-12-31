@@ -1,9 +1,8 @@
 {
   "mcpServers": {
-    {{- /* Personal and Third-party MCP Servers */ -}}
-    {{- includeTemplate "dot_claude/mcp-servers-personal.json.tmpl" . -}}
-    {{- /* Work Related MCP Servers - conditionally add comma if work servers exist */ -}}
-    {{- if eq .chezmoi.username "cobrien" }},{{ end -}}
-    {{- includeTemplate "dot_claude/mcp-servers-work.json.tmpl" . }}
+{{- includeTemplate "dot_claude/mcp-servers-personal.json.tmpl" . | indent 4 }}
+{{- if eq .chezmoi.username "cobrien" }},
+{{ includeTemplate "dot_claude/mcp-servers-work.json.tmpl" . | indent 4 }}
+{{- end }}
   }
 }
