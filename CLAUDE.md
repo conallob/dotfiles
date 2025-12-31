@@ -4,7 +4,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-his is a **chezmoi-managed dotfiles repository** for managing personal configuration across macOS, FreeBSD, and Linux systems. The repository uses chezmoi's templating system with 1Password integration for secrets management.
+This is a **chezmoi-managed dotfiles repository** for managing personal configuration across macOS,
+FreeBSD, and Linux systems. The repository uses chezmoi's templating system with 1Password integration for secrets management.
 
 ## Git Workflow
 
