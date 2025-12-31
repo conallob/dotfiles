@@ -79,6 +79,7 @@ cask "claude-code"
 ## Personally Developed MCPs
 tap "conallob/tap"
 brew "mcp-ssh-wingman"
+brew "mcp-omnifocus"
 
 # Utilities
 
