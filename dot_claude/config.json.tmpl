@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-config.json",
   "mcpServers": {
 {{- includeTemplate "dot_claude/mcp-servers-personal.json.tmpl" . | indent 4 }}
 {{- if eq .chezmoi.username "cobrien" }},

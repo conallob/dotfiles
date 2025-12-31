@@ -1,13 +1,13 @@
 {{- /* Work Related MCP Servers */ -}}
 {{- if eq .chezmoi.username "cobrien" -}}
 "incidentio": {
-  "command": "/Users/{{- .chezmoi.username -}}/bin/incident-io-mcp-server",
+  "command": "/Users/{{ .chezmoi.username }}/bin/incident-io-mcp-server",
   "env": {
-    "INCIDENT_IO_API_KEY": "{{- (onepasswordDetailsFields "jqnzasyqfhkqf7iza5vspjwboa").credential.value }}"
+    "INCIDENT_IO_API_KEY": "{{ (onepasswordDetailsFields "jqnzasyqfhkqf7iza5vspjwboa").credential.value }}"
   }
 },
 "GitLab": {
   "type": "http",
   "url": "https://gitlab.com/api/v4/mcp"
 }
-{{- end -}}
+{{- end }}

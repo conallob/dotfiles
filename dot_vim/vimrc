@@ -9,7 +9,6 @@
 set sw=2                      " Shift width
 set ts=2                      " Tab stop
 set number                    " Line numbers
-set relativenumber            " Relative line numbers for easy navigation
 set ai                        " Auto indent
 set nowrap                    " Don't wrap lines
 set bs=2                      " Backspace behavior
@@ -31,7 +30,12 @@ set showmatch                 " Highlight matching brackets
 set cursorline                " Highlight current line
 set splitright                " Vertical splits to the right
 set splitbelow                " Horizontal splits below
-set termguicolors             " True color support
+
+" Enable true colors if terminal supports it
+" Note: Disable this if you want terminal transparency
+if !has('gui_running') && &term =~ '^\%(screen\|tmux\|xterm-256color\)'
+  set termguicolors
+endif
 
 " Fix delete key, per http://panic.com/prompt/support.html
 :fixdel
@@ -115,8 +119,17 @@ call plug#end()
 " Color Scheme
 " ============================================================================
 set background=dark
+
+" Enable transparent background for gruvbox
+let g:gruvbox_transparent_bg = 1
+
 try
     colorscheme gruvbox
+    " Clear background to respect terminal transparency
+    hi Normal guibg=NONE ctermbg=NONE
+    hi NonText guibg=NONE ctermbg=NONE
+    hi LineNr guibg=NONE ctermbg=NONE
+    hi SignColumn guibg=NONE ctermbg=NONE
 catch
     colorscheme desert
 endtry
@@ -576,7 +589,9 @@ command! SynStack echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "nam
 " ============================================================================
 " vim-glaive configuration (must be after plug#end)
 " ============================================================================
-call glaive#Install()
-
-" Optional: configure vim-codefmt with glaive
-" Glaive codefmt plugin[mappings]
+" Only call glaive#Install if the plugin is available
+if exists('*glaive#Install')
+  call glaive#Install()
+  " Optional: configure vim-codefmt with glaive
+  " Glaive codefmt plugin[mappings]
+endif
