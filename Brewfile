@@ -1,5 +1,8 @@
 # Documented checklist at https://github.com/conallob/New-Machine/blob/master/osx-setup.md
 
+# To install on a new machine:
+# brew bundle --file=./Brewfile
+
 # specify a directory to install
 cask_args appdir: '/Applications'
 
@@ -12,6 +15,7 @@ brew "mas"
 
 brew "go"
 brew "python@3.12"
+brew "virtualenvwrapper"
 brew "git"
 cask "goland"
 cask "jetbrains-toolbox"
@@ -52,6 +56,7 @@ brew "krew"
 brew "kustomize"
 brew "k9s"
 brew "kubectx"
+brew "talosctl"
 
 # General Utilities
 brew "jq"
@@ -61,20 +66,23 @@ brew "yq"
 
 # Terminal
 cask "ghostty"
+brew "tmux"
+brew "zellij"
 
 # ZSH & Shell Environment
 
 brew "atuin"
 brew "powerlevel10k"
 brew "zsh-autosuggestions"
-brew "zellij"
 
 # AI Chatbot
 cask "claude"
+cask "claude-code"
 
 ## Personally Developed MCPs
 tap "conallob/tap"
 brew "mcp-ssh-wingman"
+brew "mcp-omnifocus"
 
 # Utilities
 

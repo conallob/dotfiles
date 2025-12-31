@@ -5,13 +5,24 @@
     "OBSIDIAN_API_KEY": "{{- (onepasswordDetailsFields "xe6ncd3wlggzxt6lq7zv3mduly").credential.value }}"
   }
 },
-"home-assistant-taku": {
+"Home Assistant - Taku": {
   "command": "mcp-proxy",
   "args": [
-    "https://api.taku.ie/api/mcp"
+    "https://api.taku.ie/mcp_server/sse"
   ],
   "env": {
     "API_ACCESS_TOKEN": "{{- (onepasswordDetailsFields "mtsvdobrdd3qsztkds33okg6by").credential.value }}"
+  }
+},
+"jetbrains": {
+  "command": "/Applications/GoLand.app/Contents/jbr/Contents/Home/bin/java",
+  "args": [
+    "-classpath",
+    "/Applications/GoLand.app/Contents/plugins/mcpserver/lib/mcpserver-frontend.jar:/Applications/GoLand.app/Contents/lib/util-8.jar",
+    "com.intellij.mcpserver.stdio.McpStdioRunnerKt"
+  ],
+  "env": {
+    "IJ_MCP_SERVER_PORT": "64342"
   }
 },
 "omnifocus": {
@@ -20,6 +31,9 @@
     "-scripts", "/opt/homebrew/share/mcp-omnifocus",
     "-cache-ttl", "60"
   ]
+},
+"google-sheets": {
+  "command": "/opt/homebrew/bin/mcp-google-sheets"
 },
 "ssh-wingman": {
   "command": "/opt/homebrew/bin/mcp-ssh-wingman",
