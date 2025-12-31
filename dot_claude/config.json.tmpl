@@ -5,5 +5,91 @@
 {{- if eq .chezmoi.username "cobrien" }},
 {{ includeTemplate "dot_claude/mcp-servers-work.json.tmpl" . | indent 4 }}
 {{- end }}
+  },
+  "lsp": {
+    "enabled": true,
+    "servers": {
+      "gopls": {
+        "command": "gopls",
+        "args": ["serve"],
+        "rootPatterns": ["go.mod", "go.work", ".git"],
+        "filetypes": ["go"],
+        "settings": {
+          "gopls": {
+            "analyses": {
+              "unusedparams": true,
+              "shadow": true
+            },
+            "staticcheck": true,
+            "gofumpt": true
+          }
+        }
+      },
+      "basedpyright": {
+        "command": "basedpyright-langserver",
+        "args": ["--stdio"],
+        "rootPatterns": ["pyproject.toml", "setup.py", "setup.cfg", "requirements.txt", ".git"],
+        "filetypes": ["python"],
+        "settings": {
+          "basedpyright": {
+            "analysis": {
+              "typeCheckingMode": "basic",
+              "autoSearchPaths": true,
+              "useLibraryCodeForTypes": true
+            }
+          }
+        }
+      },
+      "marksman": {
+        "command": "marksman",
+        "args": ["server"],
+        "rootPatterns": [".git", ".marksman.toml"],
+        "filetypes": ["markdown"]
+      },
+      "yaml-language-server": {
+        "command": "yaml-language-server",
+        "args": ["--stdio"],
+        "rootPatterns": [".git"],
+        "filetypes": ["yaml", "yml"],
+        "settings": {
+          "yaml": {
+            "format": {
+              "enable": true
+            },
+            "validate": true,
+            "hover": true,
+            "completion": true,
+            "schemas": {
+              "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.{yml,yaml}",
+              "https://json.schemastore.org/gitlab-ci.json": ".gitlab-ci.{yml,yaml}",
+              "https://raw.githubusercontent.com/docker/compose/master/compose/config/compose_spec.json": "docker-compose*.{yml,yaml}"
+            }
+          }
+        }
+      },
+      "texlab": {
+        "command": "texlab",
+        "rootPatterns": [".git"],
+        "filetypes": ["tex", "latex", "bib"]
+      },
+      "typescript-language-server": {
+        "command": "typescript-language-server",
+        "args": ["--stdio"],
+        "rootPatterns": ["package.json", "tsconfig.json", "jsconfig.json", ".git"],
+        "filetypes": ["javascript", "javascriptreact", "typescript", "typescriptreact"]
+      },
+      "vscode-json-language-server": {
+        "command": "vscode-json-language-server",
+        "args": ["--stdio"],
+        "rootPatterns": [".git"],
+        "filetypes": ["json", "jsonc"]
+      },
+      "bash-language-server": {
+        "command": "bash-language-server",
+        "args": ["start"],
+        "rootPatterns": [".git"],
+        "filetypes": ["sh", "bash"]
+      }
+    }
   }
 }
