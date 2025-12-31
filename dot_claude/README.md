@@ -8,7 +8,7 @@ This directory contains unified configuration for both **Claude Code** (CLI) and
 
 | File | Purpose | Used By |
 |------|---------|---------|
-| `config.json.tmpl` | MCP server configuration | Claude Code (CLI) |
+| `config.json.tmpl` | MCP servers + LSP configuration | Claude Code (CLI) |
 | `settings.json.tmpl` | Basic CLI settings | Claude Code (CLI) |
 | `plugins/config.json.tmpl` | Plugin-specific settings | Claude Code plugins |
 | `../Library/.../claude_desktop_config.json.tmpl` | MCP server configuration | Claude Desktop (GUI) |
@@ -71,6 +71,58 @@ The configuration uses a **unified template approach** where MCP server definiti
 
 - **incidentio**: Incident.io integration with 1Password API key
 - **GitLab**: GitLab MCP HTTP integration
+
+## LSP (Language Server Protocol) Configuration
+
+Claude Code v2.0.74+ includes LSP support. The configuration uses the same language servers installed for Vim, providing consistent IDE features across both editors.
+
+### Configured Language Servers
+
+| Language Server | Languages | Features |
+|----------------|-----------|----------|
+| **gopls** | Go | Code completion, go-to-definition, diagnostics, refactoring |
+| **basedpyright** | Python | Type checking, completion, diagnostics |
+| **marksman** | Markdown | Completion, navigation, diagnostics |
+| **yaml-language-server** | YAML | Schema validation, completion (GitHub Actions, GitLab CI, Docker Compose) |
+| **texlab** | LaTeX, BibTeX | Completion, build support, navigation |
+| **typescript-language-server** | TypeScript, JavaScript | Full TS/JS support, JSX/TSX |
+| **vscode-json-language-server** | JSON, JSONC | Schema validation, completion |
+| **bash-language-server** | Bash, Shell | Completion, diagnostics, shellcheck integration |
+
+### LSP Features
+
+- **Code Completion**: Intelligent suggestions based on context
+- **Go to Definition**: Navigate to symbol definitions
+- **Find References**: Find all usages of a symbol
+- **Diagnostics**: Real-time error and warning detection
+- **Hover Documentation**: View documentation on hover
+- **Code Actions**: Quick fixes and refactoring suggestions
+- **Formatting**: Auto-format on save
+
+### Configuration Details
+
+The LSP configuration in `config.json.tmpl` includes:
+
+- **Root Pattern Detection**: Automatically detects project roots (e.g., `go.mod`, `package.json`, `.git`)
+- **File Type Association**: Maps file extensions to appropriate language servers
+- **Server-Specific Settings**: Optimized settings for each language server
+- **YAML Schema Integration**: Automatic schema validation for GitHub Actions, GitLab CI, and Docker Compose files
+
+### Installation
+
+All language servers are installed via Homebrew (see Brewfile):
+
+```bash
+brew install gopls basedpyright marksman yaml-language-server texlab \
+             typescript-language-server vscode-langservers-extracted \
+             bash-language-server
+```
+
+Or install all dependencies at once:
+
+```bash
+brew bundle install
+```
 
 ## Template Logic
 
