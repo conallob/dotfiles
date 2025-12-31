@@ -4,18 +4,23 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This is a **chezmoi-managed dotfiles repository** for managing personal configuration across macOS, FreeBSD, and Linux systems. The repository uses chezmoi's templating system with 1Password integration for secrets management.
+This is a **chezmoi-managed dotfiles repository** for managing personal configuration across macOS,
+FreeBSD, and Linux systems. The repository uses chezmoi's templating system with 1Password integration for secrets management.
 
 ## Git Workflow
 
 **This repository typically works directly on the `master` branch.**
 
-Since this is a personal dotfiles repository managing system configurations, changes are usually committed directly to master. Feature branches should be **infrequent** and only used for:
+Since this is a personal dotfiles repository managing system configurations, 
+changes are usually committed directly to master. Feature branches should be 
+**infrequent** and only used for:
 - Major refactoring or architectural changes
 - Experimental configurations that need testing before deployment
 - Changes that require review or collaboration
 
-For routine configuration updates (adding packages, updating settings, fixing bugs), commit directly to master.
+For routine configuration updates (adding packages, updating settings, 
+fixing bugs), commit directly to master.
+
 
 ## Key Architecture Patterns
 

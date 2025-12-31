@@ -9,6 +9,7 @@
 
 # Testing
 * Always write unittests when writing languages such as Go or Python
+* Always run linters, `golangci-lint` and `go fmt` for Golang , `black`, `ruff` for Python
 
 # Workflow
 * When working on Github repositories under github.com/conallob , always install Claude App and Claude Github Actions

@@ -27,8 +27,10 @@ unset x mydomain
 POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true
 
 # atuin, for shell history
-
 eval "$(atuin init zsh)"
+
+# virtualenvwrapper, for managing venv for python scripts
+source virtualenvwrapper.sh
 
 # Machine Specific zshrc
 source $(chezmoi source-path)/dot_zsh/zshrc.$(uname -s)
