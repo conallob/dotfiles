@@ -6,6 +6,10 @@
   {{ includeTemplate "dot_claude/mcp-servers-personal.json.tmpl" . | indent 4 -}},
 
   {{- /* Work Related MCP Servers */ -}}
+  {{- if eq .chezmoi.username "cobrien" -}}
+  ,
   {{- includeTemplate "dot_claude/mcp-servers-work.json.tmpl" . | indent 4 -}}
+  {{- end -}}
+
   }
 }
