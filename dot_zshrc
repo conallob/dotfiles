@@ -32,6 +32,9 @@ eval "$(atuin init zsh)"
 # virtualenvwrapper, for managing venv for python scripts
 source virtualenvwrapper.sh
 
+# Enable LSP for Claude Code
+export ENABLE_LSP_TOOLS=1
+
 # Machine Specific zshrc
 source $(chezmoi source-path)/dot_zsh/zshrc.$(uname -s)
 
