@@ -8,9 +8,8 @@
 "home-assistant-taku": {
   "type": "http",
   "url": "https://api.taku.ie/api/mcp",
-  "env": {
-    "API_ACCESS_TOKEN": "{{- (onepasswordDetailsFields "mtsvdobrdd3qsztkds33okg6by").credential.value }}"
-  }
+  "oauthClientId": "https://claude.ai",
+  "oauthClientSecret": "{{- (onepasswordDetailsFields "mtsvdobrdd3qsztkds33okg6by").credential.value }}"
 },
 "omnifocus": {
   "command": "/opt/homebrew/bin/mcp-omnifocus",
