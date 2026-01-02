@@ -125,14 +125,31 @@ let g:gruvbox_transparent_bg = 1
 
 try
     colorscheme gruvbox
-    " Clear background to respect terminal transparency
-    hi Normal guibg=NONE ctermbg=NONE
-    hi NonText guibg=NONE ctermbg=NONE
-    hi LineNr guibg=NONE ctermbg=NONE
-    hi SignColumn guibg=NONE ctermbg=NONE
 catch
     colorscheme desert
 endtry
+
+" Clear background to respect terminal transparency
+" This must be AFTER the colorscheme is set
+augroup TransparentBackground
+    autocmd!
+    autocmd ColorScheme * hi Normal guibg=NONE ctermbg=NONE
+    autocmd ColorScheme * hi NonText guibg=NONE ctermbg=NONE
+    autocmd ColorScheme * hi LineNr guibg=NONE ctermbg=NONE
+    autocmd ColorScheme * hi SignColumn guibg=NONE ctermbg=NONE
+    autocmd ColorScheme * hi EndOfBuffer guibg=NONE ctermbg=NONE
+    autocmd ColorScheme * hi Folded guibg=NONE ctermbg=NONE
+    autocmd ColorScheme * hi VertSplit guibg=NONE ctermbg=NONE
+augroup END
+
+" Apply transparency immediately for current session
+hi Normal guibg=NONE ctermbg=NONE
+hi NonText guibg=NONE ctermbg=NONE
+hi LineNr guibg=NONE ctermbg=NONE
+hi SignColumn guibg=NONE ctermbg=NONE
+hi EndOfBuffer guibg=NONE ctermbg=NONE
+hi Folded guibg=NONE ctermbg=NONE
+hi VertSplit guibg=NONE ctermbg=NONE
 
 " ============================================================================
 " LSP Configuration
@@ -327,6 +344,16 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#branch#enabled = 1
+
+" Ensure airline respects transparent background
+augroup AirlineTransparency
+    autocmd!
+    autocmd VimEnter * hi airline_c guibg=NONE ctermbg=NONE
+    autocmd VimEnter * hi airline_x guibg=NONE ctermbg=NONE
+    autocmd VimEnter * hi airline_y guibg=NONE ctermbg=NONE
+    autocmd VimEnter * hi airline_z guibg=NONE ctermbg=NONE
+    autocmd VimEnter * hi airline_tabfill guibg=NONE ctermbg=NONE
+augroup END
 
 " ============================================================================
 " Go Configuration (vim-go)
