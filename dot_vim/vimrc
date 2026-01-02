@@ -33,9 +33,9 @@ set splitbelow                " Horizontal splits below
 
 " Enable true colors if terminal supports it
 " Note: Disable this if you want terminal transparency
-if !has('gui_running') && &term =~ '^\%(screen\|tmux\|xterm-256color\|xterm-ghostty\)'
-  set termguicolors
-endif
+"if !has('gui_running') && &term =~ '^\%(screen\|tmux\|xterm-256color\|xterm-ghostty\)'
+"  set termguicolors
+"endif
 
 " Fix delete key, per http://panic.com/prompt/support.html
 :fixdel
