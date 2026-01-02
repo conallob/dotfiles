@@ -33,7 +33,7 @@ set splitbelow                " Horizontal splits below
 
 " Enable true colors if terminal supports it
 " Note: Disable this if you want terminal transparency
-if !has('gui_running') && &term =~ '^\%(screen\|tmux\|xterm-256color\)'
+if !has('gui_running') && &term =~ '^\%(screen\|tmux\|xterm-256color\|xterm-ghostty\)'
   set termguicolors
 endif
 
