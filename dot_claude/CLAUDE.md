@@ -32,7 +32,7 @@ Use specialized subagents to handle complex, repetitive tasks more efficiently:
 
 ## GitHub Actions Subagent
 
-When working with Pull Requests, use a subagent to monitor GitHub Actions:
+When working with GitHub Pull Requests, use a subagent to monitor GitHub Actions:
 * Instead of repeatedly checking and copying GitHub Actions output manually
 * Launch a general-purpose subagent to monitor the PR's CI/CD pipeline
 * The subagent should use `gh` commands to check workflow runs and report status
