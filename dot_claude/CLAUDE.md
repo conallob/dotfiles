@@ -34,7 +34,7 @@ When working with Pull Requests, use a subagent to monitor GitHub Actions:
 
 Before committing changes to a branch, use a subagent to run linting and tests:
 * Launch a general-purpose subagent to run all relevant linters and tests for the codebase
-* For Go projects: run `golangci-lint`, `go fmt`, and `go test`
-* For Python projects: run `black`, `ruff`, and `pytest`
+* The subagent should first inspect `.github/workflows/` to detect what linters and test commands are configured
+* Run the same commands that GitHub Actions will run to ensure local checks match CI/CD
 * The subagent should report all issues found and only mark complete when all checks pass
-* This ensures code quality before creating commits or push requests
+* This ensures code quality before creating commits or push requests and prevents CI failures
