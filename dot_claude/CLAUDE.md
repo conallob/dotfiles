@@ -14,6 +14,17 @@
 # Workflow
 * When working on Github repositories under github.com/conallob , always install Claude App and Claude Github Actions
 * When working on Github Pull Requests, always address all PR feedback provided by Claude Code Review
+* When creating Pull Requests, include the primary prompts as multiline markdown code blocks in the PR description
+  - This provides context for reviewers about the original intent and scope
+  - Format prompts using markdown code fences (triple backticks)
+  - Example format in PR description:
+    ```
+    ## Original Prompt
+
+    ```
+    Create a new branch to update @dot_claude/CLAUDE.md to use subagents...
+    ```
+    ```
 
 # Subagents
 
