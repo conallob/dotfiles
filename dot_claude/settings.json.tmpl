@@ -11,14 +11,14 @@
     "commit-commands@claude-plugins-official": true
   },
   "hooks": {
-    "_comment": "Native system notifications when Claude is waiting for input",
+    {{- /* Native system notifications when Claude is waiting for input */}}
     "Notification": [
       {
         "matcher": "idle_prompt",
         "hooks": [
           {
             "type": "command",
-            {{/* macOS native notification with Claude app icon */}}
+            {{- /* macOS native notification with Claude app icon */}}
             "command": "osascript -e 'tell application \"Claude\" to display notification \"Claude has completed the task and is awaiting your input\" with title \"Claude Code\"'"
           }
         ]
@@ -28,7 +28,7 @@
         "hooks": [
           {
             "type": "command",
-            {{/* Alert when Claude needs permission with Claude app icon */}}
+            {{- /* Alert when Claude needs permission with Claude app icon */}}
             "command": "osascript -e 'tell application \"Claude\" to display notification \"Claude needs your permission to proceed\" with title \"Claude Code\"'"
           }
         ]
@@ -39,7 +39,7 @@
         "hooks": [
           {
             "type": "command",
-            {{/* Terminal bell when Claude finishes responding */}}
+            {{- /* Terminal bell when Claude finishes responding */}}
             "command": "printf '\\a'"
           }
         ]
