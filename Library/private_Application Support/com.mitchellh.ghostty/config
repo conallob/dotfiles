@@ -4,3 +4,9 @@ cursor-invert-fg-bg = true
 window-height = 58
 window-width = 80
 keybind = shift+enter=text:\n
+
+# Desktop notifications
+desktop-notifications = true
+
+# Terminal bell (visual and audio)
+shell-integration-features = cursor,sudo,title
