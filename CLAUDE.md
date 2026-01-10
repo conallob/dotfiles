@@ -9,17 +9,17 @@ FreeBSD, and Linux systems. The repository uses chezmoi's templating system with
 
 ## Git Workflow
 
-**This repository typically works directly on the `master` branch.**
+**This repository typically works directly on the `main` branch.**
 
-Since this is a personal dotfiles repository managing system configurations, 
-changes are usually committed directly to master. Feature branches should be 
+Since this is a personal dotfiles repository managing system configurations,
+changes are usually committed directly to main. Feature branches should be
 **infrequent** and only used for:
 - Major refactoring or architectural changes
 - Experimental configurations that need testing before deployment
 - Changes that require review or collaboration
 
-For routine configuration updates (adding packages, updating settings, 
-fixing bugs), commit directly to master.
+For routine configuration updates (adding packages, updating settings,
+fixing bugs), commit directly to main.
 
 
 ## Key Architecture Patterns
