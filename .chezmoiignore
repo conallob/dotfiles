@@ -1,0 +1,3 @@
+# Ignore markdown documentation files that should stay in the repository
+# but not be applied to the home directory
+*.md
