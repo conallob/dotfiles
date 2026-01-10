@@ -36,7 +36,10 @@ Files and directories use chezmoi's special prefix naming:
 Files with `.tmpl` extension are processed by chezmoi using Go templates:
 - **1Password Integration**: Uses `onepasswordDetailsFields` and `onepasswordDocument` functions to inject secrets
 - **Conditional Logic**: `{{- if eq .chezmoi.username "cobrien" }}` gates work-specific configurations
-- **Comments in JSON**: Uses `"_comment"` keys (not `"$comment"`) for annotations in JSON files, as per recent commits
+- **JSON Template Files**: Files ending in `.json.tmpl` use Go `text/template` syntax:
+  - Use `{{/* comment */}}` for template comments (not JSON comments)
+  - Be mindful of trailing whitespace in the rendered output - use `{{-` and `-}}` to trim whitespace
+  - Test rendered output with `chezmoi execute-template` to verify proper JSON formatting
 
 ### Multi-Platform Configuration Strategy
 
