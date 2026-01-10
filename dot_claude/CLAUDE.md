@@ -52,3 +52,17 @@ Before committing changes to a branch, use a subagent to run linting and tests:
 * Run the same commands that the CI/CD platform will run to ensure local checks match CI/CD
 * The subagent should report all issues found and only mark complete when all checks pass
 * This ensures code quality before creating commits or push requests and prevents CI failures
+
+## Spell Check Subagent
+
+Before committing changes, use a subagent to check spelling in code, documentation, and comments:
+* Launch a general-purpose subagent to run spell checking on modified files
+* The subagent should check:
+  - Documentation files (*.md, *.rst, *.txt)
+  - Code comments and docstrings
+  - Commit messages
+  - String literals where appropriate (excluding technical terms, variables, APIs)
+* Use tools like `codespell`, `aspell`, or `typos` if available in the project
+* Report spelling errors with suggestions for corrections
+* The subagent should only mark complete when all spelling issues are addressed or intentionally ignored
+* This prevents typos from making it into commits and improves documentation quality
