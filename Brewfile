@@ -83,6 +83,12 @@ brew "zsh-autosuggestions"
 cask "claude"
 cask "claude-code"
 
+# AI Coding Add-Ons
+#
+# https://github.com/steveyegge/beads?tab=readme-ov-file#bd---beads
+tap "steveyegge/beads"
+brew "bd"
+
 ## Personally Developed MCPs
 tap "conallob/tap"
 brew "mcp-ssh-wingman"
