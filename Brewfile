@@ -65,6 +65,7 @@ brew "talosctl"
 brew "jq"
 brew "protobuf"
 brew "pssh"
+brew "terminal-notifier"
 brew "yq"
 
 # Terminal

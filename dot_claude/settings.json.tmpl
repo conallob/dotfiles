@@ -19,7 +19,7 @@
           {
             "type": "command",
             {{- /* macOS native notification with Claude app icon */}}
-            "command": "osascript -e 'tell application \"Claude\" to display notification \"Claude has completed the task and is awaiting your input\" with title \"Claude Code\"'"
+            "command": "terminal-notifier -message \"Claude has completed the task and is awaiting your input\" -title \"Claude Code\" -sender com.anthropic.claudefordesktop"
           }
         ]
       },
@@ -29,7 +29,7 @@
           {
             "type": "command",
             {{- /* Alert when Claude needs permission with Claude app icon */}}
-            "command": "osascript -e 'tell application \"Claude\" to display notification \"Claude needs your permission to proceed\" with title \"Claude Code\"'"
+            "command": "terminal-notifier -message \"Claude needs your permission to proceed\" -title \"Claude Code\" -sender com.anthropic.claudefordesktop"
           }
         ]
       }
