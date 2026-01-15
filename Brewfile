@@ -48,6 +48,7 @@ brew "markdownlint-cli"  # Markdown linter
 brew "hadolint"  # Dockerfile linter
 brew "yamllint"  # YAML linter
 brew "prettier"  # Multi-language code formatter
+brew "keep-sorted" # Language-agnostic lint sorting formatter
 
 # Container tools
 brew "podman"
