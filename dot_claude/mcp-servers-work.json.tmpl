@@ -9,5 +9,28 @@
 "GitLab": {
   "type": "http",
   "url": "https://gitlab.com/api/v4/mcp"
+},
+"obsidian-mcp-tools": {
+  "command": "/Users/{{- .chezmoi.username -}}/Documents/Multiverse/.obsidian/plugins/mcp-tools/bin/mcp-server",
+  "env": {
+    "OBSIDIAN_API_KEY": "{{- (onepasswordDetailsFields "xe6ncd3wlggzxt6lq7zv3mduly").credential.value }}"
+  }
+},
+"context7": {
+  "type": "http",
+  "url": "https://mcp.context7.com/mcp",
+  "oauthClientId": "CONTEXT7_API_KEY",
+  "oauthClientSecret": "{{- (onepasswordDetailsFields "3c2h6vl24g4nb3qfwmaovqf7ze").credential.value }}"
+},
+"omnifocus": {
+  "command": "/opt/homebrew/bin/mcp-omnifocus",
+  "args": [
+    "-scripts", "/opt/homebrew/share/mcp-omnifocus",
+    "-cache-ttl", "60"
+  ]
+},
+"ssh-wingman": {
+  "command": "/opt/homebrew/bin/mcp-ssh-wingman",
+  "args": ["--session", "mcp-wingman"]
 }
 {{- end }}
