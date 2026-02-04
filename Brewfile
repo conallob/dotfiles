@@ -117,6 +117,7 @@ cask "whatsapp"
 cask "timeular"
 cask "obsidian"
 cask "elgato-stream-deck"
+cask "obs"  # Open Broadcast Software
 mas "Omnifocus", id: 1542143627
 mas "Flycut", id: 442160987
 mas "Remarkable", id: 1276493162
