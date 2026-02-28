@@ -20,3 +20,10 @@ if [ -e "${CONFIGS}/alias.$(hostname -s)" ];
 then
   source "${CONFIGS}/alias.$(hostname -s)"
 fi
+
+# On non-macOS systems, load OSC 52 clipboard helpers (pbcopy shim, copy function).
+# macOS has pbcopy/pbpaste natively; other platforms need the OSC 52 path.
+if [ "$(uname -s)" != "Darwin" ] && [ -e "${CONFIGS}/alias.remote-clipboard" ];
+then
+  source "${CONFIGS}/alias.remote-clipboard"
+fi
