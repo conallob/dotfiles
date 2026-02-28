@@ -1,0 +1,9 @@
+# https://danmackinlay.name/notebook/clipboard.html#any-remote-terminal-via-osc52
+
+# copy stdin to the *local* clipboard via OSC 52
+pbcopy() {
+  # GNU base64 (Linux) wraps lines by default; strip newlines to keep OSC payload intact.
+  local data
+  data=$(base64 | tr -d '\r\n')
+  printf '\e]52;c;%s\a' "$data"
+}
