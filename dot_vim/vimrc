@@ -113,6 +113,9 @@ Plug 'jiangmiao/auto-pairs'                         " Auto-close brackets
 Plug 'yggdroot/indentline'                          " Show indent guides
 Plug 'editorconfig/editorconfig-vim'                " EditorConfig support
 
+" --- Clipboard ---
+Plug 'ojroques/vim-oscyank', {'branch': 'main'}     " OSC 52 clipboard (works over SSH, without X11)
+
 call plug#end()
 
 " ============================================================================
@@ -621,4 +624,14 @@ if exists('*glaive#Install')
   call glaive#Install()
   " Optional: configure vim-codefmt with glaive
   " Glaive codefmt plugin[mappings]
+endif
+
+" ============================================================================
+" OSC 52 Clipboard (vim-oscyank)
+" ============================================================================
+" Automatically sync yanks to the terminal clipboard via OSC 52.
+" Works over SSH and without X11 (complements 'vim -X' alias).
+" Triggers whenever text is yanked to the + register (clipboard=unnamedplus).
+if exists('g:loaded_oscyank')
+  autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '+' | execute 'OSCYankRegister +' | endif
 endif
