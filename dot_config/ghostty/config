@@ -10,3 +10,8 @@ desktop-notifications = true
 
 # Terminal bell (visual and audio)
 shell-integration-features = cursor,sudo,title
+
+# Clipboard (OSC 52)
+clipboard-read = allow
+clipboard-write = allow
+copy-on-select = clipboard
