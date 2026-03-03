@@ -26,6 +26,18 @@
     ```
     ```
 
+# Enterprise Account Constraints
+
+When using the Claude Enterprise account at work, a number of commands are sandboxed and unavailable for direct execution. Plan accordingly and ask the user to run these commands manually when needed:
+
+* `git` — version control operations (commits, pushes, branching, etc.)
+* `kubectl` — Kubernetes cluster interactions
+* `gh` — GitHub CLI operations
+* `glab` — GitLab CLI operations
+* Other system or infrastructure tooling may also be restricted
+
+When a sandboxed command is required, provide the exact command for the user to run and incorporate their output to continue the task.
+
 # Subagents
 
 Use specialized subagents to handle complex, repetitive tasks more efficiently:
