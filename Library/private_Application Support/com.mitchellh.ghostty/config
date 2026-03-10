@@ -1,2 +1,2 @@
 # Per https://ghostty.org/docs/config#splitting-into-multiple-files
-config-file = $HOME/.config/ghostty/config
+config-file = ~/.config/ghostty/config
