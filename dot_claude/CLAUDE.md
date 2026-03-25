@@ -37,6 +37,7 @@ Specialised agents are defined in `~/.claude/agents/`. Use them for:
 * `python-dev` — Python formatting, linting, type checking, and testing
 * `chezmoi` — dotfiles template editing, validation, and apply workflow
 * `github-pr` — GitHub PR creation, review response, and gh CLI workflows
+* `gitlab-mr` — GitLab MR creation, review response, and glab CLI workflows
 * `k8s` — Kubernetes, kustomize, and Talos cluster operations
 * `obsidian` — capture notes and search the Obsidian vault
 * `omnifocus` — capture tasks and TODOs into OmniFocus
