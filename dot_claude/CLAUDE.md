@@ -10,6 +10,7 @@
 # Testing
 * Always write unittests when writing languages such as Go or Python
 * Always run linters, `golangci-lint` and `go fmt` for Golang , `black`, `ruff` for Python
+* Always run Python operations (linting, testing, package installs) inside a virtualenv managed via `mkvirtualenv` (virtualenvwrapper); never use system Python
 
 # Workflow
 * When working on Github repositories under github.com/conallob , always install Claude App and Claude Github Actions
