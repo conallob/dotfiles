@@ -13,19 +13,22 @@ Always structure MR descriptions as:
 ## Summary
 - <bullet points describing changes>
 
-Co-Authored-By: Claude Code + Claude {{ model }}
+## Linked Jira Issue
+- <link to one or more Jira issues>
 
-## Original Prompt
+## AI
+Co-Authored-By: Claude Code + Claude <model>, with the original prompt:
 
 ```
 <original user prompt here>
 ```
 
-<session URL>
+https://claude.ai/session/<session-id>
 ```
 
 - Do **not** include a Test Plan section — test plans belong in commits, code comments, or linked issues, not in the MR description.
-- `{{ model }}` should be replaced with the actual Claude model name (e.g. `claude-sonnet-4-6`).
+- Always include one or more Jira issue links in the `Linked Jira Issue` section.
+- Replace `<model>` with the actual Claude model name (e.g. `claude-sonnet-4-6`).
 
 - Keep MR title under 70 characters
 - `glab mr create --title "..." --description "$(cat <<'EOF' ... EOF)"`

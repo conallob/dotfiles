@@ -19,19 +19,18 @@ Always structure PR descriptions as:
 ## Summary
 - <bullet points describing changes>
 
-Co-Authored-By: Claude Code + Claude {{ model }}
-
-## Original Prompt
+## AI
+Co-Authored-By: Claude Code + Claude <model>, with the original prompt:
 
 ```
 <original user prompt here>
 ```
 
-<session URL>
+https://claude.ai/session/<session-id>
 ```
 
 - Do **not** include a Test Plan section — test plans belong in commits, code comments, or linked issues, not in the PR description.
-- `{{ model }}` should be replaced with the actual Claude model name (e.g. `claude-sonnet-4-6`).
+- Replace `<model>` with the actual Claude model name (e.g. `claude-sonnet-4-6`).
 
 - Keep PR title under 70 characters
 - `gh pr create --title "..." --body "$(cat <<'EOF' ... EOF)"`
