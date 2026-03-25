@@ -10,6 +10,12 @@
     {{- /* Git Commit Commands */}}
     "commit-commands@claude-plugins-official": true
   },
+{{- if eq .chezmoi.username "cobrien" }}
+  "env": {
+    {{- /* GitLab API token from work 1Password account */}}
+    "GITLAB_TOKEN": "{{ (onepasswordDetailsFields "zvmzgcfpmw33ttzrw4ureqxtim" "" "FUJ74MTVQVCN5DXVK4PSF5HKU4").credential.value }}"
+  },
+{{- end }}
   "hooks": {
     {{- /* Native system notifications when Claude is waiting for input */}}
     "Notification": [
