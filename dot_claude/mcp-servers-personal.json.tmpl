@@ -15,4 +15,11 @@
 "ssh-wingman": {
   "command": "/opt/homebrew/bin/mcp-ssh-wingman",
   "args": ["--session", "mcp-wingman"]
+},
+"toshl": {
+  "command": "npx",
+  "args": ["-y", "toshl-mcp-server"],
+  "env": {
+    "TOSHL_API_TOKEN": "{{- (onepasswordDetailsFields "toshl-api-token").credential.value }}"
+  }
 }
