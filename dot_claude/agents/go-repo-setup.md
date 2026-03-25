@@ -9,7 +9,7 @@ Specialist for bootstrapping new Go repositories under `github.com/conallob` wit
 
 Given a new (or nearly empty) GitHub repository, this agent creates:
 
-1. **GitHub Actions workflows** — build CI, GoReleaser release, Claude Code integration, Claude Code Review
+1. **GitHub Actions workflows** — build CI, GoReleaser release
 2. **`.goreleaser.yml`** — multi-platform (or darwin-only) release config with Homebrew tap
 3. **`Makefile`** — standard targets: build, clean, install, test, fmt, vet, lint
 4. **`go.mod`** — Go module initialisation
@@ -154,55 +154,23 @@ jobs:
 
 ---
 
-### `.github/workflows/claude.yml`
+### Claude Code GitHub Actions (claude.yml + code review)
 
-```yaml
-name: Claude Code
+Do **not** manually create these workflow files. Instead, set them up via the official installer:
 
-on:
-  issue_comment:
-    types: [created]
-  pull_request_review_comment:
-    types: [created]
-  issues:
-    types: [opened, assigned]
-  pull_request_review:
-    types: [submitted]
+**Recommended**: In a Claude Code terminal session inside the repo, run:
 
-jobs:
-  claude:
-    if: |
-      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
-      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
-      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
-      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: read
-      issues: read
-      id-token: write
-      actions: read
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-
-      - name: Run Claude Code
-        id: claude
-        uses: anthropics/claude-code-action@v1
-        with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          additional_permissions: |
-            actions: read
+```
+/install-github-app
 ```
 
----
+This installs the Claude GitHub App and creates the correct `claude.yml` workflow for `@claude` mention support. Follow the prompts — you need to be a repo admin.
 
-### `.github/workflows/claude-code-review.yml`
+**For Code Review**: Enable the managed Code Review service (not a copied workflow) via the admin settings at `https://claude.ai/admin-settings/claude-code`. Select the repository and choose a review trigger (on PR open, on every push, or manual).
 
-Copy the current default Claude Code Review workflow from an existing repo (e.g. `conallob/mcp-ssh-wingman`). Do not embed a static template here — the canonical version evolves over time and should be sourced fresh from an up-to-date reference repo.
+See the official docs for full details:
+- GitHub Actions setup: https://code.claude.com/docs/en/github-actions
+- Code Review setup: https://code.claude.com/docs/en/code-review
 
 ---
 
@@ -477,16 +445,14 @@ func main() {
    - Use `mcp__github__push_files` to batch multiple files in a single commit when available.
 3. **Verify** with `mcp__github__list_branches` and `mcp__github__get_file_contents` that files landed correctly.
 4. **Report** a summary of what was created and remind the user to:
-   - Add `CLAUDE_CODE_OAUTH_TOKEN` secret to the repo (from Claude.ai account settings)
    - Add `HOMEBREW_TAP_GITHUB_TOKEN` secret to the repo (a PAT with write access to `conallob/homebrew-tap`)
-   - Install the Claude GitHub App on the repo
+   - Run `/install-github-app` in a Claude Code terminal to set up `@claude` mention support
+   - Enable Code Review via https://claude.ai/admin-settings/claude-code
 
 ## Checklist
 
 - [ ] `.github/workflows/build.yml`
 - [ ] `.github/workflows/release.yml`
-- [ ] `.github/workflows/claude.yml`
-- [ ] `.github/workflows/claude-code-review.yml`
 - [ ] `.goreleaser.yml`
 - [ ] `Makefile`
 - [ ] `go.mod`
@@ -495,3 +461,5 @@ func main() {
 - [ ] `README.md`
 - [ ] `CLAUDE.md`
 - [ ] `.gitignore`
+- [ ] Claude GitHub App installed (via `/install-github-app`)
+- [ ] Code Review enabled at https://claude.ai/admin-settings/claude-code
