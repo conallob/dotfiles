@@ -19,9 +19,6 @@ Always structure PR descriptions as:
 ## Summary
 - <bullet points describing changes>
 
-## Test Plan
-- [ ] <what was tested>
-
 ## Original Prompt
 
 ```
@@ -30,6 +27,8 @@ Always structure PR descriptions as:
 
 <session URL>
 ```
+
+Do **not** include a Test Plan section in PR descriptions — test plans belong in commits, code comments, or linked issues, not in the PR description itself.
 
 - Keep PR title under 70 characters
 - `gh pr create --title "..." --body "$(cat <<'EOF' ... EOF)"`
