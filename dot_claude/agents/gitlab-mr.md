@@ -27,7 +27,7 @@ https://claude.ai/session/<session-id>
 ```
 
 - Do **not** include a Test Plan section — test plans belong in commits, code comments, or linked issues, not in the MR description.
-- Always include one or more Jira issue links in the `Linked Jira Issue` section.
+- Always include one or more Jira issue links in the `Linked Jira Issue` section. The Jira issue key is often embedded in the branch name (e.g. `feat/PROJ-1234-some-description` → `PROJ-1234`); extract it from there if not otherwise known.
 - Replace `<model>` with the actual Claude model name (e.g. `claude-sonnet-4-6`).
 
 - Keep MR title under 70 characters
