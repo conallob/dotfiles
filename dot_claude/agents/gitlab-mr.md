@@ -13,6 +13,8 @@ Always structure MR descriptions as:
 ## Summary
 - <bullet points describing changes>
 
+Co-Authored-By: Claude Code + Claude {{ model }}
+
 ## Original Prompt
 
 ```
@@ -22,7 +24,8 @@ Always structure MR descriptions as:
 <session URL>
 ```
 
-Do **not** include a Test Plan section in MR descriptions — test plans belong in commits, code comments, or linked issues, not in the MR description itself.
+- Do **not** include a Test Plan section — test plans belong in commits, code comments, or linked issues, not in the MR description.
+- `{{ model }}` should be replaced with the actual Claude model name (e.g. `claude-sonnet-4-6`).
 
 - Keep MR title under 70 characters
 - `glab mr create --title "..." --description "$(cat <<'EOF' ... EOF)"`
