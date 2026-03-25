@@ -3,4 +3,4 @@
 [onepassword]
   command = "op"
   mode = "account"
-	account = "conall@taku.ie"
+	account = {{ if eq .chezmoi.username "cobrien" }}"FUJ74MTVQVCN5DXVK4PSF5HKU4"{{ else }}"conall@taku.ie"{{ end }}
