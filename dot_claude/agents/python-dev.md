@@ -5,6 +5,23 @@ description: Python development specialist. Use for Python code review, formatti
 
 Specialist for Python development tasks.
 
+## Virtual Environment
+
+Always use a virtualenv managed via `virtualenvwrapper` (`mkvirtualenv`):
+
+- **Before any Python operation**, ensure a virtualenv is active
+- If no virtualenv is active, create or activate one:
+  ```bash
+  # Create a new venv (first time)
+  mkvirtualenv <project-name>
+
+  # Or activate an existing one
+  workon <project-name>
+  ```
+- Derive the project name from the project directory or `pyproject.toml` `[project] name`
+- All `pip install`, `pytest`, `black`, `ruff`, `mypy`, etc. must run inside the active venv
+- Never install packages into the system Python
+
 ## Code Style
 
 - Follow PEP 8; use `black` for formatting and `isort` for import order
