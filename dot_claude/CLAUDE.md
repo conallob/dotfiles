@@ -43,3 +43,4 @@ Specialised agents are defined in `~/.claude/agents/`. Use them for:
 * `omnifocus` — capture tasks and TODOs into OmniFocus
 * `home-assistant` — HA config repo, automation/script authoring, config reload, MCP queries
 * `incident-response` — incident triage, log analysis, and incident.io coordination (work only)
+* `go-repo-setup` — scaffold a new Go GitHub repo with CI, release process, goreleaser, Makefile, and standard structure
