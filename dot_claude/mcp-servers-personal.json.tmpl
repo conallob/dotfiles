@@ -17,9 +17,8 @@
   "args": ["--session", "mcp-wingman"]
 },
 "toshl": {
-  "command": "npx",
-  "args": ["-y", "toshl-mcp-server"],
+  "command": "/opt/homebrew/bin/mcp-toshl",
   "env": {
-    "TOSHL_API_TOKEN": "{{- (onepasswordDetailsFields "toshl-api-token").credential.value }}"
+    "TOSHL_TOKEN": "{{- (onepasswordDetailsFields "toshl-api-token").credential.value }}"
   }
 }
