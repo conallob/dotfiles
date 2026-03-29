@@ -12,6 +12,11 @@
 * Always run linters, `golangci-lint` and `go fmt` for Golang , `black`, `ruff` for Python
 * Always run Python operations (linting, testing, package installs) inside a virtualenv managed via `mkvirtualenv` (virtualenvwrapper); never use system Python
 
+# Verification
+* Always close the feedback loop after code changes — use the `lint-test` agent to run linters and tests before considering a task done
+* When fixing a bug: reproduce the failure first, then verify it is gone
+* Use `/simplify` after non-trivial code changes to review for quality, reuse, and efficiency
+
 # Workflow
 * When working on Github repositories under github.com/conallob , always install Claude App and Claude Github Actions
 * When working on GitHub Pull Requests or GitLab Merge Requests, always address all PR/MR feedback provided by Claude Code Review

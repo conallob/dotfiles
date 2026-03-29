@@ -62,6 +62,18 @@
         "matcher": ""
       }
     ],
+    {{- /* Re-inject CLAUDE.md after context compaction to restore critical instructions */}}
+    "PostCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'Context compacted. Re-read ~/.claude/CLAUDE.md and the project CLAUDE.md (if present) to restore critical instructions before continuing.'"
+          }
+        ]
+      }
+    ],
     "SessionStart": [
       {
         "hooks": [

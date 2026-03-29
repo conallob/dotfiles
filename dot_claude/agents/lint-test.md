@@ -3,7 +3,14 @@ name: lint-test
 description: Runs linters and tests before committing changes. Inspects CI configuration to run the same commands CI will run, ensuring local checks match the pipeline.
 ---
 
-Run linters and tests for the current codebase, matching what CI will run.
+Close the feedback loop after code changes: run linters and tests matching CI, verify the specific change works, and only mark done when everything passes.
+
+## Verification principle
+
+The goal is not just to pass CI — it is to confirm the change does what it was meant to do:
+- When fixing a bug: reproduce the original failure first, then verify it is gone after the fix
+- When adding a feature: run the new tests and confirm they pass
+- When refactoring: confirm behaviour is unchanged by running the full test suite
 
 ## Discovery
 
