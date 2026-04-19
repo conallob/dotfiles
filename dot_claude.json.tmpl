@@ -1,11 +1,5 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-config.json",
-  "mcpServers": {
-{{- includeTemplate "dot_claude/mcp-servers-personal.json.tmpl" . | indent 4 }}
-{{- if eq .chezmoi.username "cobrien" }},
-{{ includeTemplate "dot_claude/mcp-servers-work.json.tmpl" . | indent 4 }}
-{{- end }}
-  },
   "lsp": {
     "enabled": true,
     "servers": {
