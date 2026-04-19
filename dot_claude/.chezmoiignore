@@ -1,0 +1,4 @@
+# These files are template partials used via includeTemplate in config.json.tmpl.
+# They must not be deployed as standalone target files.
+mcp-servers-personal.json
+mcp-servers-work.json
