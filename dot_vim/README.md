@@ -7,7 +7,7 @@ A comprehensive, modern Vim configuration optimized for Go and Python developmen
 ### Core Capabilities
 - **LSP Support**: Full Language Server Protocol integration with vim-lsp
 - **Auto-completion**: Async completion with asyncomplete.vim
-- **AI Assistance**: Claude and Windsurf AI integration for code assistance
+- **AI Assistance**: Claude AI integration for code assistance
 - **Git Integration**: Full GitHub and GitLab support with fugitive
 - **Fuzzy Finding**: Fast file navigation with fzf
 - **Linting & Formatting**: Comprehensive linting with ALE and auto-formatting on save
@@ -152,8 +152,6 @@ The leader key is set to `,` (comma)
 | `<Tab>` | Next completion item |
 | `<S-Tab>` | Previous completion item |
 | `<CR>` | Accept completion |
-| `<C-j>` | Expand/jump forward snippet |
-| `<C-k>` | Jump backward snippet |
 
 ### Window Navigation
 

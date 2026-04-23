@@ -68,10 +68,8 @@ Plug 'prabirshrestha/asyncomplete.vim'              " Async completion
 Plug 'prabirshrestha/asyncomplete-lsp.vim'          " LSP source for asyncomplete
 Plug 'dense-analysis/ale'                           " Linting and fixing
 Plug 'honza/vim-snippets'                           " Snippet collection
-Plug 'SirVer/ultisnips'                             " Snippet engine
 
 " --- AI Assistance ---
-Plug 'Exafunction/windsurf.vim', { 'branch': 'main' } " Windsurf AI (keeping existing)
 Plug 'madox2/vim-ai'                                " Claude/OpenAI integration
 
 " --- Git Integration ---
@@ -241,13 +239,6 @@ let g:ale_fix_on_save = 1
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <CR>    pumvisible() ? asyncomplete#close_popup() : "\<CR>"
-
-" ============================================================================
-" UltiSnips Configuration
-" ============================================================================
-let g:UltiSnipsExpandTrigger="<c-j>"
-let g:UltiSnipsJumpForwardTrigger="<c-j>"
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
 " ============================================================================
 " AI Integration (vim-ai for Claude)
