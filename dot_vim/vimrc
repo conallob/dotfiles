@@ -70,7 +70,9 @@ Plug 'dense-analysis/ale'                           " Linting and fixing
 Plug 'honza/vim-snippets'                           " Snippet collection
 
 " --- AI Assistance ---
-Plug 'madox2/vim-ai'                                " Claude/OpenAI integration
+if has('python3')
+  Plug 'madox2/vim-ai'                              " Claude/OpenAI integration
+endif
 
 " --- Git Integration ---
 Plug 'tpope/vim-fugitive'                           " Git wrapper
@@ -243,23 +245,24 @@ inoremap <expr> <CR>    pumvisible() ? asyncomplete#close_popup() : "\<CR>"
 " ============================================================================
 " AI Integration (vim-ai for Claude)
 " ============================================================================
-" vim-ai uses OPENAI_API_KEY by default, but can be configured for Claude
-" Set environment variables in your shell or use 1Password integration
-let g:vim_ai_chat = {
-\  "options": {
-\    "model": "claude-3-5-sonnet-20241022",
-\    "endpoint_url": "https://api.anthropic.com/v1/messages",
-\    "max_tokens": 4096,
-\    "temperature": 0.7,
-\  },
-\}
+if has('python3')
+  " vim-ai uses OPENAI_API_KEY by default, but can be configured for Claude
+  " Set environment variables in your shell or use 1Password integration
+  let g:vim_ai_chat = {
+  \  "options": {
+  \    "model": "claude-3-5-sonnet-20241022",
+  \    "endpoint_url": "https://api.anthropic.com/v1/messages",
+  \    "max_tokens": 4096,
+  \    "temperature": 0.7,
+  \  },
+  \}
 
-" AI keybindings
-nnoremap <leader>ai :AI
-vnoremap <leader>ai :AI
-nnoremap <leader>ae :AIEdit
-vnoremap <leader>ae :AIEdit
-nnoremap <leader>ac :AIChat<CR>
+  nnoremap <leader>ai :AI
+  vnoremap <leader>ai :AI
+  nnoremap <leader>ae :AIEdit
+  vnoremap <leader>ae :AIEdit
+  nnoremap <leader>ac :AIChat<CR>
+endif
 
 " ============================================================================
 " FZF Configuration
