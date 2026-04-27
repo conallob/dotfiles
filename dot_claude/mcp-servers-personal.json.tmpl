@@ -26,6 +26,6 @@
   "command": "/opt/homebrew/bin/mcp-jetkvm",
   "env": {
     "JETKVM_HOST": "{{- index (index (onepassword "obmmyfye6pntjru4uv5a36scwq").urls 0) "href" }}",
-    "JETKVM_PASSWORD": "{{- (onepasswordDetailsFields "obmmyfye6pntjru4uv5a36scwq").confirmPassword.value }}"
+    "JETKVM_PASSWORD": "{{- (onepasswordDetailsFields "obmmyfye6pntjru4uv5a36scwq").credential.value }}"
   }
 }
