@@ -25,7 +25,7 @@
 "jetkvm": {
   "command": "/opt/homebrew/bin/mcp-jetkvm",
   "env": {
-    "JETKVM_HOST": "{{- index (index ((onepasswordDetailsFields "obmmyfye6pntjru4uv5a36scwq").hostname.value 0) "href" }}",
-    "JETKVM_PASSWORD": "{{- (onepasswordDetailsFields "obmmyfye6pntjru4uv5a36scwq").credential.value }}"
+    "JETKVM_HOST": "{{- (onepasswordDetailsFields "iezautmwtooqxovmvtkssl5z4a").hostname.value }}",
+    "JETKVM_PASSWORD": "{{- (onepasswordDetailsFields "iezautmwtooqxovmvtkssl5z4a").credential.value }}"
   }
 }
