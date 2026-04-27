@@ -1,42 +1,19 @@
 #!/bin/bash
-# chezmoi modify script: merges mcpServers into ~/.claude.json
-# chezmoi renders this template first (resolving 1Password secrets), then executes
-# the resulting bash script. stdin = current ~/.claude.json, stdout = modified output.
-# This preserves runtime state (numStartups, tipsHistory, etc.) while keeping
-# MCP server configuration under chezmoi/1Password management.
-
+{{- /* chezmoi modify script: merges MCP servers into ~/.claude.json */ -}}
 set -euo pipefail
 
-mcpServers=$(cat <<'EOF'
-{
-  "obsidian-mcp-tools": {
-    "command": "/Users/{{ .chezmoi.username }}/Documents/Multiverse/.obsidian/plugins/mcp-tools/bin/mcp-server",
-    "env": {
-      "OBSIDIAN_API_KEY": "{{ (onepasswordDetailsFields "xe6ncd3wlggzxt6lq7zv3mduly").credential.value }}"
-    }
-  },
-  "omnifocus": {
-    "command": "/opt/homebrew/bin/mcp-omnifocus",
-    "args": ["-scripts", "/opt/homebrew/share/mcp-omnifocus", "-cache-ttl", "60"]
-  },
-  "ssh-wingman": {
-    "command": "/opt/homebrew/bin/mcp-ssh-wingman",
-    "args": ["--session", "mcp-wingman"]
-  },
-  "toshl": {
-    "command": "/opt/homebrew/bin/mcp-toshl",
-    "env": {
-      "TOSHL_TOKEN": "{{ (onepasswordDetailsFields "toshl-api-token").credential.value }}"
-    }
-  }{{ if eq .chezmoi.username "cobrien" }},
-  "incidentio": {
-    "command": "/Users/{{ .chezmoi.username }}/bin/incident-io-mcp-server",
-    "env": {
-      "INCIDENT_IO_API_KEY": "{{ (onepasswordDetailsFields "jqnzasyqfhkqf7iza5vspjwboa").credential.value }}"
-    }
-  }{{ end }}
-}
-EOF
-)
+MCP_SERVERS=$(mktemp)
+trap 'rm -f "$MCP_SERVERS"' EXIT
 
-cat | jq --argjson mcp "${mcpServers}" '.mcpServers = $mcp'
+cat > "$MCP_SERVERS" << 'MCPEOF'
+{
+{{- includeTemplate "dot_claude/mcp-servers-personal.json.tmpl" . | indent 2 }}
+{{- if eq .chezmoi.username "cobrien" }},
+{{ includeTemplate "dot_claude/mcp-servers-work.json.tmpl" . | indent 2 }}
+{{- end }}
+}
+MCPEOF
+
+INPUT=$(cat)
+[ -z "$INPUT" ] && INPUT="{}"
+echo "$INPUT" | jq --slurpfile servers "$MCP_SERVERS" '.mcpServers = ((.mcpServers // {}) + $servers[0])'
