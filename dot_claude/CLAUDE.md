@@ -6,6 +6,8 @@
 * Avoid single letter variable names, except for trivial loop variables
 * Strive for clean, self documenting code
 * Leave annotations for humans to understand
+* Write the minimum code that solves the problem — nothing speculative or anticipatory
+* Touch only what the task requires; clean up only your own mess, not surrounding code
 
 # Testing
 * Always write unittests when writing languages such as Go or Python
@@ -13,9 +15,11 @@
 * Always run Python operations (linting, testing, package installs) inside a virtualenv managed via `mkvirtualenv` (virtualenvwrapper); never use system Python
 
 # Verification
+* Define success criteria before starting — know what "done" looks like before writing any code
 * Always close the feedback loop after code changes — use the `lint-test` agent to run linters and tests before considering a task done
 * When fixing a bug: reproduce the failure first, then verify it is gone
 * Use `/simplify` after non-trivial code changes to review for quality, reuse, and efficiency
+* Don't assume. Don't hide confusion. Surface tradeoffs and ambiguity explicitly before proceeding
 
 # Workflow
 * When working on Github repositories under github.com/conallob , always install Claude App and Claude Github Actions
