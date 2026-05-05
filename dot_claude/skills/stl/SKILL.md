@@ -2,7 +2,7 @@
 name: stl
 description: |
   Design objects for fabrication on the Snapmaker 2 A350T — a 3-in-1 machine with
-  3D printing (dual extrusion, official enclosure), laser cutting/engraving (1.6 W
+  3D printing (dual nozzle head, official enclosure), laser cutting/engraving (1.6 W
   and 10 W heads), and CNC carving. Also supports 4-axis work via the rotary module
   (assembled, not yet configured). Outputs OpenSCAD for 3D printing/CNC, SVG/DXF
   for laser work. Use for: functional parts, enclosures, brackets, laser-cut panels,
@@ -20,7 +20,7 @@ Design an object for fabrication on the Snapmaker 2 A350T. The machine is a
 The A350T is equipped with:
 - **Official enclosure** — enables ABS/ASA printing, required for laser safety
 - **Quick Release toolhead set** — faster head swaps; adds a slight margin to usable build area beyond the base dimensions
-- **Dual Extrusion 2-in-1 Pro Module** — two filaments through a single nozzle
+- **Dual Nozzle 2-in-1 Pro Module** — two nozzles, one filament at a time
 - **1.6 W laser module** (original)
 - **10 W laser module** (high-power upgrade, thicker material cutting)
 - **CNC carving module**
@@ -40,7 +40,7 @@ The A350T is equipped with:
 | Layer height | 0.05 – 0.35 mm; optimal 0.1 – 0.2 mm |
 | Extruder temp | up to 275 °C |
 | Bed temp | up to 80 °C |
-| Filament | 1.75 mm; dual filament (2-in-1 Pro Module) |
+| Filament | 1.75 mm; dual nozzle (2-in-1 Pro Module), one active at a time |
 | Bed levelling | Automatic 11×11 grid |
 
 **Filament guide:**
@@ -62,7 +62,7 @@ The A350T is equipped with:
 - Internal corners: fillet r ≥ 0.4 mm to reduce stress
 - Layer adhesion is weakest along Z; orient load paths in X/Y
 
-**Dual extrusion use cases:** dissolvable supports (PVA + PLA), two-colour parts, rigid+flexible combinations. Note in design which bodies use which extruder.
+**Dual nozzle use cases:** material changes between prints without manual re-threading (e.g. PLA then TPU). Only one nozzle is active at a time — true simultaneous multi-material is not supported. Note in design which bodies use which nozzle.
 
 ---
 
