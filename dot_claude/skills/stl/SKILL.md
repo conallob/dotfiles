@@ -1,71 +1,153 @@
 ---
 name: stl
 description: |
-  Design 3D printable objects as OpenSCAD source files, validated against the
-  Snapmaker A350T printer constraints (320×350×330 mm build volume, 0.4 mm nozzle,
-  dual extrusion). Use for: designing new parts, adapters, enclosures, functional
-  brackets, and any physical object to be printed on the Snapmaker A350T.
+  Design objects for fabrication on the Snapmaker 2 A350T — a 3-in-1 machine with
+  3D printing (dual extrusion, official enclosure), laser cutting/engraving (1.6 W
+  and 10 W heads), and CNC carving. Also supports 4-axis work via the rotary module
+  (assembled, not yet configured). Outputs OpenSCAD for 3D printing/CNC, SVG/DXF
+  for laser work. Use for: functional parts, enclosures, brackets, laser-cut panels,
+  engraved pieces, and CNC-carved stock.
 user-invocable: true
 ---
 
-# /stl — Design 3D Printable Objects for Snapmaker A350T
+# /stl — Design for the Snapmaker 2 A350T
 
-Design a 3D printable object based on the user's description. Output an OpenSCAD
-`.scad` source file that respects the Snapmaker A350T's hardware constraints.
+Design an object for fabrication on the Snapmaker 2 A350T. The machine is a
+**3-in-1** platform; the first step is always confirming which modality to use.
 
-## Snapmaker A350T Constraints
+## Machine Overview
+
+The A350T is equipped with:
+- **Official enclosure** — enables ABS/ASA printing, required for laser safety
+- **Quick Release toolhead set** — faster head swaps; adds a slight margin to usable build area beyond the base dimensions
+- **Dual Extrusion 2-in-1 Pro Module** — two filaments through a single nozzle
+- **1.6 W laser module** (original)
+- **10 W laser module** (high-power upgrade, thicker material cutting)
+- **CNC carving module**
+- **Rotary module** — assembled; 4th-axis (A-axis) capability for laser and CNC; **not yet calibrated/configured**
+
+---
+
+## Modality Constraints
+
+### 3D Printing
 
 | Property | Value |
 |---|---|
-| Build volume | 320 × 350 × 330 mm (X × Y × Z) |
-| Nozzle diameter | 0.4 mm (default), 0.2 mm / 0.6 mm / 0.8 mm available |
-| Layer height | 0.05 – 0.35 mm (optimal: 0.1 – 0.2 mm) |
+| Base build volume | 320 × 350 × 330 mm (X × Y × Z) |
+| Build volume with Quick Release | slightly larger — verify with a test print at limits |
+| Nozzle diameter | 0.4 mm default; 0.2 / 0.6 / 0.8 mm available |
+| Layer height | 0.05 – 0.35 mm; optimal 0.1 – 0.2 mm |
 | Extruder temp | up to 275 °C |
 | Bed temp | up to 80 °C |
-| Filament diameter | 1.75 mm |
-| Dual extrusion | 2-in-1 Pro Module (two filaments, single nozzle) |
-| Bed levelling | Automatic (11×11 grid) |
+| Filament | 1.75 mm; dual filament (2-in-1 Pro Module) |
+| Bed levelling | Automatic 11×11 grid |
 
-Common filaments: PLA (190–220 °C / bed 45–60 °C), PETG (230–250 °C / bed 70–80 °C),
-TPU (220–240 °C / bed 30–45 °C, flexible), ABS (230–250 °C / bed 80 °C, requires enclosure).
+**Filament guide:**
+| Material | Nozzle °C | Bed °C | Notes |
+|---|---|---|---|
+| PLA | 190 – 220 | 45 – 60 | Easy, enclosure optional |
+| PETG | 230 – 250 | 70 – 80 | Good strength, slight stringing |
+| TPU | 220 – 240 | 30 – 45 | Flexible; slow print speed |
+| ABS | 230 – 250 | 80 | **Enclosure required** |
+| ASA | 240 – 260 | 80 – 100 | UV resistant; **enclosure required** |
+
+**FDM design rules:**
+- Wall thickness: 1.2 mm minimum (3× nozzle), 2.4 mm for structural parts
+- Overhangs: ≤ 45° without supports; note any feature needing supports
+- Bridging: reliable up to ~60 mm; flag longer spans
+- Tolerances: +0.2 mm clearance on mating faces; +0.3 mm for sliding fits
+- Holes: design 0.2 mm oversized (printer shrinks them); exact size for press-fits
+- Minimum feature: 0.8 mm (2× nozzle); smaller will not resolve
+- Internal corners: fillet r ≥ 0.4 mm to reduce stress
+- Layer adhesion is weakest along Z; orient load paths in X/Y
+
+**Dual extrusion use cases:** dissolvable supports (PVA + PLA), two-colour parts, rigid+flexible combinations. Note in design which bodies use which extruder.
+
+---
+
+### Laser Cutting / Engraving
+
+| Property | 1.6 W Module | 10 W Module |
+|---|---|---|
+| Working area (flat) | 320 × 350 mm | 320 × 350 mm |
+| Typical cut depth (wood) | ~3 mm ply | ~8 mm ply |
+| Typical engrave materials | wood, leather, acrylic (light) | wood, leather, acrylic, anodised Al |
+| Enclosure | Required for safe operation | Required for safe operation |
+
+**Design rules:**
+- Output format: **SVG** (preferred) or **DXF** for cut/engrave paths
+- Minimum feature size: ~0.2 mm for engraving; ~0.5 mm for cut paths (kerf ~0.1 – 0.2 mm)
+- Add 0.1 mm kerf compensation outward on cut profiles, inward on holes
+- Score lines, engrave fills, and cut outlines should be on separate layers/colours
+- Material must be flat and secured; warped sheet degrades focus and cut quality
+
+---
+
+### CNC Carving
+
+| Property | Value |
+|---|---|
+| Working area (flat) | 320 × 350 mm |
+| Z travel (approx.) | up to ~275 mm (less than 3D printing due to spindle length) |
+| Typical materials | wood, MDF, PCB, soft plastics, wax |
+| Enclosure | Recommended (dust containment) |
+
+**Design rules:**
+- Output format: **OpenSCAD** (for 3D toolpath geometry) or **DXF/SVG** (for 2.5D profiles)
+- Account for tool radius in inside corners — a square internal pocket needs dog-bone fillets
+- Minimum inside corner radius = end mill radius + 10% clearance
+- Depth of cut per pass: 0.5 – 1.5 mm for wood; shallower for hard materials
+- Always specify stock thickness and origin (top-of-stock vs. spoilboard)
+
+---
+
+### Rotary Module (4th Axis — not yet configured)
+
+The rotary module adds an A-axis (rotation around X). **Do not generate production-ready rotary files until it is calibrated.** When it is set up:
+
+| Property | Value |
+|---|---|
+| Modalities | Laser engraving + CNC (not 3D printing) |
+| Workpiece diameter | up to ~80 mm |
+| Workpiece length | up to ~400 mm |
+| Output format | Luban-compatible toolpaths; rotary SVG for laser |
+
+Flag any rotary design with a `# ROTARY — requires calibration before use` comment at the top of the output file.
+
+---
 
 ## Design Process
 
-### 1. Clarify requirements
-Before designing, confirm:
-- **Function**: what does the part do?
-- **Fit**: does it mate with an existing object? (measure in mm)
-- **Material**: rigidity, flexibility, heat resistance, aesthetics needed?
-- **Quantity**: one-off or repeated print?
+### 1. Choose modality
+Confirm which head will be used: **3D print**, **laser**, **CNC flat**, or **CNC/laser rotary**.
+If unclear, ask. Each has different constraints, file formats, and fixturing requirements.
 
-If requirements are ambiguous, ask rather than guess.
+### 2. Clarify requirements
+- **Function**: what does the part do / what is being cut or engraved?
+- **Fit**: mating dimensions in mm?
+- **Material**: which filament, sheet material, or stock?
+- **Quantity**: one-off or batch?
 
-### 2. Orient and size for printing
-- Keep the tallest dimension along Z only when unavoidable; wider/flatter parts are stronger and faster.
-- Never exceed 320 × 350 × 330 mm. Add a `// Build volume check` assertion in the SCAD.
-- Standard wall thickness: 1.2 mm (3× nozzle width) minimum, 2.4 mm for structural parts.
-- Layer-adhesion is weakest along Z; orient so load paths run in X/Y.
+Surface ambiguity before proceeding.
 
-### 3. FDM design rules
-- **Overhangs**: design ≤ 45° without supports; call out any feature that needs supports.
-- **Bridging**: up to ~60 mm bridging is usually reliable; flag longer spans.
-- **Tolerances**: add 0.2 mm clearance on mating faces; 0.3 mm for sliding fits.
-- **Holes**: design 0.2 mm oversized (printer shrinks them). For press-fit: exact size.
-- **Minimum feature size**: 0.8 mm (2× nozzle); smaller features print poorly.
-- **Avoid sharp internal corners**: fillet with r ≥ 0.4 mm to reduce stress concentration.
+### 3. Design to constraints
+Apply the relevant rules from the sections above. For 3D printing, orient the part
+so the primary load path runs in X/Y, not Z.
 
-### 4. Write the OpenSCAD file
-Use parametric values — put all tuneable dimensions as variables at the top. Structure:
+### 4. Write the design file
 
+**3D printing / CNC 3D** — OpenSCAD:
 ```openscad
 // === Parameters ===
-wall   = 1.6;   // mm
-// ...
+wall = 1.6;  // mm — 4× nozzle for structural parts
 
-// === Build volume assertion ===
+// === Build volume check (3D printing) ===
 assert(part_x <= 320, "Exceeds X build volume");
 assert(part_y <= 350, "Exceeds Y build volume");
 assert(part_z <= 330, "Exceeds Z build volume");
+
+$fn = 64;
 
 // === Modules ===
 module body() { ... }
@@ -74,32 +156,31 @@ module body() { ... }
 body();
 ```
 
-- Use `$fn = 64;` (or higher for cosmetic circles) at the top.
-- Prefer `hull()`, `minkowski()`, and `offset()` for rounded shapes over raw spheres.
-- Comment every non-obvious dimension with its purpose.
+**Laser / CNC 2.5D** — describe SVG/DXF layer structure in comments, then emit
+the vector geometry. Separate layers: `engrave-fill`, `engrave-outline`, `score`, `cut`.
 
-### 5. Validate the design
-After writing the SCAD, mentally trace through:
-- [ ] Fits in build volume?
-- [ ] Worst overhang angle called out?
-- [ ] Clearances applied to mating faces?
-- [ ] Minimum wall ≥ 1.2 mm everywhere?
-- [ ] All holes sized with +0.2 mm tolerance?
+### 5. Validate
+- [ ] Fits within working area / build volume?
+- [ ] Worst overhang or unsupported span identified?
+- [ ] Clearances and tolerances applied?
+- [ ] Minimum feature size respected?
+- [ ] Kerf compensation added (laser)?
+- [ ] Dog-bone fillets on internal CNC corners?
+- [ ] Rotary files flagged as uncalibrated if applicable?
 
-### 6. Provide slicing recommendations
-Finish with a `## Slicer Settings` section in your response:
-- Recommended material and temperatures
-- Layer height suggestion
-- Infill % and pattern (e.g. gyroid for functional parts)
-- Support needed? (yes/no, and where)
-- Print orientation note
-- Estimated print time if obvious (rough guess only)
+### 6. Fabrication notes
+End the response with a concise **Fabrication Settings** block:
+- Modality and head
+- Material + temps (3D) or feed/speed (CNC) or power/speed (laser)
+- Layer height / pass depth
+- Supports or fixturing needed
+- Estimated time (rough)
+
+---
 
 ## Output Format
 
-1. **Brief design rationale** (2–4 sentences): key decisions and trade-offs.
-2. **OpenSCAD source** in a fenced `openscad` code block, saved to a `.scad` file in the current directory.
-3. **Slicer Settings** as a compact markdown table or bullet list.
-4. **Known limitations** — anything the design can't do or assumptions made.
-
-Save the file as `<descriptive-name>.scad` in the current working directory using the Write tool.
+1. **Design rationale** (2–4 sentences): key decisions and trade-offs.
+2. **Design file** in a fenced code block (`openscad`, `svg`, or `dxf`), saved to disk with the Write tool as `<descriptive-name>.scad` / `.svg` / `.dxf`.
+3. **Fabrication Settings** as a compact table or bullet list.
+4. **Known limitations** — assumptions made, features not modelled, anything needing manual verification before fabrication.
