@@ -11,6 +11,9 @@ export MYHOSTNAME=$(hostname -s)
 export EDITOR="vim"
 export PAGER="less"
 
+# rsync flags for gigabit transfers per https://gist.github.com/KartikTalwar/4393116
+export RSYNC_FLAGS="-Pvar --numeric-ids --progress -e 'ssh -T -c aes128-gcm@openssh.com -o Compression=no -x'"
+
 export LANG=en_IE.UTF-8
 export LC_CTYPE=en_IE.UTF-8
 export LC_MESSAGES=C
