@@ -1,0 +1,57 @@
+# Digital Blasphemy Downloader Configuration
+# Copy this file to blasphemy-downloader.yaml and customize
+
+# Digital Blasphemy settings
+blasphemy:
+  # Option 1: Store credentials directly (not recommended)
+  username: "your_username"
+  password: "your_password"
+
+  # Desired resolution (common options: 1920x1080, 2560x1440, 3840x2160)
+  resolution: "3840x2160"
+
+  # Maximum number of wallpapers to download per run (0 = all available)
+  limit: 100
+
+# 1Password integration (recommended for secure credential storage)
+onepassword:
+  enabled: true  # Set to true to use 1Password
+  username_item: "vfh2jwafwzbwvk6fzl6fqbspcq"  # 1Password item name
+  username_field: "username"          # Field name containing username
+  password_item: "vfh2jwafwzbwvk6fzl6fqbspcq"  # 1Password item name (can be same as username_item)
+  password_field: "password"          # Field name containing password
+  vault_name: "Private"              # 1Password vault name
+  account: ""                         # Optional: specific 1Password account
+
+# Storage configuration
+storage:
+  type: "gdrive"  # Options: "local" or "gdrive"
+
+  # Local storage settings (used when type = "local")
+  local_path: "~/Pictures/Blasphemy"
+
+# Google Drive settings (used when type = "gdrive")
+google_drive:
+  # Path to Google OAuth2 credentials JSON file
+  # Get this from: https://console.cloud.google.com/apis/credentials
+  credentials_path: "~/.config/blasphemy-downloader/credentials.json"
+
+  # Path to store OAuth token (auto-generated on first run)
+  token_path: "~/.config/blasphemy-downloader/gdrive-token.json"
+
+  # Google Drive folder ID to upload wallpapers to
+  # Leave empty to upload to root directory
+  # Get folder ID from the URL when viewing the folder in Drive:
+  # https://drive.google.com/drive/folders/FOLDER_ID_HERE
+  folder_id: "0B-jiqUgoArumfnVzdjA1VnkwSzdRZVc2aUhpMU5nb2h0Q3FpZkotZFF5WGJFYll0ZVJuNkE"
+
+# Download state tracking
+state:
+  # Path to state file (tracks which wallpapers have been downloaded)
+  file_path: "~/.config/blasphemy-downloader/state.json"
+
+# Pushover notifications (optional)
+pushover:
+  enabled: false
+  token: "your_pushover_app_token"
+  user_key: "your_pushover_user_key"
