@@ -1,5 +1,5 @@
 ---
-name: stl
+name: fabricate
 description: |
   Design objects for fabrication on the Snapmaker 2 A350T — a 3-in-1 machine with
   3D printing (dual nozzle head, official enclosure), laser cutting/engraving (1.6 W
@@ -10,7 +10,7 @@ description: |
 user-invocable: true
 ---
 
-# /stl — Design for the Snapmaker 2 A350T
+# /fabricate — Design for the Snapmaker 2 A350T
 
 Design an object for fabrication on the Snapmaker 2 A350T. The machine is a
 **3-in-1** platform; the first step is always confirming which modality to use.
@@ -25,6 +25,14 @@ The A350T is equipped with:
 - **10 W laser module** (high-power upgrade, thicker material cutting)
 - **CNC carving module**
 - **Rotary module** — assembled; 4th-axis (A-axis) capability for laser and CNC; **not yet calibrated/configured**
+
+### Environment Sensors
+
+Two Home Assistant sensors monitor the workshop environment:
+- **Inside enclosure**: `sensor.snapmaker_enclosure` — temperature + humidity inside the official enclosure
+- **Outside enclosure**: `sensor.workshop_sensor` — ambient workshop temperature + humidity
+
+Query these via the `home-assistant` agent when evaluating print conditions (e.g. ABS/ASA humidity sensitivity, enclosure warm-up state).
 
 ---
 
@@ -63,6 +71,14 @@ The A350T is equipped with:
 - Layer adhesion is weakest along Z; orient load paths in X/Y
 
 **Dual nozzle use cases:** material changes between prints without manual re-threading (e.g. PLA then TPU). Only one nozzle is active at a time — true simultaneous multi-material is not supported. Note in design which bodies use which nozzle.
+
+### Filament Management
+
+- **Storage**: all spools are stored in individual zip-lock bags in the workshop space alongside the Snapmaker
+- **Drying**: the **EIBOS Polyphemus Dryer** is available for moisture-sensitive filaments (ABS, ASA, Nylon, TPU); dry before printing if a spool has been open or humidity has been elevated
+- **Tracking**: every spool has a **SimplyPrint.io RFID tag** recording material type, colour, temperature settings, and weight remaining — consult SimplyPrint before selecting a spool to confirm available material
+
+When recommending a material, note whether it should be dried first (check `sensor.workshop_sensor` humidity) and confirm weight remaining via SimplyPrint RFID data.
 
 ---
 
@@ -167,6 +183,8 @@ the vector geometry. Separate layers: `engrave-fill`, `engrave-outline`, `score`
 - [ ] Kerf compensation added (laser)?
 - [ ] Dog-bone fillets on internal CNC corners?
 - [ ] Rotary files flagged as uncalibrated if applicable?
+- [ ] Filament: weight available confirmed via SimplyPrint RFID?
+- [ ] Filament: drying needed based on workshop humidity?
 
 ### 6. Fabrication notes
 End the response with a concise **Fabrication Settings** block:
@@ -174,6 +192,7 @@ End the response with a concise **Fabrication Settings** block:
 - Material + temps (3D) or feed/speed (CNC) or power/speed (laser)
 - Layer height / pass depth
 - Supports or fixturing needed
+- Filament spool status (colour, weight remaining, dry/wet)
 - Estimated time (rough)
 
 ---
