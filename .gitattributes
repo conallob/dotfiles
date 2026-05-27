@@ -1,0 +1,3 @@
+# Ensure consistent LF line endings on all platforms.
+# Overrides core.autocrlf for files that must be LF (shell scripts, templates).
+* text=auto eol=lf
