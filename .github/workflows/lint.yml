@@ -33,8 +33,7 @@ jobs:
 
           echo "Linting ${#yaml_files[@]} YAML file(s):"
           printf '  %s\n' "${yaml_files[@]}"
-          yamllint -d '{extends: default, rules: {line-length: {max: 120}}}' \
-            "${yaml_files[@]}"
+          yamllint -c .yamllint.yml "${yaml_files[@]}"
 
   json:
     name: JSON
@@ -78,12 +77,7 @@ jobs:
           # Minimal chezmoi config so execute-template has the data variables
           # that templates reference (e.g. .chezmoi.username).
           mkdir -p ~/.config/chezmoi
-          cat > ~/.config/chezmoi/chezmoi.toml <<'TOML'
-[data]
-  # Stub values used by templates that branch on username or hostname.
-  # These intentionally do not match any real host so work-only blocks
-  # are exercised via the else path.
-TOML
+          printf '[data]\n' > ~/.config/chezmoi/chezmoi.toml
 
           # Put the mock op binary ahead of any real op on PATH so chezmoi's
           # onepasswordDetailsFields / onepasswordDocument functions get stubs.
