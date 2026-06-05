@@ -176,8 +176,20 @@ jobs:
           while IFS= read -r -d '' file; do
             case "$file" in
               *.bash) check "$file" bash ;;
-              *.sh)   check "$file" sh   ;;
-              *.zsh)  check "$file" bash ;; # shellcheck has no zsh dialect; bash is closest
+              *.sh)
+                # Use bash dialect for scripts with a bash shebang (e.g. CI helpers).
+                if head -1 "$file" 2>/dev/null | grep -q bash; then
+                  check "$file" bash
+                else
+                  check "$file" sh
+                fi
+                ;;
+              *.zsh)
+                case "$file" in
+                  *dot_p10k*) ;;  # p10k config uses zsh-only anonymous functions
+                  *) check "$file" bash ;;  # no zsh dialect; bash is closest
+                esac
+                ;;
             esac
           done < <(find . \( -name '.git' -prune \) -o \
             \( -name '*.sh' -o -name '*.bash' -o -name '*.zsh' \) \
