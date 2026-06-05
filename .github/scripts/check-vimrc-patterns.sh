@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# shellcheck shell=bash
 # Grep-based antipattern checks for the vimrc.
 # Each check targets a class of bug that has caused real breakage in this repo.
 # Run: bash .github/scripts/check-vimrc-patterns.sh dot_vim/vimrc
