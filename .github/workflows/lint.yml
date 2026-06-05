@@ -197,3 +197,65 @@ TOML
           done < <(find ./dot_zsh -type f -print0 2>/dev/null)
 
           exit "$fail"
+
+  # ── Vimscript syntax + antipattern checks ──────────────────────────────────
+  vimrc:
+    name: vimrc
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install vim
+        run: sudo apt-get install -y --no-install-recommends vim
+
+      - name: Syntax check (source with vim-plug stubs)
+        run: |
+          # Generate a wrapper that stubs vim-plug before sourcing the real vimrc.
+          # vim-plug's plug#begin / plug#end / Plug commands are not installed in CI.
+          # plug#end also normally enables filetype/syntax, so we replicate that.
+          cat > /tmp/vimrc_check.vim << EOF
+          function! plug#begin(...) abort
+          endfunction
+          function! plug#end() abort
+            filetype plugin indent on
+            syntax on
+          endfunction
+          command! -nargs=+ Plug :
+          try
+            source $GITHUB_WORKSPACE/dot_vim/vimrc
+          catch
+            echoerr v:exception
+            cquit
+          endtry
+          qall!
+          EOF
+
+          # -e: ex mode  -s: silent  --not-a-term: suppress terminal warnings
+          # -u NONE: no init file  --noplugin: skip system plugins
+          output=$(vim -e -s --not-a-term -u NONE --noplugin \
+            -S /tmp/vimrc_check.vim 2>&1 || true)
+
+          errors=$(printf '%s\n' "$output" \
+            | grep -v '^$' \
+            | grep -v '^Vim: Warning:' \
+            || true)
+
+          if [ -n "$errors" ]; then
+            echo "vim reported errors when sourcing vimrc:"
+            echo "$errors"
+            exit 1
+          fi
+          echo "OK: vimrc loaded without errors"
+
+      - name: Antipattern checks
+        run: bash .github/scripts/check-vimrc-patterns.sh dot_vim/vimrc
+
+  # ── UltiSnips snippet structure ────────────────────────────────────────────
+  snippets:
+    name: UltiSnips snippets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate snippet structure
+        run: python3 .github/scripts/check-snippets.py dot_vim/UltiSnips
