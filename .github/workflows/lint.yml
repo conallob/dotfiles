@@ -42,12 +42,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Validate JSON and JSON templates
+      - name: Validate JSON files
         run: |
           fail=0
 
-          validate_json() {
-            local file="$1"
+          # Files identified by extension (.json only; .json.tmpl handled by the templates job)
+          while IFS= read -r -d '' file; do
             if ! jq empty < "$file" 2>/tmp/jq_err; then
               echo "FAIL: $file"
               cat /tmp/jq_err
@@ -55,46 +55,49 @@ jobs:
             else
               echo "OK:   $file"
             fi
-          }
-
-          strip_tmpl_and_validate() {
-            local file="$1"
-            # Replace Go template actions with inert placeholders so jq can
-            # parse the surrounding JSON structure.  We substitute:
-            #   block actions  {{ ... }}  →  "TEMPLATE"
-            #   comment blocks {{/* */}}  →  "" (empty, handled by block rule)
-            local stripped
-            stripped=$(perl -0777 -pe \
-              's/\{\{-?\s*\/\*.*?\*\/\s*-?\}\}//gs;
-               s/"[^"]*\{\{[^}]*\}\}[^"]*"/"TEMPLATE"/gs;
-               s/\{\{[^}]*\}\}/"TEMPLATE"/gs' \
-              "$file")
-
-            if ! echo "$stripped" | jq empty 2>/tmp/jq_err; then
-              echo "FAIL: $file (after template stripping)"
-              cat /tmp/jq_err
-              echo "--- Stripped content ---"
-              echo "$stripped"
-              fail=1
-            else
-              echo "OK:   $file"
-            fi
-          }
-
-          # Files identified by extension
-          while IFS= read -r -d '' file; do
-            case "$file" in
-              *.json.tmpl) strip_tmpl_and_validate "$file" ;;
-              *.json)      validate_json "$file" ;;
-            esac
           done < <(find . \( -name '.git' -prune \) -o \
-            \( -name '*.json' -o -name '*.json.tmpl' \) \
+            -name '*.json' -not -name '*.json.tmpl' \
             -type f -print0)
 
-          # Files identified by path prefix (no extension but known JSON dirs)
+          # Files identified by path prefix (no extension but known JSON locations)
           # Currently none in this repo; extend here if that changes.
 
           exit "$fail"
+
+  templates:
+    name: Templates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install chezmoi
+        run: |
+          curl -fsLS https://chezmoi.io/get | sh -s -- -b /usr/local/bin
+
+      - name: Validate template syntax and JSON structure
+        run: |
+          # scripts/validate-templates.go uses Go's text/template parser (the
+          # same engine chezmoi uses internally) to check syntax without
+          # executing templates. This means 1Password and other external calls
+          # are never made, so the job is safe to run in CI without secrets.
+          #
+          # For .json.tmpl files it additionally strips template directives and
+          # validates the remaining JSON skeleton with encoding/json.
+
+          mapfile -d '' tmpl_files < <(
+            find . \( -name '.git' -prune \) -o \
+              -name '*.tmpl' -type f -print0
+          )
+
+          if [[ ${#tmpl_files[@]} -eq 0 ]]; then
+            echo "No template files found."
+            exit 0
+          fi
+
+          echo "Validating ${#tmpl_files[@]} template file(s):"
+          printf '  %s\n' "${tmpl_files[@]}"
+
+          go run scripts/validate-templates.go "${tmpl_files[@]}"
 
   shell:
     name: Shell
