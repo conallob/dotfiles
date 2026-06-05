@@ -1,0 +1,184 @@
+# Go snippets for interview prep
+# Expand with <C-e>, jump with <C-j>/<C-k>
+
+# ── Error handling ───────────────────────────────────────────────────────────
+
+snippet iferr "if err != nil { return }" b
+if err != nil {
+	return ${1:nil}, err
+}
+endsnippet
+
+snippet iferrl "if err != nil { log + return }" b
+if err != nil {
+	log.Printf("${1:operation}: %v", err)
+	return ${2:nil}, err
+}
+endsnippet
+
+snippet errfmt "fmt.Errorf with %w wrap" i
+fmt.Errorf("${1:context}: %w", err)
+endsnippet
+
+# ── Functions ────────────────────────────────────────────────────────────────
+
+snippet fn "plain function" b
+func ${1:name}(${2}) ${3:error} {
+	${4}
+}
+endsnippet
+
+snippet main "main function" b
+func main() {
+	${1}
+}
+endsnippet
+
+# ── HTTP handlers ────────────────────────────────────────────────────────────
+
+snippet handler "http.HandlerFunc signature" b
+func ${1:handlerName}(w http.ResponseWriter, r *http.Request) {
+	${2}
+}
+endsnippet
+
+snippet handlerf "http handler returning JSON" b
+func ${1:handlerName}(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	resp := ${2:struct{}{}}
+	if err := json.NewEncoder(w).Encode(resp); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+endsnippet
+
+snippet mux "http.NewServeMux + ListenAndServe" b
+mux := http.NewServeMux()
+mux.HandleFunc("${1:GET /path}", ${2:handler})
+if err := http.ListenAndServe(":${3:8080}", mux); err != nil {
+	log.Fatal(err)
+}
+endsnippet
+
+# ── JSON marshalling ─────────────────────────────────────────────────────────
+
+snippet jsonstruct "JSON-tagged struct" b
+type ${1:Name} struct {
+	${2:Field} ${3:string} `json:"${4:field}"`
+}
+endsnippet
+
+snippet marshal "json.Marshal with error check" b
+${1:data}, err := json.Marshal(${2:v})
+if err != nil {
+	return ${3:nil}, fmt.Errorf("marshal: %w", err)
+}
+endsnippet
+
+snippet unmarshal "json.Unmarshal with error check" b
+var ${1:result} ${2:Type}
+if err := json.Unmarshal(${3:data}, &${1:result}); err != nil {
+	return ${4:nil}, fmt.Errorf("unmarshal: %w", err)
+}
+endsnippet
+
+snippet encode "json.NewEncoder(w).Encode" b
+if err := json.NewEncoder(${1:w}).Encode(${2:v}); err != nil {
+	return ${3:nil}, fmt.Errorf("encode: %w", err)
+}
+endsnippet
+
+snippet decode "json.NewDecoder(r.Body).Decode" b
+var ${1:input} ${2:Type}
+if err := json.NewDecoder(${3:r.Body}).Decode(&${1:input}); err != nil {
+	http.Error(${4:w}, err.Error(), http.StatusBadRequest)
+	return
+}
+endsnippet
+
+# ── File I/O ─────────────────────────────────────────────────────────────────
+
+snippet readfile "os.ReadFile" b
+${1:data}, err := os.ReadFile("${2:filename}")
+if err != nil {
+	return ${3:nil}, fmt.Errorf("read file: %w", err)
+}
+endsnippet
+
+snippet writefile "os.WriteFile" b
+if err := os.WriteFile("${1:filename}", ${2:data}, 0o644); err != nil {
+	return ${3:nil}, fmt.Errorf("write file: %w", err)
+}
+endsnippet
+
+snippet openfile "os.Open with defer Close" b
+f, err := os.Open("${1:filename}")
+if err != nil {
+	return ${2:nil}, fmt.Errorf("open: %w", err)
+}
+defer f.Close()
+${3}
+endsnippet
+
+snippet createfile "os.Create with defer Close" b
+f, err := os.Create("${1:filename}")
+if err != nil {
+	return ${2:nil}, fmt.Errorf("create: %w", err)
+}
+defer f.Close()
+${3}
+endsnippet
+
+# ── Context ───────────────────────────────────────────────────────────────────
+
+snippet ctx "context.Background()" b
+ctx := context.Background()
+endsnippet
+
+snippet ctxto "context.WithTimeout + defer cancel" b
+ctx, cancel := context.WithTimeout(${1:context.Background()}, ${2:30}*time.Second)
+defer cancel()
+endsnippet
+
+# ── Concurrency ───────────────────────────────────────────────────────────────
+
+snippet goroutine "anonymous goroutine" b
+go func() {
+	${1}
+}()
+endsnippet
+
+snippet chan "make buffered channel" b
+${1:ch} := make(chan ${2:int}, ${3:1})
+endsnippet
+
+snippet select "select statement" b
+select {
+case ${1:v} := <-${2:ch}:
+	${3}
+case <-ctx.Done():
+	return ctx.Err()
+}
+endsnippet
+
+# ── Testing ───────────────────────────────────────────────────────────────────
+
+snippet test "table-driven test function" b
+func Test${1:Name}(t *testing.T) {
+	tests := []struct {
+		name string
+		${2:input} ${3:string}
+		want  ${4:string}
+	}{
+		{name: "${5:case}", ${2:input}: ${6}, want: ${7}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := ${8:func}(tt.${2:input})
+			if got != tt.want {
+				t.Errorf("got %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+endsnippet
