@@ -74,10 +74,11 @@ jobs:
 
       - name: Set up chezmoi config and mock 1Password CLI
         run: |
-          # Minimal chezmoi config so execute-template has the data variables
-          # that templates reference (e.g. .chezmoi.username).
+          # Minimal chezmoi config: set sourceDir so includeTemplate resolves
+          # relative paths, and provide stub data variables for templates.
           mkdir -p ~/.config/chezmoi
-          printf '[data]\n' > ~/.config/chezmoi/chezmoi.toml
+          printf '[chezmoi]\n  sourceDir = "%s"\n[data]\n' "$GITHUB_WORKSPACE" \
+            > ~/.config/chezmoi/chezmoi.toml
 
           # Put the mock op binary ahead of any real op on PATH so chezmoi's
           # onepasswordDetailsFields / onepasswordDocument functions get stubs.
@@ -90,7 +91,7 @@ jobs:
 
           validate_template() {
             local file="$1"
-            local rendered
+            local rendered first_char validate_json
             if ! rendered=$(chezmoi execute-template < "$file" 2>/tmp/tmpl_err); then
               echo "FAIL (render): $file"
               cat /tmp/tmpl_err
@@ -100,13 +101,29 @@ jobs:
 
             # For JSON templates, also validate the rendered output is valid JSON.
             case "$file" in
+              *modify_*.json.tmpl)
+                # Modify scripts render as shell scripts, not JSON — skip JSON validation.
+                echo "OK    $file"
+                ;;
               *.json.tmpl)
-                if ! echo "$rendered" | jq empty 2>/tmp/jq_err; then
-                  echo "FAIL (json):   $file"
-                  cat /tmp/jq_err
-                  fail=1
-                else
+                if [[ -z "$rendered" ]]; then
                   echo "OK    $file"
+                else
+                  first_char=$(printf '%s' "$rendered" | tr -d '[:space:]' | head -c1)
+                  if [[ "$first_char" == '{' || "$first_char" == '[' ]]; then
+                    validate_json="$rendered"
+                  else
+                    # JSON object fragment (key:value pairs without enclosing braces),
+                    # used as an includeTemplate partial — wrap before validating.
+                    validate_json="{ $rendered }"
+                  fi
+                  if ! echo "$validate_json" | jq empty 2>/tmp/jq_err; then
+                    echo "FAIL (json):   $file"
+                    cat /tmp/jq_err
+                    fail=1
+                  else
+                    echo "OK    $file"
+                  fi
                 fi
                 ;;
               *)
