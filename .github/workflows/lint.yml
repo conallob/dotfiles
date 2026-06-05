@@ -92,7 +92,7 @@ jobs:
           validate_template() {
             local file="$1"
             local rendered first_char validate_json
-            if ! rendered=$(chezmoi execute-template < "$file" 2>/tmp/tmpl_err); then
+            if ! rendered=$(chezmoi --source "$(pwd)" execute-template < "$file" 2>/tmp/tmpl_err); then
               echo "FAIL (render): $file"
               cat /tmp/tmpl_err
               fail=1
