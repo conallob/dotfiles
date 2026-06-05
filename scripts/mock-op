@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# Fake 1Password CLI for CI template rendering.
+#
+# chezmoi's onepasswordDetailsFields calls:
+#   op item get <uuid> --format json [--account <account>]
+# chezmoi's onepasswordDocument calls:
+#   op document get <uuid> [--account <account>]
+#
+# We return a JSON item with every field name the templates access
+# (credential, hostname, username) populated with recognisable stub
+# values, so chezmoi execute-template can render templates fully.
+
+case "$1" in
+  item)
+    shift
+    # $1 is now "get", $2 is the uuid
+    cat <<'EOF'
+{
+  "id": "MOCK000000000000000000000",
+  "title": "Mock Item",
+  "fields": [
+    {"id": "credential", "label": "credential", "value": "mock-credential", "type": "CONCEALED"},
+    {"id": "hostname",   "label": "hostname",   "value": "mock.example.com", "type": "STRING"},
+    {"id": "username",   "label": "username",   "value": "mock-user",        "type": "STRING"},
+    {"id": "password",   "label": "password",   "value": "mock-password",    "type": "CONCEALED"},
+    {"id": "token",      "label": "token",      "value": "mock-token",       "type": "CONCEALED"}
+  ]
+}
+EOF
+    ;;
+
+  document)
+    # $1=document $2=get $3=uuid — return a plain stub string
+    echo "mock-document-content"
+    ;;
+
+  account)
+    # chezmoi may call `op account list` to check sign-in state
+    echo '[]'
+    ;;
+
+  signin|signout)
+    exit 0
+    ;;
+
+  *)
+    echo "mock-op: unhandled subcommand: $*" >&2
+    exit 1
+    ;;
+esac
