@@ -1,0 +1,154 @@
+name: Lint
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  yaml:
+    name: YAML
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install yamllint
+        run: pip install yamllint
+
+      - name: Lint YAML files
+        run: |
+          # Collect files by extension (.yaml / .yml)
+          mapfile -d '' yaml_files < <(
+            find . \
+              \( -name '.git' -prune \) -o \
+              \( -name '*.yaml' -o -name '*.yml' \) \
+              -type f -print0
+          )
+
+          if [[ ${#yaml_files[@]} -eq 0 ]]; then
+            echo "No YAML files found."
+            exit 0
+          fi
+
+          echo "Linting ${#yaml_files[@]} YAML file(s):"
+          printf '  %s\n' "${yaml_files[@]}"
+          yamllint -d '{extends: default, rules: {line-length: {max: 120}}}' \
+            "${yaml_files[@]}"
+
+  json:
+    name: JSON
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate JSON and JSON templates
+        run: |
+          fail=0
+
+          validate_json() {
+            local file="$1"
+            if ! jq empty < "$file" 2>/tmp/jq_err; then
+              echo "FAIL: $file"
+              cat /tmp/jq_err
+              fail=1
+            else
+              echo "OK:   $file"
+            fi
+          }
+
+          strip_tmpl_and_validate() {
+            local file="$1"
+            # Replace Go template actions with inert placeholders so jq can
+            # parse the surrounding JSON structure.  We substitute:
+            #   block actions  {{ ... }}  →  "TEMPLATE"
+            #   comment blocks {{/* */}}  →  "" (empty, handled by block rule)
+            local stripped
+            stripped=$(perl -0777 -pe \
+              's/\{\{-?\s*\/\*.*?\*\/\s*-?\}\}//gs;
+               s/"[^"]*\{\{[^}]*\}\}[^"]*"/"TEMPLATE"/gs;
+               s/\{\{[^}]*\}\}/"TEMPLATE"/gs' \
+              "$file")
+
+            if ! echo "$stripped" | jq empty 2>/tmp/jq_err; then
+              echo "FAIL: $file (after template stripping)"
+              cat /tmp/jq_err
+              echo "--- Stripped content ---"
+              echo "$stripped"
+              fail=1
+            else
+              echo "OK:   $file"
+            fi
+          }
+
+          # Files identified by extension
+          while IFS= read -r -d '' file; do
+            case "$file" in
+              *.json.tmpl) strip_tmpl_and_validate "$file" ;;
+              *.json)      validate_json "$file" ;;
+            esac
+          done < <(find . \( -name '.git' -prune \) -o \
+            \( -name '*.json' -o -name '*.json.tmpl' \) \
+            -type f -print0)
+
+          # Files identified by path prefix (no extension but known JSON dirs)
+          # Currently none in this repo; extend here if that changes.
+
+          exit "$fail"
+
+  shell:
+    name: Shell
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install shellcheck
+        run: sudo apt-get install -y shellcheck
+
+      - name: Lint shell scripts
+        run: |
+          fail=0
+
+          check() {
+            local file="$1" shell="$2"
+            if ! shellcheck -s "$shell" -e SC1090,SC1091 "$file"; then
+              fail=1
+            fi
+          }
+
+          # --- By extension ---
+          while IFS= read -r -d '' file; do
+            case "$file" in
+              *.bash) check "$file" bash ;;
+              *.sh)   check "$file" sh   ;;
+              *.zsh)  check "$file" bash ;; # shellcheck has no zsh dialect; bash is closest
+            esac
+          done < <(find . \( -name '.git' -prune \) -o \
+            \( -name '*.sh' -o -name '*.bash' -o -name '*.zsh' \) \
+            -type f -print0)
+
+          # --- By path prefix ---
+
+          # shell.d/ — modular env/alias fragments, treated as sh
+          while IFS= read -r -d '' file; do
+            check "$file" sh
+          done < <(find ./shell.d \( -name '*.tmpl' -prune \) -o \
+            -type f -print0)
+
+          # osx/ — macOS helper scripts, treated as sh
+          while IFS= read -r -d '' file; do
+            # skip non-shell files that may land here
+            case "$file" in
+              *.sh|*.bash) check "$file" sh ;;
+            esac
+          done < <(find ./osx -type f -print0 2>/dev/null)
+
+          # dot_zsh/ — zsh scripts (no extension in some cases)
+          while IFS= read -r -d '' file; do
+            case "$file" in
+              *.tmpl) continue ;;  # skip chezmoi templates
+            esac
+            check "$file" bash
+          done < <(find ./dot_zsh -type f -print0 2>/dev/null)
+
+          exit "$fail"
