@@ -328,11 +328,41 @@ if has('python3')
   \  },
   \}
 
-  nnoremap <leader>ai :AI
-  vnoremap <leader>ai :AI
-  nnoremap <leader>ae :AIEdit
-  vnoremap <leader>ae :AIEdit
-  nnoremap <leader>ac :AIChat<CR>
+  let g:ai_enabled = 1
+
+  function! s:AIKeymapsEnable() abort
+    nnoremap <leader>ai :AI
+    vnoremap <leader>ai :AI
+    nnoremap <leader>ae :AIEdit
+    vnoremap <leader>ae :AIEdit
+    nnoremap <leader>ac :AIChat<CR>
+  endfunction
+
+  function! s:AIKeymapsDisable() abort
+    silent! nunmap <leader>ai
+    silent! vunmap <leader>ai
+    silent! nunmap <leader>ae
+    silent! vunmap <leader>ae
+    silent! nunmap <leader>ac
+  endfunction
+
+  function! ToggleAI() abort
+    if g:ai_enabled
+      let g:ai_enabled = 0
+      call s:AIKeymapsDisable()
+      echo "AI assist disabled"
+    else
+      let g:ai_enabled = 1
+      call s:AIKeymapsEnable()
+      echo "AI assist enabled"
+    endif
+    redrawstatus!
+  endfunction
+
+  call s:AIKeymapsEnable()
+
+  command! AIToggle call ToggleAI()
+  nnoremap <leader>at :AIToggle<CR>
 endif
 
 " ============================================================================
@@ -412,6 +442,18 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#branch#enabled = 1
+
+" AI status indicator: shows 'AI' when enabled, 'AI:OFF' when disabled
+function! AirlineAIStatus() abort
+  return get(g:, 'ai_enabled', 1) ? 'AI' : 'AI:OFF'
+endfunction
+
+augroup AirlineAISection
+  autocmd!
+  autocmd User AirlineAfterInit
+    \ call airline#parts#define_function('ai_status', 'AirlineAIStatus') |
+    \ let g:airline_section_x = airline#section#create_right(['ai_status', 'filetype'])
+augroup END
 
 " Ensure airline respects transparent background
 augroup AirlineTransparency
