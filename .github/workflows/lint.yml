@@ -33,8 +33,7 @@ jobs:
 
           echo "Linting ${#yaml_files[@]} YAML file(s):"
           printf '  %s\n' "${yaml_files[@]}"
-          yamllint -d '{extends: default, rules: {line-length: {max: 120}}}' \
-            "${yaml_files[@]}"
+          yamllint -c .yamllint.yml "${yaml_files[@]}"
 
   json:
     name: JSON
@@ -75,15 +74,11 @@ jobs:
 
       - name: Set up chezmoi config and mock 1Password CLI
         run: |
-          # Minimal chezmoi config so execute-template has the data variables
-          # that templates reference (e.g. .chezmoi.username).
+          # Minimal chezmoi config: set sourceDir so includeTemplate resolves
+          # relative paths, and provide stub data variables for templates.
           mkdir -p ~/.config/chezmoi
-          cat > ~/.config/chezmoi/chezmoi.toml <<'TOML'
-[data]
-  # Stub values used by templates that branch on username or hostname.
-  # These intentionally do not match any real host so work-only blocks
-  # are exercised via the else path.
-TOML
+          printf '[chezmoi]\n  sourceDir = "%s"\n[data]\n' "$GITHUB_WORKSPACE" \
+            > ~/.config/chezmoi/chezmoi.toml
 
           # Put the mock op binary ahead of any real op on PATH so chezmoi's
           # onepasswordDetailsFields / onepasswordDocument functions get stubs.
@@ -96,8 +91,8 @@ TOML
 
           validate_template() {
             local file="$1"
-            local rendered
-            if ! rendered=$(chezmoi execute-template < "$file" 2>/tmp/tmpl_err); then
+            local rendered first_char validate_json
+            if ! rendered=$(chezmoi --source "$(pwd)" execute-template < "$file" 2>/tmp/tmpl_err); then
               echo "FAIL (render): $file"
               cat /tmp/tmpl_err
               fail=1
@@ -106,13 +101,29 @@ TOML
 
             # For JSON templates, also validate the rendered output is valid JSON.
             case "$file" in
+              *modify_*.json.tmpl)
+                # Modify scripts render as shell scripts, not JSON — skip JSON validation.
+                echo "OK    $file"
+                ;;
               *.json.tmpl)
-                if ! echo "$rendered" | jq empty 2>/tmp/jq_err; then
-                  echo "FAIL (json):   $file"
-                  cat /tmp/jq_err
-                  fail=1
-                else
+                if [[ -z "$rendered" ]]; then
                   echo "OK    $file"
+                else
+                  first_char=$(printf '%s' "$rendered" | tr -d '[:space:]' | head -c1)
+                  if [[ "$first_char" == '{' || "$first_char" == '[' ]]; then
+                    validate_json="$rendered"
+                  else
+                    # JSON object fragment (key:value pairs without enclosing braces),
+                    # used as an includeTemplate partial — wrap before validating.
+                    validate_json="{ $rendered }"
+                  fi
+                  if ! echo "$validate_json" | jq empty 2>/tmp/jq_err; then
+                    echo "FAIL (json):   $file"
+                    cat /tmp/jq_err
+                    fail=1
+                  else
+                    echo "OK    $file"
+                  fi
                 fi
                 ;;
               *)
@@ -165,8 +176,20 @@ TOML
           while IFS= read -r -d '' file; do
             case "$file" in
               *.bash) check "$file" bash ;;
-              *.sh)   check "$file" sh   ;;
-              *.zsh)  check "$file" bash ;; # shellcheck has no zsh dialect; bash is closest
+              *.sh)
+                # Use bash dialect for scripts with a bash shebang (e.g. CI helpers).
+                if head -1 "$file" 2>/dev/null | grep -q bash; then
+                  check "$file" bash
+                else
+                  check "$file" sh
+                fi
+                ;;
+              *.zsh)
+                case "$file" in
+                  *dot_p10k*) ;;  # p10k config uses zsh-only anonymous functions
+                  *) check "$file" bash ;;  # no zsh dialect; bash is closest
+                esac
+                ;;
             esac
           done < <(find . \( -name '.git' -prune \) -o \
             \( -name '*.sh' -o -name '*.bash' -o -name '*.zsh' \) \

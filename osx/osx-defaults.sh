@@ -163,16 +163,16 @@ defaults write com.apple.iTunes NSUserKeyEquivalents -dict-add "Target Search Fi
 defaults write com.apple.dashboard devmode -bool true
 
 # Reset Launchpad
-if [ -e "~/Library/Application\ Support/Dock/*.db" ]
+if [ -e "$HOME/Library/Application Support/Dock/*.db" ]
 then
-  rm ~/Library/Application\ Support/Dock/*.db
+  rm "$HOME/Library/Application Support/Dock/"*.db
 fi
 
 # Show the ~/Library folder
 chflags nohidden ~/Library
 
 # Disable local Time Machine backups
-hash tmutil &> /dev/null && sudo tmutil disablelocal
+hash tmutil > /dev/null 2>&1 && sudo tmutil disablelocal
 
 # Remove Dropbox’s green checkmark icons in Finder
 #file=/Applications/Dropbox.app/Contents/Resources/check.icns

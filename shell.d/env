@@ -5,8 +5,10 @@
 #
 
 # Useful variables for understanding the machine specific configs
-export CONFIGS="$(chezmoi source-path)/shell.d"
-export MYHOSTNAME=$(hostname -s)
+CONFIGS="$(chezmoi source-path)/shell.d"
+export CONFIGS
+MYHOSTNAME="$(hostname -s)"
+export MYHOSTNAME
 
 export EDITOR="vim"
 export PAGER="less"
@@ -28,18 +30,18 @@ if [ -d /tmp/conall ]
 then
    /usr/bin/true
 else
-   mkdir /tmp/conall 2>&1 >/dev/null
+   mkdir /tmp/conall >/dev/null 2>&1
    chmod 700 /tmp/conall
 fi
 
 # Enable platform env settings
 if [ -e "${CONFIGS}/env.$(uname -s)" ];
 then
-  source "${CONFIGS}/env.$(uname -s)"
+  . "${CONFIGS}/env.$(uname -s)"
 fi
 
 # Enable host specific env settings
 if [ -e "${CONFIGS}/env.$(hostname -s)" ];
 then
-  source "${CONFIGS}/env.$(hostname -s)"
+  . "${CONFIGS}/env.$(hostname -s)"
 fi

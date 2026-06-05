@@ -7,4 +7,4 @@ eval "$(/usr/local/bin/atuin init zsh)"
 source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # Load 1Password CLI plugins
-source $HOME/.config/op/plugins.sh
+source "$HOME/.config/op/plugins.sh"
