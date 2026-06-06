@@ -1,4 +1,31 @@
 # Universal snippets (all file types)
+#
+# keep-sorted snippets use # comments (covers YAML, Python, Shell, TOML, Ansible).
+# Language-specific overrides in go.snippets, proto.snippets, bzl.snippets use //.
+
+snippet ks "keep-sorted block" b
+# keep-sorted start
+${1}
+# keep-sorted end
+${0}
+endsnippet
+
+snippet kss "keep-sorted start marker" b
+# keep-sorted start
+${0}
+endsnippet
+
+snippet kse "keep-sorted end marker" b
+# keep-sorted end
+${0}
+endsnippet
+
+snippet kso "keep-sorted block with options" b
+# keep-sorted start ${1:numeric}
+${2}
+# keep-sorted end
+${0}
+endsnippet
 
 snippet todo "TODO comment" i
 TODO(${1:who}): ${2}

@@ -317,7 +317,7 @@ let g:ale_linters = {
 " Note: Go is intentionally absent — gopls (LSP) handles formatting and
 " import management via source.organizeImports + LspDocumentFormatSync on save.
 let g:ale_fixers = {
-\   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\   '*': ['remove_trailing_lines', 'trim_whitespace', 'keep_sorted'],
 \   'python': ['black', 'isort'],
 \   'javascript': ['prettier'],
 \   'typescript': ['prettier'],
@@ -645,6 +645,19 @@ function! s:AleFixBufFmt(buffer) abort
   return {'command': 'buf format -'}
 endfunction
 call ale#fix#registry#Add('buf_fmt', function('s:AleFixBufFmt'), ['proto'], 'Format protobuf with buf')
+
+" keep-sorted: sorts regions delimited by "keep-sorted start/end" comments.
+" No-op on files without markers — safe to include in '*' fixers for all types.
+" Markers vary by language comment style; see UltiSnips snippets (trigger: ks).
+function! s:AleFixKeepSorted(buffer) abort
+  return {'command': 'keep-sorted -'}
+endfunction
+call ale#fix#registry#Add('keep_sorted', function('s:AleFixKeepSorted'), [], 'Sort keep-sorted regions')
+
+" :KeepSorted — run keep-sorted on the whole buffer immediately (no save needed).
+" Useful for one-off sorting or in files where ale_fix_on_save is disabled.
+command! KeepSorted %!keep-sorted -
+nnoremap <leader>ks :KeepSorted<CR>
 
 " Kustomization files are YAML; tag them so yaml-language-server applies schema
 autocmd BufRead,BufNewFile kustomization.yaml,kustomization.yml
