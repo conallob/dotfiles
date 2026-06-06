@@ -58,9 +58,9 @@ brew "prettier"  # Multi-language code formatter
 brew "ansible-lint"  # Ansible playbook linter
 brew "buildifier"  # Bazel BUILD/bzl file formatter and linter
 brew "keep-sorted" # Language-agnostic lint sorting formatter
+brew "rustup"  # Rust toolchain manager — run `rustup-init` after install
 # ifttt-lint: cross-file drift linter (LINT.IfChange / LINT.ThenChange markers)
 # No Homebrew formula — install via: cargo install ifttt-lint
-# If Rust/cargo is not yet present: brew install rustup && rustup-init
 
 # Container tools
 brew "podman"
