@@ -4,6 +4,232 @@
 
 ---
 
+## Motion
+
+| Key | Action |
+|-----|--------|
+| `w` / `b` | Next / previous word start |
+| `e` / `ge` | Next / previous word end |
+| `W` / `B` / `E` | Same but WORD (whitespace-delimited) |
+| `0` / `^` / `$` | Line start (col 0) / first non-blank / end |
+| `gg` / `G` | Top / bottom of file |
+| `50G` or `:50` | Jump to line 50 |
+| `%` | Jump to matching bracket / paren / `#ifdef` |
+| `{` / `}` | Previous / next empty line (paragraph) |
+| `Ctrl-D` / `Ctrl-U` | Half-page down / up |
+| `H` / `M` / `L` | Top / middle / bottom of visible screen |
+| `zz` / `zt` / `zb` | Scroll so cursor is middle / top / bottom |
+| `f{c}` / `F{c}` | Jump to next / previous `{c}` on line |
+| `t{c}` / `T{c}` | Jump *before* next / previous `{c}` on line |
+| `;` / `,` | Repeat / reverse last `f`/`t` jump |
+| `*` / `#` | Search forward / backward for word under cursor |
+| `n` / `N` | Next / previous search match |
+| `''` (two ticks) | Jump back to where you were before last big jump |
+| `Ctrl-O` / `Ctrl-I` | Walk backward / forward through jump list |
+
+---
+
+## Text Objects — the vim superpower
+
+> Pattern: `{operator}{scope}{object}` e.g. `ci"` = change inside quotes
+
+| Object | Means |
+|--------|-------|
+| `iw` / `aw` | inner word / a word (includes space) |
+| `i"` / `a"` | inside / around double quotes |
+| `i'` / `a'` | inside / around single quotes |
+| `i(` / `a(` | inside / around parentheses (also `)`) |
+| `i{` / `a{` | inside / around braces (also `}`) |
+| `i[` / `a[` | inside / around brackets |
+| `it` / `at` | inside / around HTML/XML tag |
+| `ip` / `ap` | inner / a paragraph |
+| `is` / `as` | inner / a sentence |
+
+**Common combos:**
+
+| Command | Does |
+|---------|------|
+| `ciw` | Change word under cursor |
+| `ci"` | Change text inside quotes |
+| `ca(` | Change everything including the parentheses |
+| `di{` | Delete inside braces |
+| `yi[` | Yank inside brackets |
+| `va"` | Visually select including the quotes |
+| `=i{` | Re-indent inside braces |
+| `gUiw` | Uppercase word |
+| `guiw` | Lowercase word |
+
+---
+
+## Operators
+
+| Key | Action |
+|-----|--------|
+| `d` | Delete (into default register) |
+| `c` | Change (delete + enter insert mode) |
+| `y` | Yank (copy) |
+| `>` / `<` | Indent / dedent |
+| `=` | Auto-indent |
+| `gU` / `gu` | Uppercase / lowercase |
+| `gc` | Toggle comment (NERDCommenter) — works on motion or visual |
+
+All operators compose with text objects and motions: `d3j`, `y$`, `c%`, `>ip`.
+
+---
+
+## Insert Mode
+
+| Key | Action |
+|-----|--------|
+| `i` / `a` | Insert before / after cursor |
+| `I` / `A` | Insert at line start / end |
+| `o` / `O` | New line below / above, enter insert |
+| `s` / `S` | Delete char / line and insert |
+| `C` | Change to end of line |
+| `Ctrl-W` | Delete word backward (in insert mode) |
+| `Ctrl-U` | Delete to start of line (in insert mode) |
+| `Ctrl-R{reg}` | Paste register `{reg}` without leaving insert mode |
+| `Ctrl-R=` | Insert result of expression (e.g. `Ctrl-R= 2+2 Enter` → `4`) |
+
+---
+
+## Registers
+
+> Prefix any yank or paste with `"{reg}` to use a named register.
+
+| Key | Action |
+|-----|--------|
+| `"ayy` | Yank line into register `a` |
+| `"ap` | Paste from register `a` |
+| `"+y` / `"+p` | Yank to / paste from system clipboard |
+| `"0p` | Paste the last *yanked* text (not deleted) |
+| `""p` | Paste from default register |
+| `:reg` | Show all register contents |
+| `Ctrl-R{reg}` | Paste register in insert / command mode |
+
+**Special registers:**
+- `"0` — last yank
+- `"+` — system clipboard
+- `"%` — current filename
+- `":` — last command
+- `"/` — last search
+- `"_` — black hole (delete without clobbering clipboard)
+
+---
+
+## Macros
+
+| Key | Action |
+|-----|--------|
+| `q{a}` | Start recording macro into register `a` |
+| `q` | Stop recording |
+| `@{a}` | Play macro `a` |
+| `@@` | Replay last macro |
+| `10@a` | Play macro `a` 10 times |
+| `:reg a` | Inspect what's in macro `a` |
+
+**Tip:** Record a macro that ends by moving to the next target line, then `10@@` to repeat across many lines.
+
+---
+
+## Search & Replace
+
+| Key | Action |
+|-----|--------|
+| `/pattern` | Search forward |
+| `?pattern` | Search backward |
+| `:%s/old/new/g` | Replace all in file |
+| `:%s/old/new/gc` | Replace all, confirm each |
+| `:'<,'>s/old/new/g` | Replace in visual selection |
+| `:s/old/new/` | Replace first on current line |
+| `\v` prefix | "Very magic" — most chars are special (closer to regex) |
+
+**Useful patterns:**
+```
+:%s/\s\+$//          remove trailing whitespace
+:%s/\v(\w+)/[\1]/g   wrap every word in brackets
+```
+
+---
+
+## Marks
+
+| Key | Action |
+|-----|--------|
+| `m{a}` | Set mark `a` at cursor |
+| `` `{a} `` | Jump to exact position of mark `a` |
+| `'{a}` | Jump to line of mark `a` |
+| `` `. `` | Jump to last change |
+| `` `[ `` / `` `] `` | Start / end of last yank or change |
+| `` `< `` / `` `> `` | Start / end of last visual selection |
+| `:marks` | List all marks |
+
+Uppercase marks (`mA`–`mZ`) are global — they work across files.
+
+---
+
+## Visual Mode
+
+| Key | Action |
+|-----|--------|
+| `v` | Character-wise visual |
+| `V` | Line-wise visual |
+| `Ctrl-V` | Block visual (column select) |
+| `o` | Move to other end of selection |
+| `gv` | Re-select last visual selection |
+| `I` (in block) | Insert text at start of every selected line |
+| `A` (in block) | Append text at end of every selected line |
+
+---
+
+## Windows & Splits
+
+| Key | Action |
+|-----|--------|
+| `:sp` / `:vsp` | Horizontal / vertical split (current file) |
+| `:sp file` | Open file in horizontal split |
+| `Ctrl-W =` | Equalise all split sizes |
+| `Ctrl-W _` | Maximise current split height |
+| `Ctrl-W \|` | Maximise current split width |
+| `Ctrl-W r` | Rotate splits |
+
+---
+
+## Miscellaneous
+
+| Key | Action |
+|-----|--------|
+| `.` | Repeat last change |
+| `u` / `Ctrl-R` | Undo / redo |
+| `J` | Join line below to current |
+| `~` | Toggle case of character |
+| `Ctrl-A` / `Ctrl-X` | Increment / decrement number under cursor |
+| `ga` | Show ASCII / Unicode value of character under cursor |
+| `g~iw` | Toggle case of word |
+| `:earlier 5m` | Undo to state 5 minutes ago |
+| `:later 5m` | Redo to state 5 minutes from now |
+| `K` | Look up man page for word under cursor (outside LSP files) |
+| `Ctrl-G` | Show current filename and position |
+
+---
+
+## Command Line
+
+| Command | Action |
+|---------|--------|
+| `:e file` | Open file |
+| `:w !sudo tee %` | Save file you opened without sudo |
+| `:r !cmd` | Insert output of shell command below cursor |
+| `:%!cmd` | Filter entire file through shell command |
+| `:g/pattern/d` | Delete all lines matching pattern |
+| `:v/pattern/d` | Delete all lines *not* matching (keep matches) |
+| `:g/pattern/norm @a` | Run macro `a` on every matching line |
+| `Ctrl-R Ctrl-W` | Insert word under cursor into command line |
+| `Ctrl-F` | Open command history in editable window |
+| `q:` | Same — open command history window |
+
+---
+
 ## Files & Navigation
 
 | Key | Action |
