@@ -1,4 +1,51 @@
 # Universal snippets (all file types)
+#
+# keep-sorted snippets use # comments (covers YAML, Python, Shell, TOML, Ansible).
+# Language-specific overrides in go.snippets, proto.snippets, bzl.snippets use //.
+
+snippet ks "keep-sorted block" b
+# keep-sorted start
+${1}
+# keep-sorted end
+${0}
+endsnippet
+
+snippet kss "keep-sorted start marker" b
+# keep-sorted start
+${0}
+endsnippet
+
+snippet kse "keep-sorted end marker" b
+# keep-sorted end
+${0}
+endsnippet
+
+snippet kso "keep-sorted block with options" b
+# keep-sorted start ${1:numeric}
+${2}
+# keep-sorted end
+${0}
+endsnippet
+
+# ifttt-lint markers use # comments here (YAML, Python, Shell, Ansible, Starlark).
+# Go and Proto override these with // variants in their own snippet files.
+
+snippet ifttt "LINT.IfChange / ThenChange block" b
+# LINT.IfChange
+${1}
+# LINT.ThenChange(${2:path/to/other/file.py})
+${0}
+endsnippet
+
+snippet iftc "LINT.IfChange start marker" b
+# LINT.IfChange
+${0}
+endsnippet
+
+snippet thenc "LINT.ThenChange end marker" b
+# LINT.ThenChange(${1:path/to/other/file.py})
+${0}
+endsnippet
 
 snippet todo "TODO comment" i
 TODO(${1:who}): ${2}

@@ -1,0 +1,128 @@
+# Protocol Buffers snippets
+
+snippet file "Proto3 file header" b
+syntax = "proto3";
+
+package ${1:mypackage};
+
+option go_package = "${2:github.com/org/repo/gen/${1:mypackage}}";
+
+${0}
+endsnippet
+
+snippet msg "Message definition" b
+message ${1:MyMessage} {
+  ${0}
+}
+endsnippet
+
+snippet svc "Service definition" b
+service ${1:MyService} {
+  ${0}
+}
+endsnippet
+
+snippet rpc "RPC method" b
+rpc ${1:MethodName}(${2:RequestType}) returns (${3:ResponseType});
+${0}
+endsnippet
+
+snippet rpcs "RPC method with server streaming" b
+rpc ${1:MethodName}(${2:RequestType}) returns (stream ${3:ResponseType});
+${0}
+endsnippet
+
+snippet rpcc "RPC method with client streaming" b
+rpc ${1:MethodName}(stream ${2:RequestType}) returns (${3:ResponseType});
+${0}
+endsnippet
+
+snippet rpcb "RPC method with bidirectional streaming" b
+rpc ${1:MethodName}(stream ${2:RequestType}) returns (stream ${3:ResponseType});
+${0}
+endsnippet
+
+snippet enum "Enum definition" b
+enum ${1:MyEnum} {
+  ${1:MY_ENUM}_UNSPECIFIED = 0;
+  ${0}
+}
+endsnippet
+
+snippet oneof "Oneof field" b
+oneof ${1:field_name} {
+  ${2:TypeA} ${3:option_a} = ${4:1};
+  ${5:TypeB} ${6:option_b} = ${7:2};
+}
+${0}
+endsnippet
+
+snippet map "Map field" b
+map<${1:string}, ${2:string}> ${3:field_name} = ${4:1};
+${0}
+endsnippet
+
+snippet import "Import statement" b
+import "${1:other.proto}";
+${0}
+endsnippet
+
+snippet ts "Timestamp field (well-known type)" b
+import "google/protobuf/timestamp.proto";
+
+google.protobuf.Timestamp ${1:created_at} = ${2:1};
+${0}
+endsnippet
+
+snippet any "Any field (well-known type)" b
+import "google/protobuf/any.proto";
+
+google.protobuf.Any ${1:payload} = ${2:1};
+${0}
+endsnippet
+
+snippet status "gRPC status response pattern" b
+message ${1:MyResponse} {
+  bool success = 1;
+  string message = 2;
+  ${0}
+}
+endsnippet
+
+# ── keep-sorted (// comment style) ───────────────────────────────────────────
+
+snippet ks "keep-sorted block" b
+// keep-sorted start
+${1}
+// keep-sorted end
+${0}
+endsnippet
+
+snippet kss "keep-sorted start marker" b
+// keep-sorted start
+${0}
+endsnippet
+
+snippet kse "keep-sorted end marker" b
+// keep-sorted end
+${0}
+endsnippet
+
+# ── ifttt-lint (// comment style) ────────────────────────────────────────────
+
+snippet ifttt "LINT.IfChange / ThenChange block" b
+// LINT.IfChange
+${1}
+// LINT.ThenChange(${2:path/to/other/file.proto})
+${0}
+endsnippet
+
+snippet iftc "LINT.IfChange start marker" b
+// LINT.IfChange
+${0}
+endsnippet
+
+snippet thenc "LINT.ThenChange end marker" b
+// LINT.ThenChange(${1:path/to/other/file.proto})
+${0}
+endsnippet

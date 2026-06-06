@@ -106,12 +106,17 @@ Plug 'Xuyuanp/nerdtree-git-plugin'                  " Git status in NERDTree
 
 " --- Language Support ---
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go' }  " Go development
-Plug 'sheerun/vim-polyglot'                         " Multi-language support
+Plug 'sheerun/vim-polyglot'                         " Multi-language support (includes proto, bzl)
 Plug 'cespare/vim-toml', { 'for': 'toml' }         " TOML syntax
 Plug 'vim-python/python-syntax', { 'for': 'python' } " Enhanced Python syntax
+Plug 'towolf/vim-helm'                              " Helm chart template syntax (overrides yaml in templates/)
+Plug 'pearofducks/ansible-vim'                      " Ansible playbook/role syntax and indent
+Plug 'bazelbuild/vim-bazel'                         " Bazel :Bazel commands (requires vim-maktaba)
 
 " --- Documentation Languages ---
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }  " Markdown
+Plug 'dhruvasagar/vim-table-mode', { 'for': 'markdown' } " Easy markdown table editing
+Plug 'terrastruct/d2-vim'                           " D2 diagram language syntax + indent
 Plug 'lervag/vimtex', { 'for': 'tex' }              " LaTeX
 Plug 'google/vim-maktaba'                           " Required for vim-codefmt
 Plug 'google/vim-codefmt'                           " Code formatting
@@ -238,6 +243,51 @@ let g:lsp_diagnostics_signs_warning = {'text': '⚠'}
 let g:lsp_diagnostics_signs_hint = {'text': '💡'}
 let g:lsp_diagnostics_signs_information = {'text': 'ℹ'}
 
+" Per-server initialization options
+let g:lsp_settings = {
+\  'gopls': {
+\    'initialization_options': {
+\      'ui.completion.usePlaceholders': v:true,
+\      'ui.diagnostic.staticcheck': v:true,
+\    }
+\  },
+\  'yaml-language-server': {
+\    'initialization_options': {
+\      'yaml': {
+\        'schemas': {
+\          'https://json.schemastore.org/kustomization.json':    ['kustomization.yaml', 'kustomization.yml'],
+\          'https://json.schemastore.org/helmfile.json':         ['helmfile.yaml'],
+\          'https://json.schemastore.org/ansible-playbook.json': ['playbook.yml', 'playbook.yaml'],
+\        }
+\      }
+\    }
+\  }
+\}
+
+" Manual LSP registrations for servers not auto-detected by vim-lsp-settings.
+
+" buf beta lsp: protobuf language server (completion, hover, go-to-definition)
+if executable('buf')
+  au User lsp_setup call lsp#register_server({
+  \ 'name': 'buf-ls',
+  \ 'cmd': {server_info->['buf', 'beta', 'lsp']},
+  \ 'root_uri': {server_info->lsp#utils#path_to_uri(
+  \   lsp#utils#find_nearest_parent_file_directory(
+  \     lsp#utils#get_buffer_path(),
+  \     ['buf.yaml', 'buf.work.yaml', '.git']))},
+  \ 'whitelist': ['proto'],
+  \ })
+endif
+
+" helm_ls: values completion, template diagnostics, go-to-definition for helpers
+if executable('helm_ls')
+  au User lsp_setup call lsp#register_server({
+  \ 'name': 'helm-ls',
+  \ 'cmd': {server_info->['helm_ls', 'serve']},
+  \ 'whitelist': ['helm'],
+  \ })
+endif
+
 " ============================================================================
 " ALE Configuration (Linting alongside LSP)
 " ============================================================================
@@ -257,19 +307,26 @@ let g:ale_linters = {
 \   'dockerfile': ['hadolint'],
 \   'json': ['jq'],
 \   'rest': [''],
+\   'd2': [],
+\   'proto': ['buf_lint'],
+\   'yaml.ansible': ['ansible_lint'],
+\   'bzl': ['buildifier'],
 \}
 
 " Fixers by filetype
 " Note: Go is intentionally absent — gopls (LSP) handles formatting and
 " import management via source.organizeImports + LspDocumentFormatSync on save.
 let g:ale_fixers = {
-\   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\   '*': ['remove_trailing_lines', 'trim_whitespace', 'keep_sorted'],
 \   'python': ['black', 'isort'],
 \   'javascript': ['prettier'],
 \   'typescript': ['prettier'],
 \   'json': ['prettier'],
 \   'yaml': ['prettier'],
 \   'markdown': ['prettier'],
+\   'd2': ['d2fmt'],
+\   'proto': ['buf_fmt'],
+\   'bzl': ['buildifier'],
 \   'html': ['prettier'],
 \}
 
@@ -556,6 +613,132 @@ let g:vim_markdown_conceal = 0
 let g:vim_markdown_conceal_code_blocks = 0
 let g:vim_markdown_auto_insert_bullets = 1
 let g:vim_markdown_new_list_item_indent = 2
+
+" vim-table-mode: ,tm to toggle; in markdown mode uses | pipes automatically.
+" Use ,tdd to delete a column, ,tdc to delete a row.
+" TableFormat (:TableFormat) realigns the whole table.
+let g:table_mode_corner = '|'   " markdown-style tables (not RST +)
+
+autocmd FileType markdown TableModeEnable
+
+" ============================================================================
+" D2 Configuration
+" ============================================================================
+" Filetype detection (terrastruct/d2-vim also does this, belt-and-suspenders)
+autocmd BufRead,BufNewFile *.d2 setfiletype d2
+
+" ALE fixer: `d2 fmt -` reads from stdin, writes formatted diagram to stdout
+function! s:AleFixD2(buffer) abort
+  return {'command': 'd2 fmt -'}
+endfunction
+call ale#fix#registry#Add('d2fmt', function('s:AleFixD2'), ['d2'], 'Format D2 diagrams')
+
+autocmd FileType d2 setlocal ts=2 sts=2 sw=2 expandtab
+
+" ============================================================================
+" Protobuf Configuration
+" ============================================================================
+" Syntax via vim-polyglot (proto3 included). LSP via buf-ls registered above.
+" ALE: buf_lint for diagnostics, buf_fmt fixer for format-on-save.
+
+function! s:AleFixBufFmt(buffer) abort
+  return {'command': 'buf format -'}
+endfunction
+call ale#fix#registry#Add('buf_fmt', function('s:AleFixBufFmt'), ['proto'], 'Format protobuf with buf')
+
+" keep-sorted: sorts regions delimited by "keep-sorted start/end" comments.
+" No-op on files without markers — safe to include in '*' fixers for all types.
+" Markers vary by language comment style; see UltiSnips snippets (trigger: ks).
+function! s:AleFixKeepSorted(buffer) abort
+  return {'command': 'keep-sorted -'}
+endfunction
+call ale#fix#registry#Add('keep_sorted', function('s:AleFixKeepSorted'), [], 'Sort keep-sorted regions')
+
+" :KeepSorted — run keep-sorted on the whole buffer immediately (no save needed).
+" Useful for one-off sorting or in files where ale_fix_on_save is disabled.
+command! KeepSorted %!keep-sorted -
+nnoremap <leader>ks :KeepSorted<CR>
+
+" ============================================================================
+" ifttt-lint Configuration
+" ============================================================================
+" Validates LINT.IfChange / LINT.ThenChange cross-file sync markers.
+" Ensures that when a marked block changes, its linked counterpart also changes.
+" Install: cargo install ifttt-lint  (see github.com/simonepri/ifttt-lint)
+"
+" Output format: file:line: severity: message
+" Only active when 'ifttt-lint' is found in PATH.
+if executable('ifttt-lint')
+  function! s:IftttLintHandler(buffer, lines) abort
+    let l:pattern = '\v^\S+:(\d+): (error|warning): (.+)$'
+    let l:output = []
+    for l:line in a:lines
+      let l:match = matchlist(l:line, l:pattern)
+      if len(l:match) > 0
+        call add(l:output, {
+        \  'lnum': str2nr(l:match[1]),
+        \  'type': l:match[2] ==# 'error' ? 'E' : 'W',
+        \  'text': l:match[3],
+        \ })
+      endif
+    endfor
+    return l:output
+  endfunction
+
+  " Register the linter definition for each supported filetype.
+  for s:ft in ['go', 'python', 'sh', 'yaml', 'yaml.ansible',
+  \            'proto', 'bzl', 'markdown', 'typescript', 'rust', 'helm']
+    call ale#linter#Define(s:ft, {
+    \  'name':       'ifttt_lint',
+    \  'executable': 'ifttt-lint',
+    \  'command':    'ifttt-lint --format plain %s',
+    \  'callback':   function('s:IftttLintHandler'),
+    \ })
+  endfor
+  unlet s:ft
+
+  " Add ifttt_lint to the explicit linters list for each registered filetype.
+  " (g:ale_linters_explicit = 1 means linters must be listed to run.)
+  for s:ft in keys(g:ale_linters)
+    if index(['go', 'python', 'sh', 'yaml', 'yaml.ansible',
+    \         'proto', 'bzl', 'markdown'], s:ft) >= 0
+      call add(g:ale_linters[s:ft], 'ifttt_lint')
+    endif
+  endfor
+  unlet s:ft
+endif
+
+" Kustomization files are YAML; tag them so yaml-language-server applies schema
+autocmd BufRead,BufNewFile kustomization.yaml,kustomization.yml
+  \ let b:yaml_schema = 'kustomization'
+
+" ============================================================================
+" Helm Configuration
+" ============================================================================
+" towolf/vim-helm detects files under templates/ dirs and sets ft=helm.
+" helm_ls registered above provides completion for .Values, .Chart, .Release.
+autocmd FileType helm setlocal ts=2 sts=2 sw=2 expandtab
+
+" ============================================================================
+" Ansible Configuration
+" ============================================================================
+" pearofducks/ansible-vim sets ft=yaml.ansible for playbooks, tasks, handlers.
+" ansible-language-server is auto-configured by vim-lsp-settings when present.
+let g:ansible_unindent_after_newline = 1
+let g:ansible_attribute_highlight = 'ab'
+let g:ansible_name_highlight = 'd'
+let g:ansible_extra_keywords_highlight = 1
+
+autocmd FileType yaml.ansible setlocal ts=2 sts=2 sw=2 expandtab
+
+" ============================================================================
+" Bazel Configuration
+" ============================================================================
+" vim-polyglot provides Starlark/bzl syntax. bazelbuild/vim-bazel provides
+" :Bazel build/test/run commands. buildifier handles format + lint.
+" :Bazel build //...  :Bazel test //...  :Bazel run //:target
+
+autocmd FileType bzl setlocal ts=4 sts=4 sw=4 expandtab  " Bazel style is 4-space
 
 " ============================================================================
 " LaTeX Configuration (vimtex)

@@ -1,0 +1,95 @@
+# Markdown snippets
+
+snippet fm "YAML frontmatter" b
+---
+title: ${1:Title}
+date: `date +%Y-%m-%d`
+tags: [${2:tag}]
+---
+
+${0}
+endsnippet
+
+snippet h1 "Heading 1" b
+# ${1:Heading}
+
+${0}
+endsnippet
+
+snippet h2 "Heading 2" b
+## ${1:Heading}
+
+${0}
+endsnippet
+
+snippet h3 "Heading 3" b
+### ${1:Heading}
+
+${0}
+endsnippet
+
+snippet code "Fenced code block" b
+\`\`\`${1:language}
+${2:code}
+\`\`\`
+${0}
+endsnippet
+
+snippet link "Inline link" i
+[${1:text}](${2:url})${0}
+endsnippet
+
+snippet img "Image" i
+![${1:alt}](${2:path})${0}
+endsnippet
+
+snippet table "Markdown table (3 cols)" b
+| ${1:Col 1} | ${2:Col 2} | ${3:Col 3} |
+|------------|------------|------------|
+| ${4}       | ${5}       | ${6}       |
+${0}
+endsnippet
+
+snippet task "Task list" b
+- [ ] ${1:task}
+- [ ] ${0}
+endsnippet
+
+snippet note "Blockquote note" b
+> **Note:** ${1:message}
+${0}
+endsnippet
+
+snippet warn "Blockquote warning" b
+> **Warning:** ${1:message}
+${0}
+endsnippet
+
+snippet details "HTML details/summary" b
+<details>
+<summary>${1:Summary}</summary>
+
+${2:Content}
+
+</details>
+${0}
+endsnippet
+
+# ── ifttt-lint (<!-- --> comment style) ──────────────────────────────────────
+
+snippet ifttt "LINT.IfChange / ThenChange block" b
+<!-- LINT.IfChange -->
+${1}
+<!-- LINT.ThenChange(${2:path/to/other/file.md}) -->
+${0}
+endsnippet
+
+snippet iftc "LINT.IfChange start marker" b
+<!-- LINT.IfChange -->
+${0}
+endsnippet
+
+snippet thenc "LINT.ThenChange end marker" b
+<!-- LINT.ThenChange(${1:path/to/other/file.md}) -->
+${0}
+endsnippet

@@ -1,0 +1,78 @@
+# D2 diagram snippets
+
+snippet dir "Direction" b
+direction: ${1:right}
+${0}
+endsnippet
+
+snippet conn "Connection" b
+${1:a} -> ${2:b}: ${3:label}
+${0}
+endsnippet
+
+snippet biconn "Bidirectional connection" b
+${1:a} <-> ${2:b}: ${3:label}
+${0}
+endsnippet
+
+snippet cont "Container (group)" b
+${1:name}: {
+  ${0}
+}
+endsnippet
+
+snippet shape "Shape with label" b
+${1:id}: ${2:Label} {
+  shape: ${3:rectangle}
+}
+${0}
+endsnippet
+
+snippet sql "SQL table" b
+${1:TableName}: {
+  shape: sql_table
+  ${2:id}: int {constraint: primary_key}
+  ${3:name}: varchar
+  ${0}
+}
+endsnippet
+
+snippet seq "Sequence diagram" b
+${1:name}: {
+  shape: sequence_diagram
+  ${2:actor1}
+  ${3:actor2}
+  ${2:actor1} -> ${3:actor2}: ${4:message}
+  ${0}
+}
+endsnippet
+
+snippet style "Style block" b
+${1:id}: {
+  style: {
+    fill: "${2:#f5f5f5}"
+    stroke: "${3:#333333}"
+    font-color: "${4:#000000}"
+    border-radius: ${5:4}
+  }
+}
+${0}
+endsnippet
+
+snippet grid "Grid layout" b
+${1:name}: {
+  grid-rows: ${2:2}
+  grid-columns: ${3:2}
+  ${0}
+}
+endsnippet
+
+snippet tooltip "Tooltip" b
+${1:id}.tooltip: "${2:Tooltip text}"
+${0}
+endsnippet
+
+snippet link "Clickable link" b
+${1:id}.link: "${2:https://example.com}"
+${0}
+endsnippet

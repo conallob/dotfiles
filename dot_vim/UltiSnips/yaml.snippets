@@ -1,0 +1,110 @@
+# Kustomize snippets
+# These trigger in kustomization.yaml / kustomization.yml files (filetype: yaml)
+
+snippet kust "Base kustomization.yaml" b
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ${1:./base}
+
+${0}
+endsnippet
+
+snippet res "Resources list entry" b
+resources:
+  - ${1:deployment.yaml}
+  - ${2:service.yaml}
+${0}
+endsnippet
+
+snippet patch "Strategic merge patch" b
+patches:
+  - path: ${1:patch.yaml}
+    target:
+      kind: ${2:Deployment}
+      name: ${3:my-app}
+${0}
+endsnippet
+
+snippet patchinline "Inline patch" b
+patches:
+  - patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: ${1:3}
+    target:
+      kind: ${2:Deployment}
+      name: ${3:my-app}
+${0}
+endsnippet
+
+snippet cmgen "ConfigMap generator" b
+configMapGenerator:
+  - name: ${1:my-config}
+    literals:
+      - ${2:KEY}=${3:value}
+    files:
+      - ${4:config.properties}
+${0}
+endsnippet
+
+snippet secgen "Secret generator" b
+secretGenerator:
+  - name: ${1:my-secret}
+    literals:
+      - ${2:USERNAME}=${3:admin}
+      - ${4:PASSWORD}=${5:secret}
+    type: Opaque
+${0}
+endsnippet
+
+snippet images "Image override" b
+images:
+  - name: ${1:nginx}
+    newName: ${2:my-registry/nginx}
+    newTag: ${3:1.21}
+${0}
+endsnippet
+
+snippet ns "Namespace override" b
+namespace: ${1:my-namespace}
+${0}
+endsnippet
+
+snippet prefix "Name prefix" b
+namePrefix: ${1:prod-}
+${0}
+endsnippet
+
+snippet label "Common labels" b
+commonLabels:
+  app: ${1:my-app}
+  environment: ${2:production}
+${0}
+endsnippet
+
+snippet comp "Component reference" b
+components:
+  - ${1:../components/monitoring}
+${0}
+endsnippet
+
+snippet overlay "Overlay structure (directory layout comment)" b
+# Overlay kustomization — references a base and applies environment patches
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+namespace: ${1:production}
+
+patches:
+  - path: ${2:replica-patch.yaml}
+
+images:
+  - name: ${3:app}
+    newTag: ${4:v1.2.3}
+${0}
+endsnippet
