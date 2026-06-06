@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Vim Cheat Sheet</title>
+<style>
+  /* ── Page setup ── */
+  @page {
+    size: A4;
+    margin: 10mm 12mm;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+    font-size: 8.5pt;
+    line-height: 1.35;
+    color: #1a1a1a;
+    background: #fff;
+  }
+
+  /* ── Title ── */
+  h1 {
+    font-size: 15pt;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 0.04em;
+    padding: 3mm 0 1mm;
+    border-bottom: 2px solid #333;
+    margin-bottom: 3mm;
+    grid-column: 1 / -1;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 8pt;
+    color: #555;
+    margin-bottom: 4mm;
+    grid-column: 1 / -1;
+  }
+
+  code {
+    font-family: "SF Mono", "Fira Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 8pt;
+    background: #f0f0f0;
+    padding: 0 2px;
+    border-radius: 2px;
+  }
+
+  /* ── Two-column page grid ── */
+  .page {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 6mm;
+    align-items: start;
+  }
+
+  /* ── Sections ── */
+  section {
+    break-inside: avoid-column;
+    margin-bottom: 3.5mm;
+  }
+
+  h2 {
+    font-size: 8.5pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    background: #222;
+    color: #fff;
+    padding: 1.5mm 2.5mm;
+    margin-bottom: 1.5mm;
+  }
+
+  h3 {
+    font-size: 7.5pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #444;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 0.5mm;
+    margin: 2mm 0 1mm;
+  }
+
+  /* ── Tables ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    break-inside: avoid;
+    table-layout: fixed;
+  }
+
+  td {
+    padding: 1mm 2mm;
+    vertical-align: top;
+    border-bottom: 0.5px solid #e8e8e8;
+    word-break: break-word;
+  }
+
+  td:first-child {
+    width: 36%;
+    font-family: "SF Mono", "Fira Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 7.8pt;
+    color: #b5000a;
+    white-space: nowrap;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: #fafafa; }
+
+  /* ── Notes / tips ── */
+  p.note {
+    font-size: 7.5pt;
+    color: #555;
+    margin: 1mm 0 1.5mm;
+    padding-left: 1.5mm;
+    border-left: 2px solid #ccc;
+  }
+
+  /* ── Span full width ── */
+  .full { grid-column: 1 / -1; }
+
+  /* ── Screen only ── */
+  @media screen {
+    body { background: #e8e8e8; }
+    .page {
+      background: #fff;
+      max-width: 210mm;
+      min-height: 297mm;
+      margin: 10mm auto;
+      padding: 10mm 12mm;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<h1>Vim Cheat Sheet</h1>
+<p class="subtitle">Leader key&nbsp;=&nbsp;<code>,</code> &nbsp;·&nbsp; Local leader&nbsp;=&nbsp;<code>\</code> &nbsp;·&nbsp; e.g. <code>&lt;leader&gt;w</code> → <code>,w</code></p>
+
+<!-- ══════════════ COL 1 ══════════════ -->
+
+<section>
+  <h2>Motion</h2>
+  <table>
+    <tr><td>w / b</td><td>Next / prev word start</td></tr>
+    <tr><td>e / ge</td><td>Next / prev word end</td></tr>
+    <tr><td>W / B / E</td><td>Same but WORD (whitespace-delimited)</td></tr>
+    <tr><td>0 / ^ / $</td><td>Line col-0 / first non-blank / end</td></tr>
+    <tr><td>gg / G</td><td>Top / bottom of file</td></tr>
+    <tr><td>50G &nbsp;or&nbsp; :50</td><td>Jump to line 50</td></tr>
+    <tr><td>%</td><td>Jump to matching bracket / <code>#ifdef</code></td></tr>
+    <tr><td>{ / }</td><td>Prev / next empty line (paragraph)</td></tr>
+    <tr><td>Ctrl-D / Ctrl-U</td><td>Half-page down / up</td></tr>
+    <tr><td>H / M / L</td><td>Top / middle / bottom of screen</td></tr>
+    <tr><td>zz / zt / zb</td><td>Scroll cursor to middle / top / bottom</td></tr>
+    <tr><td>f{c} / F{c}</td><td>Jump to next / prev <code>{c}</code> on line</td></tr>
+    <tr><td>t{c} / T{c}</td><td>Jump <em>before</em> next / prev <code>{c}</code></td></tr>
+    <tr><td>; / ,</td><td>Repeat / reverse last f/t jump</td></tr>
+    <tr><td>* / #</td><td>Search fwd / bwd for word under cursor</td></tr>
+    <tr><td>'' (two ticks)</td><td>Jump back before last big jump</td></tr>
+    <tr><td>Ctrl-O / Ctrl-I</td><td>Walk backward / fwd through jump list</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>Text Objects — the vim superpower</h2>
+  <p class="note">Pattern: <code>{op}{scope}{object}</code> &nbsp;e.g. <code>ci"</code> = change inside quotes</p>
+  <h3>Objects</h3>
+  <table>
+    <tr><td>iw / aw</td><td>Inner word / a word (incl. space)</td></tr>
+    <tr><td>i" / a"</td><td>Inside / around double quotes</td></tr>
+    <tr><td>i' / a'</td><td>Inside / around single quotes</td></tr>
+    <tr><td>i( / a(</td><td>Inside / around parentheses</td></tr>
+    <tr><td>i{ / a{</td><td>Inside / around braces</td></tr>
+    <tr><td>i[ / a[</td><td>Inside / around brackets</td></tr>
+    <tr><td>it / at</td><td>Inside / around HTML/XML tag</td></tr>
+    <tr><td>ip / ap</td><td>Inner / a paragraph</td></tr>
+  </table>
+  <h3>Common combos</h3>
+  <table>
+    <tr><td>ciw</td><td>Change word under cursor</td></tr>
+    <tr><td>ci"</td><td>Change text inside quotes</td></tr>
+    <tr><td>ca(</td><td>Change including the parentheses</td></tr>
+    <tr><td>di{</td><td>Delete inside braces</td></tr>
+    <tr><td>yi[</td><td>Yank inside brackets</td></tr>
+    <tr><td>=i{</td><td>Re-indent inside braces (e.g. a function)</td></tr>
+    <tr><td>gUiw / guiw</td><td>Uppercase / lowercase word</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>Operators</h2>
+  <p class="note">All compose with text objects and motions: <code>d3j</code>, <code>y$</code>, <code>c%</code>, <code>&gt;ip</code></p>
+  <table>
+    <tr><td>d / c / y</td><td>Delete / change / yank</td></tr>
+    <tr><td>&gt; / &lt;</td><td>Indent / dedent</td></tr>
+    <tr><td>=</td><td>Auto-indent</td></tr>
+    <tr><td>gU / gu</td><td>Uppercase / lowercase</td></tr>
+    <tr><td>gc</td><td>Toggle comment (NERDCommenter)</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>Insert Mode</h2>
+  <table>
+    <tr><td>i / a</td><td>Insert before / after cursor</td></tr>
+    <tr><td>I / A</td><td>Insert at line start / end</td></tr>
+    <tr><td>o / O</td><td>New line below / above, enter insert</td></tr>
+    <tr><td>s / S</td><td>Delete char / line and insert</td></tr>
+    <tr><td>C</td><td>Change to end of line</td></tr>
+    <tr><td>Ctrl-W</td><td>Delete word backward</td></tr>
+    <tr><td>Ctrl-U</td><td>Delete to start of line</td></tr>
+    <tr><td>Ctrl-R {reg}</td><td>Paste register without leaving insert</td></tr>
+    <tr><td>Ctrl-R =</td><td>Insert expression result (e.g. <code>2+2</code>→<code>4</code>)</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>Visual Mode</h2>
+  <table>
+    <tr><td>v / V</td><td>Character / line visual</td></tr>
+    <tr><td>Ctrl-V</td><td>Block / column visual</td></tr>
+    <tr><td>o</td><td>Move to other end of selection</td></tr>
+    <tr><td>gv</td><td>Re-select last visual selection</td></tr>
+    <tr><td>I (block)</td><td>Insert at start of every selected line</td></tr>
+    <tr><td>A (block)</td><td>Append at end of every selected line</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>Registers</h2>
+  <p class="note">Prefix any yank or paste with <code>"{reg}</code> to target a register</p>
+  <table>
+    <tr><td>"ayy / "ap</td><td>Yank line into / paste from register <code>a</code></td></tr>
+    <tr><td>"+y / "+p</td><td>Yank to / paste from system clipboard</td></tr>
+    <tr><td>"0p</td><td>Paste last <em>yanked</em> text (ignores deletes)</td></tr>
+    <tr><td>"_d</td><td>Delete into black hole (keeps clipboard clean)</td></tr>
+    <tr><td>:reg</td><td>Show all registers</td></tr>
+    <tr><td>Ctrl-R {reg}</td><td>Paste register in insert / command mode</td></tr>
+  </table>
+  <p class="note">Special: <code>"0</code> last yank · <code>"+</code> clipboard · <code>"%</code> filename · <code>":</code> last command · <code>"/</code> last search</p>
+</section>
+
+<!-- ══════════════ COL 2 ══════════════ -->
+
+<section>
+  <h2>Marks</h2>
+  <table>
+    <tr><td>m{a}</td><td>Set mark <code>a</code> at cursor</td></tr>
+    <tr><td>`{a}</td><td>Jump to exact position of mark <code>a</code></td></tr>
+    <tr><td>'{a}</td><td>Jump to line of mark <code>a</code></td></tr>
+    <tr><td>`. (backtick .)</td><td>Jump to position of last change</td></tr>
+    <tr><td>`[ / `]</td><td>Start / end of last yank or change</td></tr>
+    <tr><td>`&lt; / `&gt;</td><td>Start / end of last visual selection</td></tr>
+    <tr><td>:marks</td><td>List all marks</td></tr>
+  </table>
+  <p class="note">Uppercase marks (<code>mA</code>–<code>mZ</code>) are global — work across files</p>
+</section>
+
+<section>
+  <h2>Macros</h2>
+  <table>
+    <tr><td>q{a}</td><td>Start recording macro into register <code>a</code></td></tr>
+    <tr><td>q</td><td>Stop recording</td></tr>
+    <tr><td>@{a}</td><td>Play macro <code>a</code></td></tr>
+    <tr><td>@@</td><td>Replay last macro</td></tr>
+    <tr><td>10@a</td><td>Play macro <code>a</code> 10 times</td></tr>
+    <tr><td>:reg a</td><td>Inspect contents of macro <code>a</code></td></tr>
+  </table>
+  <p class="note">Tip: end the macro by moving to the next target line, then <code>10@@</code> to sweep across many lines</p>
+</section>
+
+<section>
+  <h2>Search &amp; Replace</h2>
+  <table>
+    <tr><td>/pattern</td><td>Search forward</td></tr>
+    <tr><td>?pattern</td><td>Search backward</td></tr>
+    <tr><td>n / N</td><td>Next / prev match</td></tr>
+    <tr><td>:%s/old/new/g</td><td>Replace all in file</td></tr>
+    <tr><td>:%s/old/new/gc</td><td>Replace all, confirm each</td></tr>
+    <tr><td>:'&lt;,'&gt;s/old/new/g</td><td>Replace in visual selection</td></tr>
+  </table>
+  <p class="note"><code>\v</code> prefix enables "very magic" — most chars special (closer to PCRE). e.g. <code>:%s/\v(\w+)/[\1]/g</code></p>
+</section>
+
+<section>
+  <h2>Command Line</h2>
+  <table>
+    <tr><td>:e file</td><td>Open file</td></tr>
+    <tr><td>:w !sudo tee %</td><td>Save file opened without sudo</td></tr>
+    <tr><td>:r !cmd</td><td>Insert shell command output below cursor</td></tr>
+    <tr><td>:%!cmd</td><td>Filter entire file through shell command</td></tr>
+    <tr><td>:g/pat/d</td><td>Delete all lines matching pattern</td></tr>
+    <tr><td>:v/pat/d</td><td>Delete all lines <em>not</em> matching</td></tr>
+    <tr><td>:g/pat/norm @a</td><td>Run macro <code>a</code> on every matching line</td></tr>
+    <tr><td>Ctrl-R Ctrl-W</td><td>Insert word under cursor into command</td></tr>
+    <tr><td>q: or Ctrl-F</td><td>Open editable command history window</td></tr>
+    <tr><td>:earlier 5m</td><td>Undo to file state 5 minutes ago</td></tr>
+    <tr><td>:later 5m</td><td>Redo to state 5 minutes forward</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>Miscellaneous</h2>
+  <table>
+    <tr><td>. (dot)</td><td>Repeat last change</td></tr>
+    <tr><td>u / Ctrl-R</td><td>Undo / redo</td></tr>
+    <tr><td>J</td><td>Join line below onto current</td></tr>
+    <tr><td>~</td><td>Toggle case of character under cursor</td></tr>
+    <tr><td>Ctrl-A / Ctrl-X</td><td>Increment / decrement number</td></tr>
+    <tr><td>ga</td><td>Show ASCII / Unicode value of char</td></tr>
+    <tr><td>Ctrl-G</td><td>Show filename and cursor position</td></tr>
+    <tr><td>F2</td><td>Toggle paste mode</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>Files &amp; Navigation</h2>
+  <table>
+    <tr><td>Ctrl-P</td><td>Fuzzy find file in project (fzf)</td></tr>
+    <tr><td>,f</td><td>Live grep across project (ripgrep)</td></tr>
+    <tr><td>,b</td><td>Switch between open buffers</td></tr>
+    <tr><td>,t</td><td>Search tags</td></tr>
+    <tr><td>,h</td><td>Recent files</td></tr>
+    <tr><td>,n / ,nf</td><td>Toggle file tree / reveal current file</td></tr>
+    <tr><td>,bn / ,bp</td><td>Next / previous buffer</td></tr>
+    <tr><td>,bd</td><td>Close buffer</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>Splits &amp; Terminal</h2>
+  <table>
+    <tr><td>:sp / :vsp</td><td>Horizontal / vertical split</td></tr>
+    <tr><td>,tt / ,tv</td><td>Open terminal (horiz. / vert. split)</td></tr>
+    <tr><td>Ctrl-H/J/K/L</td><td>Move between splits (works in terminal)</td></tr>
+    <tr><td>Ctrl-W =</td><td>Equalise all split sizes</td></tr>
+    <tr><td>Ctrl-W _ / |</td><td>Maximise split height / width</td></tr>
+    <tr><td>Esc</td><td>Exit terminal mode</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>LSP</h2>
+  <table>
+    <tr><td>gd / gr / gi</td><td>Definition / references / implementation</td></tr>
+    <tr><td>gt</td><td>Type definition</td></tr>
+    <tr><td>K</td><td>Hover docs</td></tr>
+    <tr><td>,rn</td><td>Rename symbol</td></tr>
+    <tr><td>,ca</td><td>Code action</td></tr>
+    <tr><td>[g / ]g</td><td>Prev / next diagnostic</td></tr>
+    <tr><td>gs / gS</td><td>Symbols in file / workspace</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>Completion &amp; Snippets</h2>
+  <table>
+    <tr><td>Tab / Shift-Tab</td><td>Next / prev completion item</td></tr>
+    <tr><td>Enter</td><td>Accept completion</td></tr>
+    <tr><td>Ctrl-E</td><td>Expand snippet</td></tr>
+    <tr><td>Ctrl-J / Ctrl-K</td><td>Jump fwd / bwd in snippet</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>Debugger (vimspector + delve)</h2>
+  <p class="note">Set breakpoint first with F9, then launch with F5</p>
+  <table>
+    <tr><td>F5 / F3 / F4</td><td>Start·continue / stop / restart</td></tr>
+    <tr><td>F9</td><td>Toggle breakpoint</td></tr>
+    <tr><td>F10 / F11 / F12</td><td>Step over / into / out</td></tr>
+    <tr><td>,di</td><td>Inspect variable under cursor</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>Test Runner (vim-test)</h2>
+  <table>
+    <tr><td>,un</td><td>Run test nearest to cursor</td></tr>
+    <tr><td>,uf</td><td>Run all tests in current file</td></tr>
+    <tr><td>,us</td><td>Run entire test suite</td></tr>
+    <tr><td>,ul</td><td>Re-run last test</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>Git</h2>
+  <table>
+    <tr><td>,gs / ,gc / ,gp</td><td>Status / commit / push</td></tr>
+    <tr><td>,gl / ,gd / ,gb</td><td>Pull / diff / blame</td></tr>
+    <tr><td>,gh</td><td>Open file on GitHub / GitLab</td></tr>
+    <tr><td>[h / ]h</td><td>Prev / next changed hunk</td></tr>
+    <tr><td>,hs / ,hu / ,hp</td><td>Stage / undo / preview hunk</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>Go extras (vim-go)</h2>
+  <table>
+    <tr><td>,gb / ,gr / ,gt</td><td>Build / run / test</td></tr>
+    <tr><td>,ga</td><td>Alternate file (<code>foo.go</code> ↔ <code>foo_test.go</code>)</td></tr>
+    <tr><td>,gd / ,gi / ,gf</td><td>Doc / implement interface / fill struct</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>Multiple Cursors (vim-visual-multi)</h2>
+  <table>
+    <tr><td>Ctrl-N</td><td>Select word; keep pressing for next match</td></tr>
+    <tr><td>Ctrl-↓ / Ctrl-↑</td><td>Add cursor below / above</td></tr>
+    <tr><td>q / Q</td><td>Skip match / remove cursor</td></tr>
+    <tr><td>Esc</td><td>Exit multi-cursor mode</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>AI &amp; REST</h2>
+  <table>
+    <tr><td>,ai / ,ae / ,ac</td><td>AI complete / edit / chat</td></tr>
+    <tr><td>,at</td><td>Toggle AI on/off</td></tr>
+    <tr><td>\rr</td><td>Execute REST request under cursor</td></tr>
+  </table>
+</section>
+
+</div>
+</body>
+</html>
