@@ -1,0 +1,131 @@
+# Bazel / Starlark snippets (BUILD, BUILD.bazel, *.bzl files)
+
+snippet load "Load statement" b
+load("${1:@rules_go//go:def.bzl}", "${2:go_library}")
+${0}
+endsnippet
+
+snippet pkg "Package declaration" b
+package(default_visibility = ["${1://visibility:public}"])
+${0}
+endsnippet
+
+snippet golib "go_library" b
+go_library(
+    name = "${1:${TM_FILENAME_BASE}}",
+    srcs = glob(["*.go"], exclude = ["*_test.go"]),
+    importpath = "${2:github.com/org/repo/${3:pkg}}",
+    visibility = ["${4://visibility:public}"],
+    deps = [
+        ${0}
+    ],
+)
+endsnippet
+
+snippet gobin "go_binary" b
+go_binary(
+    name = "${1:${TM_FILENAME_BASE}}",
+    srcs = glob(["*.go"], exclude = ["*_test.go"]),
+    importpath = "${2:github.com/org/repo/${3:cmd/${1}}}",
+    visibility = ["${4://visibility:public}"],
+    deps = [
+        ${0}
+    ],
+)
+endsnippet
+
+snippet gotest "go_test" b
+go_test(
+    name = "${1:${TM_FILENAME_BASE}_test}",
+    srcs = glob(["*_test.go"]),
+    embed = [":${2:lib}"],
+    deps = [
+        ${0}
+    ],
+)
+endsnippet
+
+snippet proto "proto_library" b
+proto_library(
+    name = "${1:${TM_FILENAME_BASE}_proto}",
+    srcs = ["${2:${TM_FILENAME_BASE}}.proto"],
+    visibility = ["${3://visibility:public}"],
+    deps = [
+        ${0}
+    ],
+)
+endsnippet
+
+snippet goproto "go_proto_library" b
+go_proto_library(
+    name = "${1:${TM_FILENAME_BASE}_go_proto}",
+    compilers = ["${2:@io_bazel_rules_go//proto:go_grpc}"],
+    importpath = "${3:github.com/org/repo/gen/${4:pkg}}",
+    proto = ":${5:${TM_FILENAME_BASE}_proto}",
+    visibility = ["${6://visibility:public}"],
+)
+${0}
+endsnippet
+
+snippet filegroup "filegroup" b
+filegroup(
+    name = "${1:files}",
+    srcs = glob(["${2:**/*}"]),
+    visibility = ["${3://visibility:public}"],
+)
+${0}
+endsnippet
+
+snippet alias "alias target" b
+alias(
+    name = "${1:alias_name}",
+    actual = "${2://some:target}",
+    visibility = ["${3://visibility:public}"],
+)
+${0}
+endsnippet
+
+snippet genrule "genrule" b
+genrule(
+    name = "${1:gen_${2:output}}",
+    srcs = ["${3:input}"],
+    outs = ["${4:output}"],
+    cmd = "${5:command}",
+)
+${0}
+endsnippet
+
+snippet macro "Starlark macro definition" b
+def ${1:macro_name}(name, ${2:arg}, **kwargs):
+    """${3:Macro description.}
+
+    Args:
+        name: Target name.
+        ${2:arg}: ${4:Argument description.}
+    """
+    ${0:native.filegroup(name = name)}
+endsnippet
+
+snippet rule "Custom Starlark rule" b
+${1:my_rule} = rule(
+    implementation = _${1:my_rule}_impl,
+    attrs = {
+        "srcs": attr.label_list(allow_files = True),
+        "${2:attr}": attr.string(default = "${3:value}"),
+    },
+)
+
+def _${1:my_rule}_impl(ctx):
+    ${0:pass}
+endsnippet
+
+snippet container "container_image (rules_docker)" b
+container_image(
+    name = "${1:image}",
+    base = "${2:@ubuntu//image}",
+    files = [":${3:binary}"],
+    cmd = ["/${3:binary}"],
+    visibility = ["${4://visibility:public}"],
+)
+${0}
+endsnippet

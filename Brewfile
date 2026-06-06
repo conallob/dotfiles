@@ -32,6 +32,9 @@ brew "gopls"  # Go language server
 brew "basedpyright"  # Python language server (faster than pyright)
 brew "marksman"  # Markdown language server
 brew "d2"  # D2 diagram scripting language + formatter
+brew "buf"  # Protobuf toolchain: lint, format, language server (buf beta lsp)
+brew "helm-ls"  # Helm chart language server
+brew "ansible-language-server"  # Ansible LSP (auto-configured by vim-lsp-settings)
 brew "yaml-language-server"  # YAML language server
 brew "texlab"  # LaTeX language server
 brew "typescript-language-server"  # TypeScript/JavaScript language server
@@ -52,6 +55,8 @@ brew "markdownlint-cli"  # Markdown linter
 brew "hadolint"  # Dockerfile linter
 brew "yamllint"  # YAML linter
 brew "prettier"  # Multi-language code formatter
+brew "ansible-lint"  # Ansible playbook linter
+brew "buildifier"  # Bazel BUILD/bzl file formatter and linter
 brew "keep-sorted" # Language-agnostic lint sorting formatter
 
 # Container tools

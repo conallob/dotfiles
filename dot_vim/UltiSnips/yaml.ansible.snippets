@@ -1,0 +1,171 @@
+# Ansible snippets
+# Filetype: yaml.ansible (set by pearofducks/ansible-vim)
+
+snippet play "Full playbook" b
+---
+- name: ${1:Playbook description}
+  hosts: ${2:all}
+  become: ${3:true}
+  gather_facts: ${4:true}
+  vars:
+    ${5:var_name}: ${6:value}
+
+  tasks:
+    - name: ${0:First task}
+endsnippet
+
+snippet task "Single task" b
+- name: ${1:Task description}
+  ${2:module.name}:
+    ${3:param}: ${4:value}
+  ${0}
+endsnippet
+
+snippet pkg "Install packages" b
+- name: Install ${1:packages}
+  ansible.builtin.package:
+    name:
+      - ${2:package-name}
+    state: ${3:present}
+${0}
+endsnippet
+
+snippet svc "Manage service" b
+- name: ${1:Start and enable} ${2:service-name}
+  ansible.builtin.service:
+    name: ${2:service-name}
+    state: ${3:started}
+    enabled: ${4:true}
+${0}
+endsnippet
+
+snippet copy "Copy file" b
+- name: Copy ${1:file}
+  ansible.builtin.copy:
+    src: ${2:files/${1:file}}
+    dest: ${3:/etc/${1:file}}
+    owner: ${4:root}
+    group: ${5:root}
+    mode: '${6:0644}'
+${0}
+endsnippet
+
+snippet template "Template task" b
+- name: Template ${1:config file}
+  ansible.builtin.template:
+    src: ${2:templates/${1}.j2}
+    dest: ${3:/etc/${1}}
+    owner: ${4:root}
+    group: ${5:root}
+    mode: '${6:0644}'
+  notify: ${7:Restart service}
+${0}
+endsnippet
+
+snippet cmd "Run command" b
+- name: ${1:Run command}
+  ansible.builtin.command:
+    cmd: ${2:command args}
+    chdir: ${3:/tmp}
+  register: ${4:result}
+  changed_when: ${5:false}
+${0}
+endsnippet
+
+snippet shell "Run shell command" b
+- name: ${1:Run shell command}
+  ansible.builtin.shell: |
+    ${2:command}
+  args:
+    chdir: ${3:/tmp}
+  register: ${4:result}
+${0}
+endsnippet
+
+snippet debug "Debug task" b
+- name: Debug ${1:variable}
+  ansible.builtin.debug:
+    var: ${1:variable}
+    verbosity: ${2:0}
+${0}
+endsnippet
+
+snippet assert "Assert condition" b
+- name: Assert ${1:condition}
+  ansible.builtin.assert:
+    that:
+      - ${2:variable is defined}
+    fail_msg: "${3:Assertion failed}"
+    success_msg: "${4:Assertion passed}"
+${0}
+endsnippet
+
+snippet when "Conditional" i
+when: ${1:ansible_os_family == "Debian"}
+${0}
+endsnippet
+
+snippet loop "Loop over list" b
+- name: ${1:Loop task}
+  ${2:module}:
+    name: "{{ item }}"
+    state: ${3:present}
+  loop:
+    - ${4:item1}
+    - ${5:item2}
+${0}
+endsnippet
+
+snippet loopdict "Loop over list of dicts" b
+- name: ${1:Loop task}
+  ${2:module}:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  loop:
+    - { name: "${3:first}", state: "${4:present}" }
+${0}
+endsnippet
+
+snippet block "Block with rescue" b
+- name: ${1:Block description}
+  block:
+    - name: ${2:Task in block}
+      ${3:module}: {}
+  rescue:
+    - name: Handle failure
+      ansible.builtin.debug:
+        msg: "Block failed: {{ ansible_failed_result }}"
+  always:
+    - name: Always run
+      ansible.builtin.debug:
+        msg: "${4:Cleanup}"
+${0}
+endsnippet
+
+snippet handler "Handler definition" b
+- name: ${1:Restart service}
+  ansible.builtin.service:
+    name: ${2:service}
+    state: restarted
+${0}
+endsnippet
+
+snippet role "Include role" b
+- name: Apply ${1:role-name} role
+  ansible.builtin.include_role:
+    name: ${1:role-name}
+  vars:
+    ${2:role_var}: ${3:value}
+${0}
+endsnippet
+
+snippet vars "Vars block" b
+vars:
+  ${1:variable_name}: ${2:value}
+  ${0}
+endsnippet
+
+snippet vault "Vault encrypted var reference" b
+${1:secret_var}: "{{ vault_${1:secret_var} }}"
+${0}
+endsnippet

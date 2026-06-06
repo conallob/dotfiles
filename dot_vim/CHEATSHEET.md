@@ -381,6 +381,27 @@ Uppercase marks (`mA`–`mZ`) are global — they work across files.
 
 ---
 
+## Snippets by Filetype (Ctrl-E to expand)
+
+| Trigger | Filetype | Expands to |
+|---------|----------|------------|
+| `file` | proto | Proto3 file header with package + go_package |
+| `msg` / `svc` / `rpc` | proto | message / service / rpc definitions |
+| `enum` / `oneof` / `map` | proto | enum, oneof, map field |
+| `deploy` / `svc` / `cm` | helm | Deployment / Service / ConfigMap template |
+| `if` / `range` / `with` | helm | Go template control structures |
+| `val` / `tpl` | helm | `.Values.x` reference / `include` call |
+| `kust` / `overlay` | yaml (kustomization) | Base or overlay kustomization.yaml |
+| `patch` / `cmgen` / `images` | yaml (kustomization) | Patch, ConfigMap generator, image override |
+| `play` / `task` / `role` | yaml.ansible | Full playbook / single task / role include |
+| `pkg` / `svc` / `template` | yaml.ansible | Package install / service / template task |
+| `block` / `loop` / `when` | yaml.ansible | Block+rescue / loop / conditional |
+| `golib` / `gobin` / `gotest` | bzl | go_library / go_binary / go_test |
+| `proto` / `goproto` | bzl | proto_library / go_proto_library |
+| `macro` / `rule` | bzl | Starlark macro / custom rule skeleton |
+
+---
+
 ## REST Client (vim-rest-console)
 
 Open a `.rest` or `.http` file, write a request, then:
