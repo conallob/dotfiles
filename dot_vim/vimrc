@@ -69,6 +69,21 @@ Plug 'prabirshrestha/asyncomplete-lsp.vim'          " LSP source for asyncomplet
 Plug 'dense-analysis/ale'                           " Linting and fixing
 Plug 'honza/vim-snippets'                           " Snippet collection
 
+" --- Snippet Engine ---
+Plug 'SirVer/ultisnips'                             " Snippet engine (requires +python3)
+Plug 'prabirshrestha/asyncomplete-ultisnips.vim'    " UltiSnips source for asyncomplete
+Plug 'prabirshrestha/asyncomplete-buffer.vim'       " Buffer word completion source
+Plug 'prabirshrestha/asyncomplete-file.vim'         " File path completion source
+
+" --- Debugging (DAP via vimspector + delve) ---
+Plug 'puremourning/vimspector'                      " DAP debugger frontend
+
+" --- Test Runner ---
+Plug 'vim-test/vim-test'                            " Language-agnostic test runner
+
+" --- Multiple Cursors ---
+Plug 'mg979/vim-visual-multi', {'branch': 'master'} " Multiple cursors (Ctrl-N)
+
 " --- AI Assistance ---
 Plug 'madox2/vim-ai'                                " Claude/OpenAI integration
 
@@ -616,6 +631,104 @@ if exists('*glaive#Install')
   " Optional: configure vim-codefmt with glaive
   " Glaive codefmt plugin[mappings]
 endif
+
+" ============================================================================
+" Debugger (vimspector)
+" ============================================================================
+" Requires: brew install delve (dlv must be on PATH)
+" Launch configs are read from .vimspector.json in project root, or fall back
+" to g:vimspector_configurations defined below.
+"
+" Standard F-key bindings (mirror GoLand / VSCode):
+"   F5  – continue / start     F9  – toggle breakpoint
+"   F10 – step over            F11 – step into    F12 – step out
+"   F3  – stop                 F4  – restart
+
+let g:vimspector_enable_mappings = 'NONE'   " define all mappings manually
+
+nnoremap <F5>  :call vimspector#Continue()<CR>
+nnoremap <F3>  :call vimspector#Stop()<CR>
+nnoremap <F4>  :call vimspector#Restart()<CR>
+nnoremap <F9>  :call vimspector#ToggleBreakpoint()<CR>
+nnoremap <F10> :call vimspector#StepOver()<CR>
+nnoremap <F11> :call vimspector#StepInto()<CR>
+nnoremap <F12> :call vimspector#StepOut()<CR>
+
+" Inspect variable under cursor
+nnoremap <leader>di <Plug>VimspectorBalloonEval
+xnoremap <leader>di <Plug>VimspectorBalloonEval
+
+" Use system delve (installed via brew) rather than a vimspector-managed gadget.
+" dlv dap mode opens a DAP server on a random port that vimspector connects to.
+let g:vimspector_adapters = {
+\  'go-delve': {
+\    'command': ['dlv', 'dap', '-l', '127.0.0.1:${port}'],
+\    'port': '${port}',
+\  }
+\}
+
+" Default launch configs shown when no .vimspector.json exists in the project.
+let g:vimspector_configurations = {
+\  'Go: Launch package': {
+\    'adapter': 'go-delve',
+\    'filetypes': ['go'],
+\    'configuration': {
+\      'request': 'launch',
+\      'mode':    'debug',
+\      'program': '${workspaceRoot}',
+\      'args':    [],
+\    }
+\  },
+\  'Go: Test function': {
+\    'adapter': 'go-delve',
+\    'filetypes': ['go'],
+\    'configuration': {
+\      'request':   'launch',
+\      'mode':      'test',
+\      'program':   '${workspaceRoot}',
+\      'args':      ['-test.run', '^${TestName}$'],
+\    }
+\  },
+\}
+
+" ============================================================================
+" Test Runner (vim-test)
+" ============================================================================
+" <leader>un – run nearest test (function under cursor)
+" <leader>uf – run all tests in current file
+" <leader>us – run entire test suite
+" <leader>ul – re-run last test
+
+nnoremap <leader>un :TestNearest<CR>
+nnoremap <leader>uf :TestFile<CR>
+nnoremap <leader>us :TestSuite<CR>
+nnoremap <leader>ul :TestLast<CR>
+
+" Run tests in a split terminal window (requires Vim 8+)
+let g:test#strategy = 'vimterminal'
+let g:test#vim#term_position = 'belowright'
+
+" Go: prefer 'go test' (vim-go provides richer output; fall back to gotest)
+let g:test#go#runner = 'gotest'
+
+" ============================================================================
+" Terminal (built-in :terminal)
+" ============================================================================
+" <leader>tt – open terminal in horizontal split below
+" <leader>tv – open terminal in vertical split to the right
+" <Esc>       – exit terminal mode back to normal mode
+
+nnoremap <leader>tt :below terminal<CR>
+nnoremap <leader>tv :vertical terminal<CR>
+
+" Exit terminal insert mode with Esc (mirrors every other mode)
+tnoremap <Esc> <C-\><C-n>
+
+" Allow window navigation from terminal mode without leaving
+tnoremap <C-h> <C-\><C-n><C-w>h
+tnoremap <C-j> <C-\><C-n><C-w>j
+tnoremap <C-k> <C-\><C-n><C-w>k
+tnoremap <C-l> <C-\><C-n><C-w>l
 
 " ============================================================================
 " OSC 52 Clipboard (vim-oscyank)
