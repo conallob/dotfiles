@@ -107,3 +107,22 @@ snippet kse "keep-sorted end marker" b
 // keep-sorted end
 ${0}
 endsnippet
+
+# ── ifttt-lint (// comment style) ────────────────────────────────────────────
+
+snippet ifttt "LINT.IfChange / ThenChange block" b
+// LINT.IfChange
+${1}
+// LINT.ThenChange(${2:path/to/other/file.proto})
+${0}
+endsnippet
+
+snippet iftc "LINT.IfChange start marker" b
+// LINT.IfChange
+${0}
+endsnippet
+
+snippet thenc "LINT.ThenChange end marker" b
+// LINT.ThenChange(${1:path/to/other/file.proto})
+${0}
+endsnippet
