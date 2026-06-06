@@ -31,6 +31,7 @@ cask "font-hack-nerd-font"  # Nerd Font for vim-devicons
 brew "gopls"  # Go language server
 brew "basedpyright"  # Python language server (faster than pyright)
 brew "marksman"  # Markdown language server
+brew "d2"  # D2 diagram scripting language + formatter
 brew "yaml-language-server"  # YAML language server
 brew "texlab"  # LaTeX language server
 brew "typescript-language-server"  # TypeScript/JavaScript language server

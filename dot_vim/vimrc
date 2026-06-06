@@ -107,6 +107,8 @@ Plug 'vim-python/python-syntax', { 'for': 'python' } " Enhanced Python syntax
 
 " --- Documentation Languages ---
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }  " Markdown
+Plug 'dhruvasagar/vim-table-mode', { 'for': 'markdown' } " Easy markdown table editing
+Plug 'terrastruct/d2-vim'                           " D2 diagram language syntax + indent
 Plug 'lervag/vimtex', { 'for': 'tex' }              " LaTeX
 Plug 'google/vim-maktaba'                           " Required for vim-codefmt
 Plug 'google/vim-codefmt'                           " Code formatting
@@ -231,6 +233,9 @@ let g:ale_linters = {
 \   'sh': ['shellcheck'],
 \   'yaml': ['yamllint'],
 \   'dockerfile': ['hadolint'],
+\   'json': ['jq'],
+\   'rest': [''],
+\   'd2': [],
 \}
 
 " Fixers by filetype
@@ -243,6 +248,7 @@ let g:ale_fixers = {
 \   'json': ['prettier'],
 \   'yaml': ['prettier'],
 \   'markdown': ['prettier'],
+\   'd2': ['d2fmt'],
 \   'html': ['prettier'],
 \}
 
@@ -409,6 +415,27 @@ let g:vim_markdown_conceal = 0
 let g:vim_markdown_conceal_code_blocks = 0
 let g:vim_markdown_auto_insert_bullets = 1
 let g:vim_markdown_new_list_item_indent = 2
+
+" vim-table-mode: ,tm to toggle; in markdown mode uses | pipes automatically.
+" Use ,tdd to delete a column, ,tdc to delete a row.
+" TableFormat (:TableFormat) realigns the whole table.
+let g:table_mode_corner = '|'   " markdown-style tables (not RST +)
+
+autocmd FileType markdown TableModeEnable
+
+" ============================================================================
+" D2 Configuration
+" ============================================================================
+" Filetype detection (terrastruct/d2-vim also does this, belt-and-suspenders)
+autocmd BufRead,BufNewFile *.d2 setfiletype d2
+
+" ALE fixer: `d2 fmt -` reads from stdin, writes formatted diagram to stdout
+function! s:AleFixD2(buffer) abort
+  return {'command': 'd2 fmt -'}
+endfunction
+call ale#fix#registry#Add('d2fmt', function('s:AleFixD2'), ['d2'], 'Format D2 diagrams')
+
+autocmd FileType d2 setlocal ts=2 sts=2 sw=2 expandtab
 
 " ============================================================================
 " LaTeX Configuration (vimtex)
