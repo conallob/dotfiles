@@ -21,7 +21,12 @@ set completeopt=menuone,noinsert,noselect,preview
 set shortmess+=c              " Don't show completion messages
 set cmdheight=2               " More space for messages
 set mouse=a                   " Enable mouse support
-set clipboard=unnamedplus     " Use system clipboard
+" Use system clipboard when available (unnamedplus=X11/Wayland, unnamed=macOS)
+if has('unnamedplus')
+  set clipboard=unnamedplus
+elseif has('clipboard')
+  set clipboard=unnamed
+endif
 set laststatus=2              " Always show status line
 set showcmd                   " Show command in bottom bar
 set wildmenu                  " Visual autocomplete for command menu
@@ -128,6 +133,9 @@ Plug 'jiangmiao/auto-pairs'                         " Auto-close brackets
 Plug 'yggdroot/indentline'                          " Show indent guides
 Plug 'editorconfig/editorconfig-vim'                " EditorConfig support
 
+" --- REST Client ---
+Plug 'diepm/vim-rest-console'                       " HTTP request testing and debugging
+
 " --- Clipboard ---
 Plug 'ojroques/vim-oscyank', {'branch': 'main'}     " OSC 52 clipboard (works over SSH, without X11)
 
@@ -192,7 +200,11 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <buffer> K <plug>(lsp-hover)
     nmap <buffer> <leader>ca <plug>(lsp-code-action)
 
-    " Format on save (can be disabled per filetype if needed)
+    " For Go: run gopls source.organizeImports first (goimports behaviour),
+    " then format. Other filetypes just format.
+    if &filetype ==# 'go'
+        autocmd BufWritePre <buffer> LspCodeActionSync source.organizeImports
+    endif
     autocmd BufWritePre <buffer> LspDocumentFormatSync
 endfunction
 
@@ -209,6 +221,18 @@ let g:lsp_diagnostics_signs_enabled = 1
 let g:lsp_document_highlight_enabled = 1
 let g:lsp_fold_enabled = 0
 let g:lsp_semantic_enabled = 1
+let g:lsp_signature_help_enabled = 1   " Show signature help when '(' is typed
+let g:lsp_signature_help_delay = 50
+
+" gopls initialization options: enable completion placeholders and staticcheck
+let g:lsp_settings = {
+\  'gopls': {
+\    'initialization_options': {
+\      'ui.completion.usePlaceholders': v:true,
+\      'ui.diagnostic.staticcheck': v:true,
+\    }
+\  }
+\}
 
 " Diagnostic signs
 let g:lsp_diagnostics_signs_error = {'text': '✗'}
@@ -235,13 +259,13 @@ let g:ale_linters = {
 \   'dockerfile': ['hadolint'],
 \   'json': ['jq'],
 \   'rest': [''],
-\   'd2': [],
 \}
 
 " Fixers by filetype
+" Note: Go is intentionally absent — gopls (LSP) handles formatting and
+" import management via source.organizeImports + LspDocumentFormatSync on save.
 let g:ale_fixers = {
 \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-\   'go': ['gofmt', 'goimports'],
 \   'python': ['black', 'isort'],
 \   'javascript': ['prettier'],
 \   'typescript': ['prettier'],
@@ -261,26 +285,97 @@ inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <CR>    pumvisible() ? asyncomplete#close_popup() : "\<CR>"
 
+" Register completion sources on asyncomplete setup
+if exists('*asyncomplete#sources#ultisnips#completor')
+  au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
+  \ 'name': 'ultisnips',
+  \ 'whitelist': ['*'],
+  \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
+  \ }))
+endif
+
+if exists('*asyncomplete#sources#buffer#completor')
+  au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+  \ 'name': 'buffer',
+  \ 'whitelist': ['*'],
+  \ 'blacklist': ['go', 'python'],
+  \ 'completor': function('asyncomplete#sources#buffer#completor'),
+  \ }))
+endif
+
+if exists('*asyncomplete#sources#file#completor')
+  au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+  \ 'name': 'file',
+  \ 'whitelist': ['*'],
+  \ 'priority': 10,
+  \ 'completor': function('asyncomplete#sources#file#completor'),
+  \ }))
+endif
+
 " ============================================================================
 " AI Integration (vim-ai for Claude)
 " ============================================================================
-" vim-ai uses OPENAI_API_KEY by default, but can be configured for Claude
-" Set environment variables in your shell or use 1Password integration
-let g:vim_ai_chat = {
-\  "options": {
-\    "model": "claude-3-5-sonnet-20241022",
-\    "endpoint_url": "https://api.anthropic.com/v1/messages",
-\    "max_tokens": 4096,
-\    "temperature": 0.7,
-\  },
-\}
+" Requires +python3 and ANTHROPIC_API_KEY environment variable.
+" Set ANTHROPIC_API_KEY in shell profile or via 1Password integration.
+if has('python3')
+  let s:ai_opts = {
+  \  "model": "claude-3-5-sonnet-20241022",
+  \  "endpoint_url": "https://api.anthropic.com/v1/messages",
+  \  "max_tokens": 4096,
+  \  "temperature": 0.7,
+  \  "request_timeout": 20,
+  \  "enable_auth": 1,
+  \  "token_file_path": "",
+  \}
 
-" AI keybindings
-nnoremap <leader>ai :AI
-vnoremap <leader>ai :AI
-nnoremap <leader>ae :AIEdit
-vnoremap <leader>ae :AIEdit
-nnoremap <leader>ac :AIChat<CR>
+  let g:vim_ai_complete = {"options": s:ai_opts}
+  let g:vim_ai_edit     = {"options": s:ai_opts}
+  let g:vim_ai_chat = {
+  \  "options": s:ai_opts,
+  \  "ui": {
+  \    "open_chat_command": "preset_below",
+  \    "scratch_buffer_keep_open": 0,
+  \    "populate_options": 0,
+  \    "code_syntax_enabled": 1,
+  \  },
+  \}
+
+  let g:ai_enabled = 1
+
+  function! s:AIKeymapsEnable() abort
+    nnoremap <leader>ai :AI
+    vnoremap <leader>ai :AI
+    nnoremap <leader>ae :AIEdit
+    vnoremap <leader>ae :AIEdit
+    nnoremap <leader>ac :AIChat<CR>
+  endfunction
+
+  function! s:AIKeymapsDisable() abort
+    silent! nunmap <leader>ai
+    silent! vunmap <leader>ai
+    silent! nunmap <leader>ae
+    silent! vunmap <leader>ae
+    silent! nunmap <leader>ac
+  endfunction
+
+  function! ToggleAI() abort
+    if g:ai_enabled
+      let g:ai_enabled = 0
+      call s:AIKeymapsDisable()
+      echo "AI assist disabled"
+    else
+      let g:ai_enabled = 1
+      call s:AIKeymapsEnable()
+      echo "AI assist enabled"
+    endif
+    redrawstatus!
+  endfunction
+
+  call s:AIKeymapsEnable()
+
+  command! AIToggle call ToggleAI()
+  nnoremap <leader>at :AIToggle<CR>
+endif
 
 " ============================================================================
 " FZF Configuration
@@ -360,6 +455,18 @@ let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#branch#enabled = 1
 
+" AI status indicator: shows 'AI' when enabled, 'AI:OFF' when disabled
+function! AirlineAIStatus() abort
+  return get(g:, 'ai_enabled', 1) ? 'AI' : 'AI:OFF'
+endfunction
+
+augroup AirlineAISection
+  autocmd!
+  autocmd User AirlineAfterInit
+    \ call airline#parts#define_function('ai_status', 'AirlineAIStatus') |
+    \ let g:airline_section_x = airline#section#create_right(['ai_status', 'filetype'])
+augroup END
+
 " Ensure airline respects transparent background
 augroup AirlineTransparency
     autocmd!
@@ -374,7 +481,8 @@ augroup END
 " Go Configuration (vim-go)
 " ============================================================================
 let g:go_fmt_command = "goimports"
-let g:go_auto_type_info = 1
+let g:go_fmt_autosave = 0        " Disable vim-go auto-format; LSP handles it via gopls
+let g:go_auto_type_info = 0      " Disable vim-go type info; LSP hover (K) replaces it
 let g:go_highlight_types = 1
 let g:go_highlight_fields = 1
 let g:go_highlight_functions = 1
@@ -397,6 +505,42 @@ autocmd FileType go nmap <leader>ga <Plug>(go-alternate-edit)
 autocmd FileType go nmap <leader>gd <Plug>(go-doc)
 autocmd FileType go nmap <leader>gi :GoImpl<CR>
 autocmd FileType go nmap <leader>gf :GoFillStruct<CR>
+
+" ============================================================================
+" UltiSnips Configuration (Snippet Engine)
+" ============================================================================
+if has('python3')
+  let g:UltiSnipsExpandTrigger = "<C-e>"         " Expand snippet (avoids Tab/CR conflict)
+  let g:UltiSnipsJumpForwardTrigger = "<C-j>"    " Jump to next tabstop in snippet
+  let g:UltiSnipsJumpBackwardTrigger = "<C-k>"   " Jump to previous tabstop in snippet
+  let g:UltiSnipsEditSplit = "vertical"
+  let g:UltiSnipsSnippetDirectories = ['UltiSnips', $HOME . '/.vim/UltiSnips']
+endif
+
+" ============================================================================
+" REST Client Configuration (vim-rest-console)
+" ============================================================================
+" Open a .rest or .http file and press <C-j> to execute the request under cursor.
+" Result is shown in a new split buffer.
+let g:vrc_auto_format_response_patterns = {
+\   'json': 'python3 -m json.tool',
+\}
+let g:vrc_show_command = 0
+let g:vrc_response_default_content_type = 'application/json'
+let g:vrc_output_buffer_name = '__VRC_OUTPUT__'
+let g:vrc_trigger = '<localleader>rr'
+
+autocmd BufRead,BufNewFile *.rest,*.http set filetype=rest
+
+" ============================================================================
+" JSON Configuration
+" ============================================================================
+autocmd FileType json setlocal ts=2 sts=2 sw=2 expandtab conceallevel=0
+
+" Format current JSON buffer in-place via jq
+command! FormatJSON %!jq '.'
+nnoremap <leader>jf :FormatJSON<CR>
+vnoremap <leader>jf :!jq '.'<CR>
 
 " ============================================================================
 " Python Configuration
@@ -630,10 +774,12 @@ autocmd BufReadPost *
 " Automatically equalize splits when vim is resized
 autocmd VimResized * wincmd =
 
-" Highlight yanked text
+" Highlight yanked text (neovim only; regular vim uses search highlight flash)
 augroup highlight_yank
     autocmd!
-    autocmd TextYankPost * silent! lua vim.highlight.on_yank {higroup="IncSearch", timeout=300}
+    if has('nvim')
+        autocmd TextYankPost * silent! lua vim.highlight.on_yank {higroup="IncSearch", timeout=300}
+    endif
 augroup END
 
 " ============================================================================
@@ -760,9 +906,11 @@ tnoremap <C-l> <C-\><C-n><C-w>l
 " ============================================================================
 " OSC 52 Clipboard (vim-oscyank)
 " ============================================================================
-" Automatically sync yanks to the terminal clipboard via OSC 52.
-" Works over SSH and without X11 (complements 'vim -X' alias).
-" Triggers whenever text is yanked to the + register (clipboard=unnamedplus).
-if exists('g:loaded_oscyank')
-  autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '+' | execute 'OSCYankRegister +' | endif
-endif
+" Sync yanks to the terminal clipboard via OSC 52 (works over SSH, no X11 needed).
+" Uses exists(':OSCYankRegister') instead of g:loaded_oscyank because vim-plug
+" plugins are added to runtimepath by plug#end() but sourced after the vimrc,
+" so g:loaded_oscyank is never set at parse time.
+autocmd TextYankPost *
+  \ if v:event.operator is 'y' && v:event.regname is '+' && exists(':OSCYankRegister') == 2 |
+  \   execute 'OSCYankRegister +' |
+  \ endif

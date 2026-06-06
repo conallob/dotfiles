@@ -94,6 +94,77 @@ The main MCP configuration is at `Library/private_Application Support/private_Cl
 - Work-specific MCPs are conditionally included based on username
 - Custom MCPs installed via personal Homebrew tap: `conallob/tap`
 
+## dot_vim — Vim Configuration
+
+The Vim configuration lives in `dot_vim/` (deployed to `~/.vim/`) and uses vim-plug for plugin management.
+
+### After any config change, apply and install
+
+```bash
+chezmoi apply ~/.vim/vimrc
+vim +PlugInstall +qall      # install/update plugins
+```
+
+### Sanity-check: Go LSP (3-step manual test)
+
+Create a throwaway file and verify the three core features:
+
+```bash
+mkdir -p /tmp/gotest && cd /tmp/gotest && go mod init gotest
+vim main.go
+```
+
+**Step 1 – Completions + struct field completion**
+```go
+package main
+
+import "fmt"
+
+type Person struct {
+    Name string `json:"name"`
+    Age  int    `json:"age"`
+}
+
+func main() {
+    p := Person{}
+    fmt.Println(p.  // type p. then wait — gopls should show Name, Age
+}
+```
+In insert mode, type `p.` and wait ~300 ms for the completion menu. You should see `Name` and `Age` from gopls.
+
+**Step 2 – Signature help on `(`**
+On the `fmt.Println(` line, enter insert mode and type `fmt.Println(`. The status line or a popup should display the function signature. If not, run `:LspStatus` and check gopls is running.
+
+**Step 3 – goimports on save**
+Delete the `import "fmt"` line, save (`:w`). On save, gopls runs `source.organizeImports` then `LspDocumentFormatSync` — the import should be re-added automatically. Confirm with `:!cat main.go`.
+
+### Key LSP bindings (Go and all LSP-enabled files)
+
+| Key | Action |
+|-----|--------|
+| `gd` | Go to definition |
+| `gr` | Find references |
+| `gi` | Go to implementation |
+| `K`  | Hover docs |
+| `<leader>rn` | Rename symbol |
+| `<leader>ca` | Code action |
+| `[g` / `]g` | Prev/next diagnostic |
+
+### Snippet engine (UltiSnips)
+
+Snippets live in `dot_vim/UltiSnips/`. Trigger with `<C-e>`, jump with `<C-j>`/`<C-k>`.
+Common Go snippets: `iferr`, `handler`, `marshal`, `unmarshal`, `readfile`, `test`.
+
+### REST client (vim-rest-console)
+
+Create a `requests.rest` file, write an HTTP request, press `<localleader>rr` (`\rr` by default) to execute:
+
+```
+GET http://localhost:8080/health HTTP/1.1
+```
+
+Response appears in a split buffer, auto-formatted as JSON.
+
 ## Important Files
 
 - **Brewfile**: Package dependencies for macOS (Homebrew bundle)

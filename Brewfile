@@ -38,6 +38,9 @@ brew "typescript-language-server"  # TypeScript/JavaScript language server
 brew "vscode-langservers-extracted"  # JSON, HTML, CSS, ESLint language servers
 brew "bash-language-server"  # Bash/Shell script language server
 
+# Debugging
+brew "delve"  # Go debugger (dlv) - used for step-through debugging in interview sessions
+
 # Linters & Formatters
 brew "golangci-lint"  # Go meta-linter
 brew "ruff"  # Fast Python linter & formatter

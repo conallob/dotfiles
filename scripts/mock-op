@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+# Fake 1Password CLI for CI template rendering.
+#
+# chezmoi's onepasswordDetailsFields calls:
+#   op item get <uuid> --format json [--account <account>]
+# chezmoi's onepasswordDocument calls:
+#   op document get <uuid> [--account <account>]
+#
+# We return a JSON item with every field name the templates access
+# (credential, hostname, username, notesPlain) populated with recognisable
+# stub values, so chezmoi execute-template can render templates fully.
+
+case "$1" in
+  item)
+    shift
+    # $1 is now "get", $2 is the uuid
+    cat <<'EOF'
+{
+  "id": "MOCK000000000000000000000",
+  "title": "Mock Item",
+  "fields": [
+    {"id": "credential", "label": "credential", "value": "mock-credential",   "type": "CONCEALED"},
+    {"id": "hostname",   "label": "hostname",   "value": "mock.example.com", "type": "STRING"},
+    {"id": "username",   "label": "username",   "value": "mock-user",        "type": "STRING"},
+    {"id": "password",   "label": "password",   "value": "mock-password",    "type": "CONCEALED"},
+    {"id": "token",      "label": "token",      "value": "mock-token",       "type": "CONCEALED"},
+    {"id": "notesPlain", "label": "notesPlain", "value": "mock-notes",       "type": "STRING"}
+  ]
+}
+EOF
+    ;;
+
+  document)
+    # $1=document $2=get $3=uuid — return a plain stub string
+    echo "mock-document-content"
+    ;;
+
+  account)
+    # chezmoi calls `op account list` to validate account UUIDs referenced in
+    # templates before calling `op item get --account <uuid>`.
+    # List every account UUID used in this repo's templates so chezmoi's
+    # account-lookup check passes.
+    cat <<'EOF'
+[
+  {
+    "url":          "mock.1password.com",
+    "email":        "mock@example.com",
+    "user_uuid":    "MOCKUSERUUID0000000000000000",
+    "account_uuid": "ZVA4BFN3HZDBJM2HNAKREAS22M"
+  },
+  {
+    "url":          "mock-work.1password.com",
+    "email":        "mock-work@example.com",
+    "user_uuid":    "MOCKWORKUUID0000000000000000",
+    "account_uuid": "FUJ74MTVQVCN5DXVK4PSF5HKU4"
+  }
+]
+EOF
+    ;;
+
+  signin|signout)
+    exit 0
+    ;;
+
+  *)
+    echo "mock-op: unhandled subcommand: $*" >&2
+    exit 1
+    ;;
+esac
