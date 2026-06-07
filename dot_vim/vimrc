@@ -75,8 +75,10 @@ Plug 'dense-analysis/ale'                           " Linting and fixing
 Plug 'honza/vim-snippets'                           " Snippet collection
 
 " --- Snippet Engine ---
-Plug 'SirVer/ultisnips'                             " Snippet engine (requires +python3)
-Plug 'prabirshrestha/asyncomplete-ultisnips.vim'    " UltiSnips source for asyncomplete
+if has('python3')
+  Plug 'SirVer/ultisnips'                           " Snippet engine (requires +python3)
+  Plug 'prabirshrestha/asyncomplete-ultisnips.vim'  " UltiSnips source for asyncomplete
+endif
 Plug 'prabirshrestha/asyncomplete-buffer.vim'       " Buffer word completion source
 Plug 'prabirshrestha/asyncomplete-file.vim'         " File path completion source
 
@@ -90,7 +92,9 @@ Plug 'vim-test/vim-test'                            " Language-agnostic test run
 Plug 'mg979/vim-visual-multi', {'branch': 'master'} " Multiple cursors (Ctrl-N)
 
 " --- AI Assistance ---
-Plug 'madox2/vim-ai'                                " Claude/OpenAI integration
+if has('python3')
+  Plug 'madox2/vim-ai'                              " Claude/OpenAI integration
+endif
 
 " --- Git Integration ---
 Plug 'tpope/vim-fugitive'                           " Git wrapper
@@ -628,10 +632,10 @@ autocmd FileType markdown TableModeEnable
 autocmd BufRead,BufNewFile *.d2 setfiletype d2
 
 " ALE fixer: `d2 fmt -` reads from stdin, writes formatted diagram to stdout
-function! s:AleFixD2(buffer) abort
+function! AleFixD2(buffer) abort
   return {'command': 'd2 fmt -'}
 endfunction
-call ale#fix#registry#Add('d2fmt', function('s:AleFixD2'), ['d2'], 'Format D2 diagrams')
+call ale#fix#registry#Add('d2fmt', 'AleFixD2', ['d2'], 'Format D2 diagrams')
 
 autocmd FileType d2 setlocal ts=2 sts=2 sw=2 expandtab
 
@@ -641,18 +645,18 @@ autocmd FileType d2 setlocal ts=2 sts=2 sw=2 expandtab
 " Syntax via vim-polyglot (proto3 included). LSP via buf-ls registered above.
 " ALE: buf_lint for diagnostics, buf_fmt fixer for format-on-save.
 
-function! s:AleFixBufFmt(buffer) abort
+function! AleFixBufFmt(buffer) abort
   return {'command': 'buf format -'}
 endfunction
-call ale#fix#registry#Add('buf_fmt', function('s:AleFixBufFmt'), ['proto'], 'Format protobuf with buf')
+call ale#fix#registry#Add('buf_fmt', 'AleFixBufFmt', ['proto'], 'Format protobuf with buf')
 
 " keep-sorted: sorts regions delimited by "keep-sorted start/end" comments.
 " No-op on files without markers — safe to include in '*' fixers for all types.
 " Markers vary by language comment style; see UltiSnips snippets (trigger: ks).
-function! s:AleFixKeepSorted(buffer) abort
+function! AleFixKeepSorted(buffer) abort
   return {'command': 'keep-sorted -'}
 endfunction
-call ale#fix#registry#Add('keep_sorted', function('s:AleFixKeepSorted'), [], 'Sort keep-sorted regions')
+call ale#fix#registry#Add('keep_sorted', 'AleFixKeepSorted', [], 'Sort keep-sorted regions')
 
 " :KeepSorted — run keep-sorted on the whole buffer immediately (no save needed).
 " Useful for one-off sorting or in files where ale_fix_on_save is disabled.
