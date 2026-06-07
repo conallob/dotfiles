@@ -4,6 +4,8 @@ cursor-invert-fg-bg = true
 window-height = 58
 window-width = 80
 keybind = shift+enter=text:\n
+font-family = Hack Nerd Font
+font-size = 13
 
 # Desktop notifications
 desktop-notifications = true
