@@ -60,6 +60,18 @@ nnoremap <leader>/ :nohlsearch<CR>
 " ============================================================================
 " Plugins (via vim-plug)
 " ============================================================================
+
+" Probe for working python3: has('python3') can return 1 even when the py3
+" command fails at runtime (e.g. macOS system vim with broken dynamic link).
+let s:has_python3 = 0
+if has('python3')
+  try
+    python3 pass
+    let s:has_python3 = 1
+  catch
+  endtry
+endif
+
 call plug#begin('~/.vim/plugged')
 
 " --- Core Plugins ---
@@ -75,7 +87,7 @@ Plug 'dense-analysis/ale'                           " Linting and fixing
 Plug 'honza/vim-snippets'                           " Snippet collection
 
 " --- Snippet Engine ---
-if has('python3')
+if s:has_python3
   Plug 'SirVer/ultisnips'                           " Snippet engine (requires +python3)
   Plug 'prabirshrestha/asyncomplete-ultisnips.vim'  " UltiSnips source for asyncomplete
 endif
@@ -92,7 +104,7 @@ Plug 'vim-test/vim-test'                            " Language-agnostic test run
 Plug 'mg979/vim-visual-multi', {'branch': 'master'} " Multiple cursors (Ctrl-N)
 
 " --- AI Assistance ---
-if has('python3')
+if s:has_python3
   Plug 'madox2/vim-ai'                              " Claude/OpenAI integration
 endif
 
@@ -375,7 +387,7 @@ endif
 " ============================================================================
 " Requires +python3 and ANTHROPIC_API_KEY environment variable.
 " Set ANTHROPIC_API_KEY in shell profile or via 1Password integration.
-if has('python3')
+if s:has_python3
   let s:ai_opts = {
   \  "model": "claude-3-5-sonnet-20241022",
   \  "endpoint_url": "https://api.anthropic.com/v1/messages",
@@ -567,7 +579,7 @@ autocmd FileType go nmap <leader>gf :GoFillStruct<CR>
 " ============================================================================
 " UltiSnips Configuration (Snippet Engine)
 " ============================================================================
-if has('python3')
+if s:has_python3
   let g:UltiSnipsExpandTrigger = "<C-e>"         " Expand snippet (avoids Tab/CR conflict)
   let g:UltiSnipsJumpForwardTrigger = "<C-j>"    " Jump to next tabstop in snippet
   let g:UltiSnipsJumpBackwardTrigger = "<C-k>"   " Jump to previous tabstop in snippet
