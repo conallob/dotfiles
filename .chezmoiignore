@@ -1,3 +1,6 @@
 # Ignore markdown documentation files that should stay in the repository
 # but not be applied to the home directory
 *.md
+
+# Re-include markdown files that should be deployed (e.g. ~/.claude/CLAUDE.md)
+!dot_claude/*.md
