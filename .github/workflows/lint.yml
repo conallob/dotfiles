@@ -82,7 +82,7 @@ jobs:
 
           # Put the mock op binary ahead of any real op on PATH so chezmoi's
           # onepasswordDetailsFields / onepasswordDocument functions get stubs.
-          cp scripts/mock-op /usr/local/bin/op
+          cp .github/scripts/mock-op /usr/local/bin/op
           chmod +x /usr/local/bin/op
 
       - name: Render and validate templates
