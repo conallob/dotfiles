@@ -87,6 +87,21 @@ Secrets are stored in 1Password and templated at apply-time:
 - **Documents**: `onepasswordDocument` for full credential documents
 - Never commit raw secrets; always use 1Password template functions
 
+#### onepasswordDetailsFields usage
+
+```
+{{ (onepasswordDetailsFields "ITEM-UUID").FIELD.value }}
+```
+
+The function signature is `(item-uuid [vault-uuid [account-uuid]])`. The item UUID
+alone is sufficient — vault and account qualifiers are optional and can cause
+"no 1Password account found" errors if the wrong UUID is placed in the wrong
+position. Find the item UUID from the 1Password URL parameter `i=`.
+
+The field name matches the label shown by `op item get ITEM-UUID` (e.g.
+`credential`, `password`, `username`). Use `op item get ITEM-UUID --reveal`
+to confirm field names without exposing values in this file.
+
 ### Claude Desktop MCP Configuration
 
 The main MCP configuration is at `Library/private_Application Support/private_Claude/claude_desktop_config.json.tmpl`:
