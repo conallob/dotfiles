@@ -53,6 +53,12 @@ EOF
     "email":        "mock-work@example.com",
     "user_uuid":    "MOCKWORKUUID0000000000000000",
     "account_uuid": "FUJ74MTVQVCN5DXVK4PSF5HKU4"
+  },
+  {
+    "url":          "taku-ie.1password.com",
+    "email":        "mock@example.com",
+    "user_uuid":    "MOCKAUTOMATIONUUID000000000",
+    "account_uuid": "dyz4dyfpyrte2nesqaerlhqlkq"
   }
 ]
 EOF
