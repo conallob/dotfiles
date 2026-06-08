@@ -11,6 +11,8 @@ FreeBSD, and Linux systems. The repository uses chezmoi's templating system with
 
 **This repository typically works directly on the `main` branch.**
 
+**For all PRs, always ensure the description matches the diff**
+
 Since this is a personal dotfiles repository managing system configurations,
 changes are usually committed directly to main. Feature branches should be
 **infrequent** and only used for:
@@ -21,6 +23,7 @@ changes are usually committed directly to main. Feature branches should be
 For routine configuration updates (adding packages, updating settings,
 fixing bugs), commit directly to main.
 
+**Don't include Test Plan details within a PR description**
 
 ## Key Architecture Patterns
 
