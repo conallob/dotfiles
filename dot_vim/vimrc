@@ -517,29 +517,32 @@ nmap <leader>hp <Plug>(GitGutterPreviewHunk)
 " ============================================================================
 " Airline Configuration
 " ============================================================================
-let g:airline_powerline_fonts = 1
+let g:airline_powerline_fonts = 0
 let g:airline_theme = 'gruvbox'
 
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
 endif
-let g:airline_left_sep           = ""
-let g:airline_left_alt_sep       = ""
-let g:airline_right_sep          = ""
-let g:airline_right_alt_sep      = ""
-let g:airline_symbols.branch     = ""
-let g:airline_symbols.readonly   = ""
-let g:airline_symbols.linenr     = ""
-let g:airline_symbols.maxlinenr  = "☰"
-let g:airline_symbols.dirty      = "⚡"
+let g:airline_left_sep           = '▶'
+let g:airline_left_alt_sep       = '›'
+let g:airline_right_sep          = '◀'
+let g:airline_right_alt_sep      = '‹'
+let g:airline_symbols.branch     = '⎇'
+let g:airline_symbols.readonly   = '⊘'
+let g:airline_symbols.linenr     = '¶'
+let g:airline_symbols.maxlinenr  = ''
+let g:airline_symbols.dirty      = '*'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#branch#enabled = 1
 
-" AI status indicator: shows 'AI' when enabled, 'AI:OFF' when disabled
+" AI status: 'AI' when active, 'AI: OFF' when disabled or non-functional
 function! AirlineAIStatus() abort
-  return get(g:, 'ai_enabled', 1) ? 'AI' : 'AI:OFF'
+  if !has('python3') || empty($ANTHROPIC_API_KEY)
+    return 'AI: OFF'
+  endif
+  return get(g:, 'ai_enabled', 1) ? 'AI' : 'AI: OFF'
 endfunction
 
 augroup AirlineAISection
