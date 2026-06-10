@@ -19,7 +19,5 @@ ghostty-transparency() {
   fi
 
   sed -i '' "s/^background-opacity = .*/background-opacity = ${new_opacity}/" "$config"
-  echo "Ghostty: opacity set to ${new_opacity}"
-
-  ghostty +reload-config 2>/dev/null && echo "Config reloaded." || echo "Reload manually with ctrl+shift+,"
+  echo "Ghostty: opacity set to ${new_opacity} — restart Ghostty to apply."
 }
