@@ -4,6 +4,7 @@ alias eject="diskutil eject"
 
 # Toggle Ghostty background opacity between transparent (0.3) and presentation (0.95),
 # or set an explicit value. Calling without args after a custom value resets to 0.3.
+# shellcheck disable=SC3033,SC3043  # hyphenated name and local are fine in bash/zsh
 ghostty-transparency() {
   local config="$HOME/.config/ghostty/config"
   local current_opacity new_opacity
