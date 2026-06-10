@@ -1,3 +1,25 @@
 # vim: filetype=sh
 
 alias eject="diskutil eject"
+
+# Toggle Ghostty background opacity between transparent (0.3) and presentation (0.95),
+# or set an explicit value. Calling without args after a custom value resets to 0.3.
+# shellcheck disable=SC3033,SC3043  # hyphenated name and local are fine in bash/zsh
+ghostty-transparency() {
+  local config="$HOME/.config/ghostty/config"
+  local current_opacity new_opacity
+  current_opacity=$(awk -F' *= *' '/^background-opacity/{print $2}' "$config")
+
+  if [ -n "$1" ]; then
+    new_opacity="$1"
+  elif [ "$current_opacity" = "0.3" ]; then
+    new_opacity="0.95"
+  else
+    new_opacity="0.3"
+  fi
+
+  sed -i '' "s/^background-opacity = .*/background-opacity = ${new_opacity}/" "$config"
+  echo "Ghostty: opacity set to ${new_opacity}"
+
+  ghostty +reload-config 2>/dev/null && echo "Config reloaded." || echo "Reload manually with ctrl+shift+,"
+}
