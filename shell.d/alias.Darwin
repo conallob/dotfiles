@@ -1,3 +1,20 @@
 # vim: filetype=sh
 
 alias eject="diskutil eject"
+
+# Toggle Ghostty background opacity between transparent (default) and opaque (presentation mode)
+ghostty-toggle() {
+  local config="$HOME/.config/ghostty/config"
+  local current_opacity
+  current_opacity=$(awk -F' *= *' '/^background-opacity/{print $2}' "$config")
+
+  if [ "$current_opacity" = "0.3" ]; then
+    sed -i '' 's/^background-opacity = .*/background-opacity = 0.95/' "$config"
+    echo "Ghostty: presentation mode (opacity: 0.95)"
+  else
+    sed -i '' 's/^background-opacity = .*/background-opacity = 0.3/' "$config"
+    echo "Ghostty: transparent mode (opacity: 0.3)"
+  fi
+
+  ghostty +reload-config 2>/dev/null && echo "Config reloaded." || echo "Reload manually with ctrl+shift+,"
+}
