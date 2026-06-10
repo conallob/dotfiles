@@ -20,7 +20,5 @@ ghostty-transparency() {
   fi
 
   sed -i '' "s/^background-blur = .*/background-blur = ${new_blur}/" "$config"
-  echo "Ghostty: background-blur set to ${new_blur}"
-
-  ghostty +reload-config 2>/dev/null && echo "Config reloaded. ✅" || echo "⚠️ Reload manually with ctrl+shift+, "
+  echo "Ghostty: background-blur set to ${new_blur} — restart Ghostty to apply."
 }
