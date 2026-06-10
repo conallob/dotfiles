@@ -2,25 +2,30 @@
 
 alias eject="diskutil eject"
 
-# Toggle Ghostty background blur for presentation mode (blur hot-reloads; opacity does not).
-# No arg: toggles false <-> true. With arg: sets that blur value (e.g. macos-glass-regular, 20).
-# Calling without args after a custom value resets to false.
+# Toggle Ghostty background blur + opacity for presentation mode.
+# No arg: toggles between transparent (blur=false, opacity=0.3) and presentation (blur=true, opacity=0.85).
+# With arg: sets blur to that value (e.g. macos-glass-regular, 20); opacity follows.
+# Calling without args from any custom state resets to transparent.
 # shellcheck disable=SC3033,SC3043  # hyphenated name and local are fine in bash/zsh
 ghostty-transparency() {
   local config="$HOME/.config/ghostty/config"
-  local current_blur new_blur
+  local current_blur new_blur new_opacity
   current_blur=$(awk -F' *= *' '/^background-blur/{print $2}' "$config")
 
   if [ -n "$1" ]; then
     new_blur="$1"
+    [ "$new_blur" = "false" ] && new_opacity="0.3" || new_opacity="0.85"
   elif [ "$current_blur" = "false" ]; then
     new_blur="true"
+    new_opacity="0.85"
   else
     new_blur="false"
+    new_opacity="0.3"
   fi
 
   sed -i '' "s/^background-blur = .*/background-blur = ${new_blur}/" "$config"
-  echo "🔲 Ghostty: background-blur set to ${new_blur}"
+  sed -i '' "s/^background-opacity = .*/background-opacity = ${new_opacity}/" "$config"
+  echo "🔲 Ghostty: background-blur=${new_blur}, background-opacity=${new_opacity}"
 
   # Transparency changes apply on reload only when a split is open (ghostty#3109).
   # Open a temporary split, reload config, then close it.
