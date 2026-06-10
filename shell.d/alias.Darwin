@@ -2,19 +2,23 @@
 
 alias eject="diskutil eject"
 
-# Toggle Ghostty background opacity between transparent (default) and opaque (presentation mode)
-ghostty-toggle() {
+# Toggle Ghostty background opacity between transparent (0.3) and presentation (0.95),
+# or set an explicit value. Calling without args after a custom value resets to 0.3.
+ghostty-transparency() {
   local config="$HOME/.config/ghostty/config"
-  local current_opacity
+  local current_opacity new_opacity
   current_opacity=$(awk -F' *= *' '/^background-opacity/{print $2}' "$config")
 
-  if [ "$current_opacity" = "0.3" ]; then
-    sed -i '' 's/^background-opacity = .*/background-opacity = 0.95/' "$config"
-    echo "Ghostty: presentation mode (opacity: 0.95)"
+  if [ -n "$1" ]; then
+    new_opacity="$1"
+  elif [ "$current_opacity" = "0.3" ]; then
+    new_opacity="0.95"
   else
-    sed -i '' 's/^background-opacity = .*/background-opacity = 0.3/' "$config"
-    echo "Ghostty: transparent mode (opacity: 0.3)"
+    new_opacity="0.3"
   fi
+
+  sed -i '' "s/^background-opacity = .*/background-opacity = ${new_opacity}/" "$config"
+  echo "Ghostty: opacity set to ${new_opacity}"
 
   ghostty +reload-config 2>/dev/null && echo "Config reloaded." || echo "Reload manually with ctrl+shift+,"
 }
