@@ -1,5 +1,6 @@
 background = #0d0d0d
 background-opacity = 0.3
+background-blur = false
 cursor-invert-fg-bg = true
 window-height = 58
 window-width = 80
