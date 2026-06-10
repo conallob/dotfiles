@@ -20,5 +20,17 @@ ghostty-transparency() {
   fi
 
   sed -i '' "s/^background-blur = .*/background-blur = ${new_blur}/" "$config"
-  echo "Ghostty: background-blur set to ${new_blur} — restart Ghostty to apply."
+  echo "Ghostty: background-blur set to ${new_blur}"
+
+  # Transparency changes apply on reload only when a split is open (ghostty#3109).
+  # Open a temporary split, reload config, then close it.
+  if osascript -e 'tell application "System Events" to tell process "Ghostty" to keystroke "d" using command down' 2>/dev/null; then
+    sleep 0.4
+    osascript -e 'tell application "System Events" to tell process "Ghostty" to keystroke "," using {command down, shift down}' 2>/dev/null
+    sleep 0.2
+    osascript -e 'tell application "System Events" to tell process "Ghostty" to keystroke "w" using command down' 2>/dev/null
+    echo "Config reloaded."
+  else
+    echo "Grant Accessibility access, or: open a split (cmd+d), reload (cmd+shift+,), close split (cmd+w)."
+  fi
 }
