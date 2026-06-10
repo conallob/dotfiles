@@ -4,7 +4,7 @@ alias eject="diskutil eject"
 
 # Toggle Ghostty background blur + opacity for presentation mode.
 # No arg: toggles between transparent (blur=false, opacity=0.3) and presentation (blur=true, opacity=0.85).
-# With arg: sets blur to that value (e.g. macos-glass-regular, 20); opacity follows.
+# With arg: sets opacity to that value; blur is enabled automatically unless opacity=1.
 # Calling without args from any custom state resets to transparent.
 # shellcheck disable=SC3033,SC3043  # hyphenated name and local are fine in bash/zsh
 ghostty-transparency() {
@@ -13,8 +13,8 @@ ghostty-transparency() {
   current_blur=$(awk -F' *= *' '/^background-blur/{print $2}' "$config")
 
   if [ -n "$1" ]; then
-    new_blur="$1"
-    [ "$new_blur" = "false" ] && new_opacity="0.3" || new_opacity="0.85"
+    new_opacity="$1"
+    [ "$new_opacity" = "1" ] && new_blur="false" || new_blur="true"
   elif [ "$current_blur" = "false" ]; then
     new_blur="true"
     new_opacity="0.85"
