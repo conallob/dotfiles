@@ -227,3 +227,59 @@ snippet thenc "LINT.ThenChange end marker" b
 // LINT.ThenChange(${1:path/to/other/file.go})
 ${0}
 endsnippet
+
+# ── Stripe / HTTP client ─────────────────────────────────────────────────────
+
+snippet htclient "HTTP client with timeout" b
+httpClient := &http.Client{
+	Timeout: ${1:10} * time.Second,
+}
+$0
+endsnippet
+
+snippet sclient "Stripe client init" b
+stripe.Key = os.Getenv("STRIPE_SECRET_KEY")
+$0
+endsnippet
+
+snippet serr "Stripe error handling" b
+if err != nil {
+	if stripeErr, ok := err.(*stripe.Error); ok {
+		switch stripeErr.Code {
+		case stripe.ErrorCodeRateLimit:
+			// back off and retry
+		case stripe.ErrorCodeInvalidRequest:
+			// bad params — don't retry
+		default:
+			// unexpected stripe error
+		}
+	}
+	return fmt.Errorf("stripe call failed: %w", err)
+}
+$0
+endsnippet
+
+snippet jdec "JSON decode response body" b
+defer ${1:resp}.Body.Close()
+var result ${2:MyStruct}
+if err := json.NewDecoder($1.Body).Decode(&result); err != nil {
+	return fmt.Errorf("decode response: %w", err)
+}
+$0
+endsnippet
+
+snippet smain "main with env key check" b
+func main() {
+	apiKey := os.Getenv("STRIPE_SECRET_KEY")
+	if apiKey == "" {
+		log.Fatal("STRIPE_SECRET_KEY not set")
+	}
+	stripe.Key = apiKey
+	$0
+}
+endsnippet
+
+snippet idem "Stripe idempotency key" b
+params.Params.IdempotencyKey = stripe.NewIdempotencyKey()
+$0
+endsnippet
