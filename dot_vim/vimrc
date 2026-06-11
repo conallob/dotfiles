@@ -858,9 +858,19 @@ au BufNewFile,BufRead .mutt_* so $VIMRUNTIME/syntax/muttrc.vim
 " ============================================================================
 " Templates for New Files
 " ============================================================================
+function! s:LoadTemplate() abort
+  let l:by_name = $HOME . '/.vim/templates/' . expand('%:t') . '.tpl'
+  let l:by_ext  = $HOME . '/.vim/templates/' . expand('%:e') . '.tpl'
+  if filereadable(l:by_name)
+    execute '0r ' . fnameescape(l:by_name)
+  elseif filereadable(l:by_ext)
+    execute '0r ' . fnameescape(l:by_ext)
+  endif
+endfunction
+
 augroup BufNewFileFromTemplate
 au!
-autocmd BufNewFile * silent! 0r $HOME/.vim/templates/%:e.tpl
+autocmd BufNewFile * call s:LoadTemplate()
 autocmd BufNewFile * normal! G"_dd1G
 autocmd BufNewFile * silent! match Todo /TODO/
 augroup END
