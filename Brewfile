@@ -78,6 +78,7 @@ brew "talosctl"
 brew "jq"
 brew "protobuf"
 brew "pssh"
+brew "pv"
 brew "terminal-notifier"
 brew "yq"
 
