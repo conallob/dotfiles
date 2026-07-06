@@ -1,4 +1,11 @@
 {{- /* Personal and Third-party MCP Servers */ -}}
+{{- /* Remove Obsidian Local MCP server, once the HTTP verison is up and running */ -}}
+"obsidian-mcp-tools-local": {
+  "command": "/Users/{{- .chezmoi.username -}}/Documents/Multiverse/.obsidian/plugins/mcp-tools/bin/mcp-server",
+  "env": {
+    "OBSIDIAN_API_KEY": "{{- (onepasswordDetailsFields "xe6ncd3wlggzxt6lq7zv3mduly").credential.value }}"
+  }
+},
 "obsidian-mcp-tools": {
   "url": "{{- (onepasswordDetailsFields "xe6ncd3wlggzxt6lq7zv3mduly").hostname.value }}",
   "headers": {
