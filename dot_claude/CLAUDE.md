@@ -36,6 +36,11 @@
     ```
     ```
 
+# Git Usage
+* When working in a git repository, if the most recently opened PR/MR for the current branch has already been merged and further instructions are given, always create a new branch before making further changes — never stack new commits onto a branch whose PR has already merged
+  - This keeps history clean and allows a subsequent PR/MR to be opened for the new work
+  - Base the new branch on the latest default branch (e.g. `main`)
+
 # Agents
 
 Specialised agents are defined in `~/.claude/agents/`. Use them for:
