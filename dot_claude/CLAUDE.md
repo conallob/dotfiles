@@ -60,3 +60,15 @@ Specialised agents are defined in `~/.claude/agents/`. Use them for:
 * `incident-response` — incident triage, log analysis, and incident.io coordination (work only)
 * `go-repo-setup` — scaffold a new Go GitHub repo with CI, release process, goreleaser, Makefile, and standard structure
 * `financial-planning` — pension tracking, spending analysis via Toshl, and personal financial planning
+* `promql-cody` — PromQL/Alertmanager rule maintenance via the o11y-analysis-tools CLIs (formatting, label-checking, test scaffolding, notification previews, hysteresis tuning, stale-alert cleanup)
+
+# Skills
+
+Additional skills from [o11y-analysis-tools](https://github.com/conallob/o11y-analysis-tools) are defined in `~/.claude/skills/`:
+* `promql-cody` — orchestrates all six PromQL/Alertmanager tools below; load this first to decide which tool fits a given request
+* `promql-fmt` — format/lint PromQL multiline expressions (hermetic, CI-safe)
+* `label-check` — enforce required labels on PromQL expressions (hermetic, CI-safe)
+* `autogen-promql-tests` — scaffold `promtool` unit tests for untested rules (hermetic)
+* `e2e-alertmanager-test` — render end-to-end alert notification previews (hermetic with a skeleton config)
+* `alert-hysteresis` — recommend `for:` duration tuning from live Prometheus history (interactive)
+* `stale-alerts-analyzer` — flag alert rules that rarely/never fire, using live Prometheus history (interactive)
