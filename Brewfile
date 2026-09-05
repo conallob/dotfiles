@@ -109,6 +109,10 @@ brew "mcp-omnifocus"
 brew "o11y-analysis-tools"
 brew "jira-beads-sync"
 
+# Hazelnut automatic file manager
+tap "ricardodantas/tap"
+brew "hazelnut"
+
 # Utilities
 
 cask "google-chrome"
