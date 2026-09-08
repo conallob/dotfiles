@@ -101,12 +101,26 @@ main() {
   require_cmd brew "Install it manually from https://brew.sh"
   require_cmd git "Install it with 'brew install git' and re-run this script."
 
+  tap_custom_taps
+
   log "Applying Brewfile (this may take a while)..."
   brew bundle --file="$BREWFILE" install
 
   post_brewfile_setup
 
   log "Done. Run 'chezmoi init --apply <your-github-username>' if you haven't already applied your dotfiles."
+}
+
+# 'brew bundle' can choke on custom taps it hasn't seen before (e.g.
+# conallob/tap) unless they're already tapped, so tap everything the
+# Brewfile references up front.
+tap_custom_taps() {
+  local tap
+  while IFS= read -r tap; do
+    [ -z "$tap" ] && continue
+    log "Tapping ${tap}..."
+    brew tap "$tap"
+  done < <(grep -oE '^tap "[^"]+"' "$BREWFILE" | sed -E 's/^tap "([^"]+)"/\1/')
 }
 
 # A few Brewfile entries need follow-up steps beyond 'brew bundle install',
