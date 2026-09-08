@@ -65,7 +65,29 @@ main() {
   log "Applying Brewfile (this may take a while)..."
   brew bundle --file="$BREWFILE" install
 
+  post_brewfile_setup
+
   log "Done. Run 'chezmoi init --apply <your-github-username>' if you haven't already applied your dotfiles."
+}
+
+# A few Brewfile entries need follow-up steps beyond 'brew bundle install',
+# as noted in the Brewfile's own comments.
+post_brewfile_setup() {
+  # rustup: "run `rustup-init` after install"
+  if command -v rustup-init >/dev/null 2>&1 && ! command -v cargo >/dev/null 2>&1; then
+    log "Initializing rustup toolchain..."
+    rustup-init -y --no-modify-path
+  fi
+
+  # ifttt-lint: "No Homebrew formula — install via: cargo install ifttt-lint"
+  if ! command -v ifttt-lint >/dev/null 2>&1; then
+    if command -v cargo >/dev/null 2>&1; then
+      log "Installing ifttt-lint via cargo..."
+      cargo install ifttt-lint
+    else
+      log "Skipping ifttt-lint: cargo not on PATH yet. Run 'cargo install ifttt-lint' after opening a new shell."
+    fi
+  fi
 }
 
 main "$@"
