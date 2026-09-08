@@ -111,18 +111,29 @@ main() {
   log "Done. Run 'chezmoi init --apply <your-github-username>' if you haven't already applied your dotfiles."
 }
 
+# The tap to auto-trust without asking: this is the author's own tap, as
+# opposed to third-party taps (e.g. ricardodantas/tap) that just happen to
+# be in the Brewfile too.
+AUTO_TRUST_TAP="conallob/tap"
+
 # 'brew bundle' can choke on custom taps it hasn't seen before (e.g.
-# conallob/tap) unless they're already tapped and trusted, so tap and trust
-# everything the Brewfile references up front. (Homebrew >= 6.0 requires
-# non-official taps to be explicitly trusted via 'brew trust' before their
-# formulae/casks can be loaded; older Homebrew has no such command, so that
-# step is skipped there.)
+# conallob/tap) unless they're already tapped, so tap everything the
+# Brewfile references up front. Homebrew >= 6.0 also requires non-official
+# taps to be explicitly trusted via 'brew trust' before their formulae/casks
+# can be loaded; only AUTO_TRUST_TAP is trusted automatically here, since
+# that's this repo's own tap -- everything else is left for the user to
+# trust deliberately (older Homebrew has no 'trust' command, so that step
+# is skipped there too).
 tap_custom_taps() {
   local tap trust_output
   while IFS= read -r tap; do
     [ -z "$tap" ] && continue
     log "Tapping ${tap}..."
     brew tap "$tap"
+
+    if [ "$tap" != "$AUTO_TRUST_TAP" ]; then
+      continue
+    fi
 
     log "Trusting ${tap}..."
     if ! trust_output=$(brew trust --tap "$tap" 2>&1); then
