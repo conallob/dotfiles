@@ -18,7 +18,7 @@
 set -euo pipefail
 
 DOTFILES_REPO="${DOTFILES_REPO:-https://github.com/conallob/dotfiles.git}"
-DOTFILES_DIR="${DOTFILES_DIR:-$HOME/dotfiles}"
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/Documents/Github/dotfiles}"
 
 log() {
   printf '==> %s\n' "$1"
