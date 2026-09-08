@@ -112,14 +112,27 @@ main() {
 }
 
 # 'brew bundle' can choke on custom taps it hasn't seen before (e.g.
-# conallob/tap) unless they're already tapped, so tap everything the
-# Brewfile references up front.
+# conallob/tap) unless they're already tapped and trusted, so tap and trust
+# everything the Brewfile references up front. (Homebrew >= 6.0 requires
+# non-official taps to be explicitly trusted via 'brew trust' before their
+# formulae/casks can be loaded; older Homebrew has no such command, so that
+# step is skipped there.)
 tap_custom_taps() {
-  local tap
+  local tap trust_output
   while IFS= read -r tap; do
     [ -z "$tap" ] && continue
     log "Tapping ${tap}..."
     brew tap "$tap"
+
+    log "Trusting ${tap}..."
+    if ! trust_output=$(brew trust --tap "$tap" 2>&1); then
+      if printf '%s' "$trust_output" | grep -qi 'unknown command'; then
+        log "brew trust not available in this Homebrew version; skipping explicit trust for ${tap}."
+      else
+        printf '%s\n' "$trust_output" >&2
+        fail "brew trust --tap ${tap} failed"
+      fi
+    fi
   done < <(grep -oE '^tap "[^"]+"' "$BREWFILE" | sed -E 's/^tap "([^"]+)"/\1/')
 }
 
