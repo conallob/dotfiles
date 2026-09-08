@@ -5,12 +5,20 @@
 # Checks that the required tooling (Homebrew, git, chezmoi) is present,
 # then applies the Brewfile to install/update all packages.
 #
-# Usage: ./assimilate.sh
+# Usage:
+#   ./assimilate.sh                    (run from within a clone of this repo)
+#   curl -fsSL <raw-url>/assimilate.sh | bash
+#     - one-shot mode: clones the repo (default: to ~/dotfiles, override with
+#       DOTFILES_DIR) and re-execs itself from inside the clone.
+#
+# Env vars (one-shot mode only):
+#   DOTFILES_REPO - git URL to clone (default: https://github.com/conallob/dotfiles.git)
+#   DOTFILES_DIR  - where to clone it (default: $HOME/dotfiles)
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BREWFILE="${SCRIPT_DIR}/Brewfile"
+DOTFILES_REPO="${DOTFILES_REPO:-https://github.com/conallob/dotfiles.git}"
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/dotfiles}"
 
 log() {
   printf '==> %s\n' "$1"
@@ -43,6 +51,34 @@ install_homebrew() {
   done
 }
 
+# Resolves to this script's directory when it's running from a real file on
+# disk (e.g. './assimilate.sh'), or nothing when it isn't (e.g. piped in via
+# 'curl ... | bash', where $BASH_SOURCE doesn't point at a readable file).
+resolve_script_dir() {
+  local source="${BASH_SOURCE[0]}"
+  if [ -f "$source" ]; then
+    cd "$(dirname "$source")" && pwd
+  fi
+}
+
+# One-shot mode: clone (or update) this repo, then hand off to the copy's
+# own assimilate.sh so the rest of the run has a Brewfile to work with.
+bootstrap_clone_and_reexec() {
+  require_cmd git "Install git first (e.g. via 'xcode-select --install' on macOS), then re-run."
+
+  if [ -d "$DOTFILES_DIR/.git" ]; then
+    log "dotfiles already cloned at ${DOTFILES_DIR}; pulling latest..."
+    git -C "$DOTFILES_DIR" pull --ff-only
+  elif [ -e "$DOTFILES_DIR" ]; then
+    fail "${DOTFILES_DIR} already exists and isn't a git repository. Set DOTFILES_DIR to choose another location."
+  else
+    log "Cloning ${DOTFILES_REPO} into ${DOTFILES_DIR}..."
+    git clone "$DOTFILES_REPO" "$DOTFILES_DIR"
+  fi
+
+  exec bash "${DOTFILES_DIR}/assimilate.sh" "$@"
+}
+
 main() {
   case "$(uname -s)" in
     Darwin|Linux)
@@ -52,15 +88,18 @@ main() {
       ;;
   esac
 
+  local script_dir
+  script_dir="$(resolve_script_dir)"
+  if [ -z "$script_dir" ] || [ ! -f "$script_dir/Brewfile" ]; then
+    bootstrap_clone_and_reexec "$@"
+  fi
+  BREWFILE="$script_dir/Brewfile"
+
   if ! command -v brew >/dev/null 2>&1; then
     install_homebrew
   fi
   require_cmd brew "Install it manually from https://brew.sh"
   require_cmd git "Install it with 'brew install git' and re-run this script."
-
-  if [ ! -f "$BREWFILE" ]; then
-    fail "Brewfile not found at ${BREWFILE}"
-  fi
 
   log "Applying Brewfile (this may take a while)..."
   brew bundle --file="$BREWFILE" install
