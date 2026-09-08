@@ -55,8 +55,8 @@ install_homebrew() {
 # disk (e.g. './assimilate.sh'), or nothing when it isn't (e.g. piped in via
 # 'curl ... | bash', where $BASH_SOURCE doesn't point at a readable file).
 resolve_script_dir() {
-  local source="${BASH_SOURCE[0]}"
-  if [ -f "$source" ]; then
+  local source="${BASH_SOURCE[0]:-}"
+  if [ -n "$source" ] && [ -f "$source" ]; then
     cd "$(dirname "$source")" && pwd
   fi
 }
