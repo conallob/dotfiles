@@ -18,7 +18,7 @@ This directory contains unified configuration for both **Claude Code** (CLI) and
 | File | Description |
 |------|-------------|
 | `mcp-servers-personal.json.tmpl` | Personal & third-party MCP servers (always included) |
-| `mcp-servers-work.json.tmpl` | Work-specific MCP servers (included when `username == "cobrien"`) |
+| `mcp-servers-work.json.tmpl` | Work-specific MCP servers (included when `isWorkAccount` is true) |
 
 ## Architecture
 
@@ -67,7 +67,7 @@ The configuration uses a **unified template approach** where MCP server definiti
 - **google-sheets**: Google Sheets integration
 - **ssh-wingman**: SSH session management
 
-### Work Servers (Included for user "cobrien")
+### Work Servers (Included when `isWorkAccount` is true)
 
 - **incidentio**: Incident.io integration with 1Password API key
 - **GitLab**: GitLab MCP HTTP integration
@@ -128,10 +128,10 @@ brew bundle install
 
 ### Conditional Inclusion
 
-Work servers are only included when the username is "cobrien":
+Work servers are only included when `isWorkAccount` is true — a custom chezmoi data variable (defined in `dot_config/chezmoi/chezmoi.toml.tmpl`) computed by checking whether the hostname starts with `andromeda` (case-insensitive):
 
 ```go
-{{- if eq .chezmoi.username "cobrien" }}
+{{- if .isWorkAccount }}
   // work servers included
 {{- end }}
 ```
@@ -142,13 +142,13 @@ The templates use conditional comma insertion to ensure valid JSON:
 
 ```go
 {{- includeTemplate "mcp-servers-personal.json.tmpl" . -}}
-{{- if eq .chezmoi.username "cobrien" }},{{ end -}}
+{{- if .isWorkAccount }},{{ end -}}
 {{- includeTemplate "mcp-servers-work.json.tmpl" . -}}
 ```
 
 This ensures:
-- **Personal only** (username ≠ "cobrien"): No trailing comma → Valid JSON ✓
-- **Personal + Work** (username = "cobrien"): Comma between them → Valid JSON ✓
+- **Personal only** (`isWorkAccount` is false): No trailing comma → Valid JSON ✓
+- **Personal + Work** (`isWorkAccount` is true): Comma between them → Valid JSON ✓
 
 ## Adding New MCP Servers
 
@@ -173,7 +173,7 @@ Edit `mcp-servers-personal.json.tmpl`:
 Edit `mcp-servers-work.json.tmpl`:
 
 ```json
-{{- if eq .chezmoi.username "cobrien" }}
+{{- if .isWorkAccount }}
 "new-work-server": {
   "command": "/path/to/command"
 },
@@ -259,13 +259,13 @@ If you get JSON parsing errors:
 
 ### Work Servers Not Appearing
 
-Verify your username matches the condition:
+Verify `isWorkAccount` resolves as expected:
 ```bash
-echo $USER
-chezmoi data | jq .chezmoi.username
+hostname
+chezmoi data | jq .isWorkAccount
 ```
 
-If it should be "cobrien" but isn't, update your chezmoi configuration.
+`isWorkAccount` is true when the hostname starts with `andromeda` (case-insensitive). If it should be true but isn't, check the hostname or update the prefix check in `dot_config/chezmoi/chezmoi.toml.tmpl`.
 
 ## File Locations After Applying
 

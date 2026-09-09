@@ -17,7 +17,7 @@ Specialist for chezmoi dotfiles operations.
 - Comments: `{{/* comment */}}` — not `//` or `#`
 - Whitespace trim: `{{-` (trim before) and `-}}` (trim after)
 - 1Password secrets: `{{ (onepasswordDetailsFields "item-id").field.value }}`
-- Conditional: `{{- if eq .chezmoi.username "cobrien" }}...{{- end }}`
+- Conditional: `{{- if .isWorkAccount }}...{{- end }}` — `isWorkAccount` is a custom data variable (set in `dot_config/chezmoi/chezmoi.toml.tmpl`) based on whether the hostname starts with `andromeda` (case-insensitive)
 - Include template: `{{- includeTemplate "path/to/file.tmpl" . }}`
 
 ## Validation
