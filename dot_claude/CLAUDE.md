@@ -64,6 +64,8 @@ Specialised agents are defined in `~/.claude/agents/`. Use them for:
 
 # Skills
 
+* `ptal` — "Please Take Another Look": re-review whatever is currently being iterated on (a PR/MR, a code diff, a draft email or doc) against prior feedback and report what's resolved vs. still open
+
 Additional skills from [o11y-analysis-tools](https://github.com/conallob/o11y-analysis-tools) are defined in `~/.claude/skills/`:
 * `promql-cody` — orchestrates all six PromQL/Alertmanager tools below; load this first to decide which tool fits a given request
 * `promql-fmt` — format/lint PromQL multiline expressions (hermetic, CI-safe)
