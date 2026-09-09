@@ -62,9 +62,12 @@ Specialised agents are defined in `~/.claude/agents/`. Use them for:
 * `financial-planning` — pension tracking, spending analysis via Toshl, and personal financial planning
 * `promql-cody` — PromQL/Alertmanager rule maintenance via the o11y-analysis-tools CLIs (formatting, label-checking, test scaffolding, notification previews, hysteresis tuning, stale-alert cleanup)
 
-# Skills
+# Commands
 
-* `ptal` — "Please Take Another Look": re-review whatever is currently being iterated on (a PR/MR, a code diff, a draft email or doc) against prior feedback and report what's resolved vs. still open
+Custom slash commands are defined in `~/.claude/commands/`:
+* `/ptal` — "Please Take Another Look": re-review whatever is currently being iterated on (a PR/MR, a code diff, a draft email or doc) against prior feedback and report what's resolved vs. still open
+
+# Skills
 
 Additional skills from [o11y-analysis-tools](https://github.com/conallob/o11y-analysis-tools) are defined in `~/.claude/skills/`:
 * `promql-cody` — orchestrates all six PromQL/Alertmanager tools below; load this first to decide which tool fits a given request
