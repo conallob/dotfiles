@@ -1,0 +1,1 @@
+{{ hasPrefix "andromeda" (.chezmoi.hostname | lower) }}

@@ -30,7 +30,7 @@
 #  https://developer.1password.com/docs/ssh/agent/config
 {{ (onepasswordDetailsFields "e5kn5ias2uvchycghwkt4aaddq").notesPlain.value }}
 
-{{- if .isWorkAccount }}
+{{- if eq (includeTemplate "isWorkAccount" .) "true" }}
 # Add my ssh key from my work vaults
 
 {{ (onepasswordDetailsFields "oqvxrd4e73sxizwjg6x7yadj6e").notesPlain.value }}
