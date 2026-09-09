@@ -1,64 +1,30 @@
 ---
-description: "Please Take Another Look" — re-review whatever's currently under review (PR/MR, code diff, draft email/doc) against prior feedback
-argument-hint: "[optional: PR number, file path, or what to re-check]"
+description: Please Take Another Look — a critical review pass on whatever we've been iterating on
 ---
 
-# /ptal — Please Take Another Look
+Take another look at what we've been working on in this conversation, the way you would
+review a colleague's CL before approving it. The goal is a real review, not a pat on the back.
 
-Re-review the thing currently being iterated on, the way you'd ask a
-colleague for a second pass after addressing their comments. Figure out
-what kind of artifact is in flight, then apply the right kind of scrutiny.
+Structure the pass like this:
 
-Arguments (if given): $ARGUMENTS
+1. **Restate the goal** — one line on what this artifact (code, doc, email, config) is
+   actually trying to achieve, so we can catch drift before anything else.
+2. **Correctness / risk first** — anything that's wrong, would break, would confuse the
+   reader, or creates a foot-gun. This is the load-bearing section; don't bury it under
+   style comments.
+3. **Gaps and edge cases** — anything unstated, unhandled, or assumed that shouldn't be.
+4. **Clarity and structure** — naming, ordering, tone, or organization issues, but only
+   ones that materially affect the reader/user, not nitpicks for their own sake.
+5. **Nits** — genuinely minor stuff, clearly labeled as optional, kept short.
 
-## Step 1 — Identify what's in review
+Rules for the review itself:
+- Be direct. If something's wrong, say so plainly — don't soften it into a question unless
+  it genuinely is one.
+- Don't rewrite the whole thing unless asked; point at the specific spot and say what's
+  wrong and why, the way review comments do.
+- If it's solid, say so briefly and move on — don't invent issues to fill out the sections.
+- If $ARGUMENTS is provided, treat it as a specific focus area for this pass (e.g.
+  "$ARGUMENTS: focus on the error handling") and weight the review accordingly, while still
+  doing a quick pass over the rest.
 
-Look at the conversation, the arguments above, and the working directory to
-determine what's being iterated on, in this priority order:
-
-1. **An open PR/MR** — if the current branch has an associated PR, or a PR
-   number/URL was passed in, or the user has been discussing one, that's
-   the target.
-2. **Uncommitted or recently committed code changes** — if there's a dirty
-   git diff or recent commits with no PR yet, review the diff directly.
-3. **A draft document, email, or design** — a file (Markdown, Google Doc,
-   Gmail draft, etc.) that has been discussed or edited earlier in this
-   session.
-
-If it's ambiguous, ask rather than guessing.
-
-## Step 2 — Re-review based on artifact type
-
-### Code / PR / MR
-- If a PR exists, use the `code-review` skill against the PR's diff (or
-  invoke it with the PR number/branch as target). Prefer `medium` effort
-  for a routine re-check; go `high` if the diff is large or this is the
-  first pass.
-- Cross-check against any earlier review comments (Claude Code Review, a
-  human reviewer, or your own prior findings in this session): confirm
-  each one is actually resolved in the current diff, not just acknowledged.
-- Run the `lint-test` agent before declaring it clean.
-- Report: resolved items, still-open items, and anything new introduced by
-  the latest edits.
-
-### Draft email / doc / design
-- Re-read the current draft in full, not just the delta since last time.
-- Check it against:
-  - Any explicit feedback already given in this session (does the new
-    draft actually address each point?)
-  - The original goal/audience for the piece (does it still serve that
-    purpose, or has scope drifted while iterating?)
-  - Clarity, tone, and length appropriate to the medium (a PTAL email
-    reads differently than a design doc).
-- Flag anything that reads as unresolved, contradictory, or newly
-  introduced noise from the edits.
-
-## Step 3 — Report back
-
-Give a short, structured verdict:
-- **Resolved**: what prior feedback is now addressed
-- **Still open**: what isn't, with a pointer to where
-- **New findings**: anything the latest pass surfaced that wasn't flagged before
-
-Don't just say "looks good" — name what you checked. If everything is
-genuinely resolved, say so plainly and note it's ready to send/merge/ship.
+$ARGUMENTS
