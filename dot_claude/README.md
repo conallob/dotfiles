@@ -128,7 +128,7 @@ brew bundle install
 
 ### Conditional Inclusion
 
-Work servers are only included when `isWorkAccount` is true — a custom chezmoi data variable (defined in `dot_config/chezmoi/chezmoi.toml.tmpl`) computed by checking whether the hostname starts with `andromeda` (case-insensitive):
+Work servers are only included when `isWorkAccount` is true — a custom chezmoi data variable (defined in `.chezmoidata.toml.tmpl` at the repo root, so it's recomputed on every `chezmoi apply`/`update` rather than requiring `chezmoi init`) computed by checking whether the hostname starts with `andromeda` (case-insensitive):
 
 ```go
 {{- if .isWorkAccount }}
@@ -265,7 +265,7 @@ hostname
 chezmoi data | jq .isWorkAccount
 ```
 
-`isWorkAccount` is true when the hostname starts with `andromeda` (case-insensitive). If it should be true but isn't, check the hostname or update the prefix check in `dot_config/chezmoi/chezmoi.toml.tmpl`.
+`isWorkAccount` is true when the hostname starts with `andromeda` (case-insensitive). If it should be true but isn't, check the hostname or update the prefix check in `.chezmoidata.toml.tmpl`.
 
 ## File Locations After Applying
 

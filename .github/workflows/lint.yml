@@ -75,10 +75,11 @@ jobs:
       - name: Set up chezmoi config and mock 1Password CLI
         run: |
           # Minimal chezmoi config: set sourceDir so includeTemplate resolves
-          # relative paths, and provide stub data variables for templates.
-          # isWorkAccount stubbed false — CI runners are never work hosts.
+          # relative paths. isWorkAccount and other computed data come from
+          # .chezmoidata.toml.tmpl in the source dir, which chezmoi loads
+          # automatically — no stub needed here.
           mkdir -p ~/.config/chezmoi
-          printf '[chezmoi]\n  sourceDir = "%s"\n[data]\n  isWorkAccount = false\n' "$GITHUB_WORKSPACE" \
+          printf '[chezmoi]\n  sourceDir = "%s"\n[data]\n' "$GITHUB_WORKSPACE" \
             > ~/.config/chezmoi/chezmoi.toml
 
           # Put the mock op binary ahead of any real op on PATH so chezmoi's

@@ -1,6 +1,4 @@
 {{- $isWorkAccount := hasPrefix "andromeda" (.chezmoi.hostname | lower) -}}
-[data]
-  isWorkAccount = {{ $isWorkAccount }}
 [git]
   autoCommit = true
 [onepassword]

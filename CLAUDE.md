@@ -38,7 +38,7 @@ Files and directories use chezmoi's special prefix naming:
 
 Files with `.tmpl` extension are processed by chezmoi using Go templates:
 - **1Password Integration**: Uses `onepasswordDetailsFields` and `onepasswordDocument` functions to inject secrets
-- **Conditional Logic**: `{{- if .isWorkAccount }}` gates work-specific configurations. `isWorkAccount` is a custom chezmoi data variable (defined in `dot_config/chezmoi/chezmoi.toml.tmpl`) computed by checking whether the hostname starts with `andromeda` (case-insensitive), rather than checking username
+- **Conditional Logic**: `{{- if .isWorkAccount }}` gates work-specific configurations. `isWorkAccount` is a custom chezmoi data variable (defined in `.chezmoidata.toml.tmpl` at the repo root, so it's recomputed on every `chezmoi apply`/`update`) computed by checking whether the hostname starts with `andromeda` (case-insensitive), rather than checking username
 - **JSON Template Files**: Files ending in `.json.tmpl` use Go `text/template` syntax:
   - Use `{{/* comment */}}` for template comments (not JSON comments)
   - Be mindful of trailing whitespace in the rendered output - use `{{-` and `-}}` to trim whitespace

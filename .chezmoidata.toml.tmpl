@@ -1,0 +1,4 @@
+# Computed template data, merged in on every `chezmoi apply`/`update`.
+# Unlike dot_config/chezmoi/chezmoi.toml.tmpl (only rendered by `chezmoi init`),
+# this file is reprocessed on every run, so it stays correct without re-init.
+isWorkAccount = {{ hasPrefix "andromeda" (.chezmoi.hostname | lower) }}
