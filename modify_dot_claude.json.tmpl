@@ -101,7 +101,7 @@ BASEEOF
 cat > "$MCP_SERVERS" << 'MCPEOF'
 {
 {{- includeTemplate "dot_claude/mcp-servers-personal.json.tmpl" . | indent 2 }}
-{{- if .isWorkAccount }},
+{{- if eq (includeTemplate "isWorkAccount" .) "true" }},
 {{ includeTemplate "dot_claude/mcp-servers-work.json.tmpl" . | indent 2 }}
 {{- end }}
 }

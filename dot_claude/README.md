@@ -128,10 +128,10 @@ brew bundle install
 
 ### Conditional Inclusion
 
-Work servers are only included when `isWorkAccount` is true — a custom chezmoi data variable (defined in `.chezmoidata.toml.tmpl` at the repo root, so it's recomputed on every `chezmoi apply`/`update` rather than requiring `chezmoi init`) computed by checking whether the hostname starts with `andromeda` (case-insensitive):
+Work servers are only included when `isWorkAccount` is true — a `.chezmoitemplates/isWorkAccount` partial (read via `includeTemplate "isWorkAccount" .`, since `.chezmoidata.*` files don't support `.tmpl` templating) computed by checking whether the hostname starts with `andromeda` (case-insensitive):
 
 ```go
-{{- if .isWorkAccount }}
+{{- if eq (includeTemplate "isWorkAccount" .) "true" }}
   // work servers included
 {{- end }}
 ```
@@ -142,7 +142,7 @@ The templates use conditional comma insertion to ensure valid JSON:
 
 ```go
 {{- includeTemplate "mcp-servers-personal.json.tmpl" . -}}
-{{- if .isWorkAccount }},{{ end -}}
+{{- if eq (includeTemplate "isWorkAccount" .) "true" }},{{ end -}}
 {{- includeTemplate "mcp-servers-work.json.tmpl" . -}}
 ```
 
@@ -173,7 +173,7 @@ Edit `mcp-servers-personal.json.tmpl`:
 Edit `mcp-servers-work.json.tmpl`:
 
 ```json
-{{- if .isWorkAccount }}
+{{- if eq (includeTemplate "isWorkAccount" .) "true" }}
 "new-work-server": {
   "command": "/path/to/command"
 },
@@ -262,10 +262,10 @@ If you get JSON parsing errors:
 Verify `isWorkAccount` resolves as expected:
 ```bash
 hostname
-chezmoi data | jq .isWorkAccount
+chezmoi execute-template '{{ includeTemplate "isWorkAccount" . }}'
 ```
 
-`isWorkAccount` is true when the hostname starts with `andromeda` (case-insensitive). If it should be true but isn't, check the hostname or update the prefix check in `.chezmoidata.toml.tmpl`.
+`isWorkAccount` is true when the hostname starts with `andromeda` (case-insensitive). If it should be true but isn't, check the hostname or update the prefix check in `.chezmoitemplates/isWorkAccount`.
 
 ## File Locations After Applying
 

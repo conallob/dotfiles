@@ -1,7 +1,7 @@
 {
   "mcpServers": {
 {{- includeTemplate "dot_claude/mcp-servers-personal.json.tmpl" . | indent 4 }}
-{{- if .isWorkAccount }},
+{{- if eq (includeTemplate "isWorkAccount" .) "true" }},
 {{ includeTemplate "dot_claude/mcp-servers-work.json.tmpl" . | indent 4 }}
 {{- end }}
   }

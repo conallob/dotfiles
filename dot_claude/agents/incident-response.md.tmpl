@@ -1,4 +1,4 @@
-{{- if .isWorkAccount -}}
+{{- if eq (includeTemplate "isWorkAccount" .) "true" -}}
 ---
 name: incident-response
 description: Incident response specialist. Use during active incidents or post-incident reviews to triage alerts, analyse logs with o11y-analysis-tools, coordinate via incident.io, and link Jira issues.

@@ -38,11 +38,17 @@ Files and directories use chezmoi's special prefix naming:
 
 Files with `.tmpl` extension are processed by chezmoi using Go templates:
 - **1Password Integration**: Uses `onepasswordDetailsFields` and `onepasswordDocument` functions to inject secrets
-- **Conditional Logic**: `{{- if .isWorkAccount }}` gates work-specific configurations. `isWorkAccount` is a custom chezmoi data variable (defined in `.chezmoidata.toml.tmpl` at the repo root, so it's recomputed on every `chezmoi apply`/`update`) computed by checking whether the hostname starts with `andromeda` (case-insensitive), rather than checking username
+- **Conditional Logic**: `{{- if eq (includeTemplate "isWorkAccount" .) "true" }}` gates work-specific configurations. `isWorkAccount` is a shared template partial (`.chezmoitemplates/isWorkAccount`) computed by checking whether the hostname starts with `andromeda` (case-insensitive), rather than checking username
 - **JSON Template Files**: Files ending in `.json.tmpl` use Go `text/template` syntax:
   - Use `{{/* comment */}}` for template comments (not JSON comments)
   - Be mindful of trailing whitespace in the rendered output - use `{{-` and `-}}` to trim whitespace
   - Test rendered output with `chezmoi execute-template` to verify proper JSON formatting
+
+### Chezmoi Template Data Gotchas
+
+- **`.chezmoidata.<format>` does NOT support a `.tmpl` suffix.** Only `.chezmoiexternal.<format>` files can be templated (`.chezmoiexternal.toml.tmpl`); a file named `.chezmoidata.toml.tmpl` is not recognized as a data file at all — chezmoi treats it as an ordinary template and would apply it as a literal dotfile target. For computed/dynamic values (e.g. anything derived from `.chezmoi.hostname`), use a **`.chezmoitemplates/<name>` partial** instead and pull its value with `includeTemplate "<name>" .` (returns a string — compare with `eq ... "true"` for booleans). `.chezmoitemplates/` entries are excluded from being applied as targets and are always re-evaluated as templates.
+- **`dot_config/chezmoi/chezmoi.toml.tmpl` only renders on `chezmoi init`.** It is never retemplated by `chezmoi apply` or `chezmoi update` — an existing install's `~/.config/chezmoi/chezmoi.toml` won't pick up new template logic added there until re-init. Don't rely on it for values other templates need on every run; use a `.chezmoitemplates/` partial (or compute inline) instead.
+- **`chezmoi execute-template < file` (used in CI) evaluates only that one file** — it does not implicitly load other source-tree data unless the mechanism used to expose that data (like `.chezmoitemplates/`) resolves it per-invocation via a template function such as `includeTemplate`. When adding a new templating mechanism, verify it works under `chezmoi execute-template` directly (as CI runs it) and not just under `chezmoi apply`/`update`.
 
 ### Multi-Platform Configuration Strategy
 

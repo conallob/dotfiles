@@ -17,8 +17,14 @@ Specialist for chezmoi dotfiles operations.
 - Comments: `{{/* comment */}}` — not `//` or `#`
 - Whitespace trim: `{{-` (trim before) and `-}}` (trim after)
 - 1Password secrets: `{{ (onepasswordDetailsFields "item-id").field.value }}`
-- Conditional: `{{- if .isWorkAccount }}...{{- end }}` — `isWorkAccount` is a custom data variable (set in `.chezmoidata.toml.tmpl` at the repo root, re-evaluated on every `chezmoi apply`/`update`, unlike `dot_config/chezmoi/chezmoi.toml.tmpl` which only renders on `chezmoi init`) based on whether the hostname starts with `andromeda` (case-insensitive)
+- Conditional: `{{- if eq (includeTemplate "isWorkAccount" .) "true" }}...{{- end }}` — `isWorkAccount` is a `.chezmoitemplates/isWorkAccount` partial based on whether the hostname starts with `andromeda` (case-insensitive)
 - Include template: `{{- includeTemplate "path/to/file.tmpl" . }}`
+
+## Chezmoi Template Data Gotchas
+
+- `.chezmoidata.<format>` files are **static only** — no `.tmpl` suffix support. A file named `.chezmoidata.toml.tmpl` is not read as data at all; it's treated (and applied) as a regular dotfile template instead. For anything computed (e.g. from `.chezmoi.hostname`), put it in a `.chezmoitemplates/<name>` partial and read it back with `includeTemplate "<name>" .` (returns a string).
+- `dot_config/chezmoi/chezmoi.toml.tmpl` renders only on `chezmoi init`, never on `apply`/`update` — an existing install's `chezmoi.toml` won't pick up changes there without re-init. Don't put per-run logic other templates depend on there.
+- `chezmoi execute-template < file` (what CI uses) only evaluates that one file — confirm any new data mechanism actually resolves under this exact invocation, not just under `apply`/`update`.
 
 ## Validation
 
