@@ -1,6 +1,9 @@
+{{- $isWorkAccount := hasPrefix "andromeda" (.chezmoi.hostname | lower) -}}
+[data]
+  isWorkAccount = {{ $isWorkAccount }}
 [git]
   autoCommit = true
 [onepassword]
   command = "op"
   mode = "account"
-	account = {{ if eq .chezmoi.username "cobrien" }}"FUJ74MTVQVCN5DXVK4PSF5HKU4"{{ else }}"ZVA4BFN3HZDBJM2HNAKREAS22M"{{ end }}
+	account = {{ if $isWorkAccount }}"FUJ74MTVQVCN5DXVK4PSF5HKU4"{{ else }}"ZVA4BFN3HZDBJM2HNAKREAS22M"{{ end }}
