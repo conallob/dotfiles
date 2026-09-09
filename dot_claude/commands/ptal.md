@@ -5,6 +5,14 @@ description: Please Take Another Look — a critical review pass on whatever we'
 Take another look at what we've been working on in this conversation, the way you would
 review a colleague's CL before approving it. The goal is a real review, not a pat on the back.
 
+If this pass is on an open PR/MR, first check that its description still matches its diff:
+re-read the current diff and the current PR/MR description side by side, and flag anything
+the description claims that the diff doesn't do, anything the diff does that the description
+doesn't mention, and any stale detail left over from an earlier revision. Fix the description
+yourself if it's just out of date; call it out as its own finding if the mismatch suggests the
+change itself drifted from intent. This catches "description didn't match the diff" before a
+human reviewer has to send it back for that alone.
+
 Structure the pass like this:
 
 1. **Restate the goal** — one line on what this artifact (code, doc, email, config) is
