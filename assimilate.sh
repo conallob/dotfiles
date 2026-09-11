@@ -2,8 +2,9 @@
 #
 # assimilate.sh - bootstrap a new machine with this dotfiles repository.
 #
-# Checks that the required tooling (Homebrew, git, chezmoi) is present,
-# then applies the Brewfile to install/update all packages.
+# Checks that the required tooling (Homebrew, git) is present, applies the
+# Brewfile to install/update all packages, applies dotfiles via chezmoi, and
+# registers/syncs atuin shell history.
 #
 # Usage:
 #   ./assimilate.sh                    (run from within a clone of this repo)
@@ -108,7 +109,12 @@ main() {
 
   post_brewfile_setup
 
-  log "Done. Run 'chezmoi init --apply <your-github-username>' if you haven't already applied your dotfiles."
+  log "Applying dotfiles via chezmoi..."
+  chezmoi init --apply conallob
+
+  setup_atuin
+
+  log "Done."
 }
 
 # The tap to auto-trust without asking: this is the author's own tap, as
@@ -145,6 +151,31 @@ tap_custom_taps() {
       fi
     fi
   done < <(grep -oE '^tap "[^"]+"' "$BREWFILE" | sed -E 's/^tap "([^"]+)"/\1/')
+}
+
+# Registers this machine's atuin client (shell history sync) and syncs it.
+# 'atuin register' prompts for a password interactively, so it only does
+# anything useful in a real terminal -- skip it if we're already logged in,
+# or just report a failure (e.g. no tty, already registered elsewhere)
+# rather than aborting the whole bootstrap over it.
+setup_atuin() {
+  if ! command -v atuin >/dev/null 2>&1; then
+    log "atuin not installed; skipping shell history sync setup."
+    return
+  fi
+
+  if [ -f "$HOME/.local/share/atuin/session" ]; then
+    log "atuin already registered; syncing..."
+    atuin sync
+    return
+  fi
+
+  log "Registering atuin account (conall)..."
+  if atuin register -u conall; then
+    atuin sync
+  else
+    log "atuin register failed (no tty, or already registered?). Run 'atuin login -u conall' manually, then 'atuin sync'."
+  fi
 }
 
 # A few Brewfile entries need follow-up steps beyond 'brew bundle install',
