@@ -1,0 +1,17 @@
+# skhd hotkey config — https://github.com/koekeishiya/skhd
+#
+# F13/F14/F15 are sent by the "OmniFocus" layer (layer #3) on the
+# Keyboardio Model 100 — see Chrysalis_Keyboardio-Model-100_layout.json
+# and Chrysalis_Keyboardio-Model-100_layout.schema.md at the repo root.
+# Nothing else on this Mac uses F13-F15, so they're safe as dedicated
+# triggers.
+
+# Reschedule the selected OmniFocus item(s) to today
+f13 : osascript ~/.config/omnifocus-shortcuts/reschedule-today.applescript
+
+# Reschedule the selected OmniFocus item(s) to tomorrow
+f14 : osascript ~/.config/omnifocus-shortcuts/reschedule-tomorrow.applescript
+
+# Reschedule the selected OmniFocus item(s) to the next working day
+# (skips Saturday/Sunday)
+f15 : osascript ~/.config/omnifocus-shortcuts/reschedule-next-workday.applescript
