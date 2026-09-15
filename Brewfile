@@ -65,6 +65,8 @@ brew "rustup"  # Rust toolchain manager — run `rustup-init` after install
 # Container tools
 brew "podman"
 cask "podman-desktop"
+tap "slp/krun"
+brew "krunkit"
 
 # Kubernetes tools
 brew "kubectl"
