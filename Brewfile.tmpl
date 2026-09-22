@@ -145,6 +145,12 @@ mas "Home Assistant", id: 1099568401
 mas "Tailscale", id: 1475387142
 
 ## Personal Use
+{{- if ne (includeTemplate "isWorkAccount" .) "true" }}
 mas "Pixelmator Pro", id: 1289583905
 cask "snapmaker-luban"
 cask "8bitdo-ultimate-software"
+{{- end }}
+{{- if eq (includeTemplate "isWorkAccount" .) "true" }}
+
+{{ (onepasswordDetailsFields "dqjrla5qkksx6ytgpxrgeo7oey").notesPlain.value }}
+{{- end }}

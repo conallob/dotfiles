@@ -191,7 +191,7 @@ Response appears in a split buffer, auto-formatted as JSON.
 
 ## Important Files
 
-- **Brewfile**: Package dependencies for macOS (Homebrew bundle)
+- **Brewfile.tmpl**: Package dependencies for macOS (Homebrew bundle). Templated to gate personal-use apps (`isWorkAccount` false) and append a 1Password secure note (`isWorkAccount` true) — `assimilate.sh` renders it via `chezmoi execute-template` before running `brew bundle`, since Homebrew Bundle can't parse Go template syntax directly
 - **dot_zshrc**: Main ZSH initialization
 - **dot_p10k.zsh**: Powerlevel10k theme configuration
 - **shell.d/**: Shared shell environment and aliases

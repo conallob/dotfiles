@@ -91,16 +91,30 @@ main() {
 
   local script_dir
   script_dir="$(resolve_script_dir)"
-  if [ -z "$script_dir" ] || [ ! -f "$script_dir/Brewfile" ]; then
+  if [ -z "$script_dir" ] || [ ! -f "$script_dir/Brewfile.tmpl" ]; then
     bootstrap_clone_and_reexec "$@"
   fi
-  BREWFILE="$script_dir/Brewfile"
 
   if ! command -v brew >/dev/null 2>&1; then
     install_homebrew
   fi
   require_cmd brew "Install it manually from https://brew.sh"
   require_cmd git "Install it with 'brew install git' and re-run this script."
+
+  # Brewfile.tmpl is a chezmoi template (isWorkAccount-gated entries), so it
+  # can't be fed to 'brew bundle' as-is. Bootstrap chezmoi itself first (it's
+  # also listed in the Brewfile, but we need it before the rest can install),
+  # then render the template to a temp file and bundle that.
+  if ! command -v chezmoi >/dev/null 2>&1; then
+    log "chezmoi not found; installing..."
+    brew install chezmoi
+  fi
+  require_cmd chezmoi "Install it manually from https://chezmoi.io."
+
+  BREWFILE="$(mktemp -t Brewfile.XXXXXX)"
+  trap 'rm -f "$BREWFILE"' EXIT
+  log "Rendering Brewfile.tmpl..."
+  chezmoi --source "$script_dir" execute-template < "$script_dir/Brewfile.tmpl" > "$BREWFILE"
 
   tap_custom_taps
 
