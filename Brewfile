@@ -141,12 +141,10 @@ cask "obs"  # Open Broadcast Software
 mas "Omnifocus", id: 1542143627
 mas "Flycut", id: 442160987
 mas "Remarkable", id: 1276493162
-
-## Personal Use
-
-mas "Pixelmator Pro", id: 1289583905
 mas "Home Assistant", id: 1099568401
 mas "Tailscale", id: 1475387142
 
+## Personal Use
+mas "Pixelmator Pro", id: 1289583905
 cask "snapmaker-luban"
 cask "8bitdo-ultimate-software"
