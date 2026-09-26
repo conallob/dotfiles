@@ -64,13 +64,74 @@ The configuration uses a **unified template approach** where MCP server definiti
 - **home-assistant-taku**: Home Assistant integration via mcp-proxy
 - **jetbrains**: JetBrains IDE integration (GoLand)
 - **omnifocus**: OmniFocus task management
-- **google-sheets**: Google Sheets integration
+- **google-docs** / **google-sheets**: Google Workspace remote MCP servers (registered by a run script, see below)
 - **ssh-wingman**: SSH session management
 
 ### Work Servers (Included when `isWorkAccount` is true)
 
 - **incidentio**: Incident.io integration with 1Password API key
 - **GitLab**: GitLab MCP HTTP integration
+
+### Google Workspace MCP Servers (Docs, Sheets)
+
+Google's first-party remote MCP servers (Developer Preview), authenticated as
+conall@gmail.com through an OAuth client in the GCP project
+`agentic-workspace-hooks` (the same project used for the Cloudflare OAuth
+credentials).
+
+| Server | URL |
+|--------|-----|
+| `google-docs` | `https://docsmcp.googleapis.com/mcp/v1` |
+| `google-sheets` | `https://sheetsmcp.googleapis.com/mcp/v1` |
+
+These are **not** in the `mcp-servers-*.json.tmpl` partials: Claude Code keeps
+an OAuth client secret in the system keychain rather than `~/.claude.json`, and
+Claude Desktop only accepts remote servers as custom connectors. Instead,
+`run_onchange_after_google-workspace-mcp.sh.tmpl` (non-work hosts only)
+registers both with `claude mcp add-json --client-secret` (OAuth callback port
+38917, scopes pinned to the ones below), reading the secret from 1Password at
+run time. It
+re-runs whenever the 1Password item changes.
+
+#### One-time GCP setup
+
+1. Enable the APIs and their MCP services:
+   ```bash
+   gcloud services enable \
+     docs.googleapis.com docsmcp.googleapis.com \
+     sheets.googleapis.com sheetsmcp.googleapis.com \
+     drive.googleapis.com \
+     --project=agentic-workspace-hooks
+   ```
+2. **Google Auth Platform → Data Access → Add or remove scopes → Manually add scopes**:
+   ```
+   https://www.googleapis.com/auth/drive.readonly
+   https://www.googleapis.com/auth/drive.file
+   https://www.googleapis.com/auth/documents.readonly
+   https://www.googleapis.com/auth/documents
+   https://www.googleapis.com/auth/spreadsheets.readonly
+   https://www.googleapis.com/auth/spreadsheets
+   ```
+3. **Audience**: the app is External, so while it's in *Testing*, add
+   conall@gmail.com as a test user. Refresh tokens for a Testing app expire
+   after 7 days, so expect to re-authenticate weekly unless the app is published.
+4. **Clients → Create client → Web application**, with authorized redirect URIs:
+   - `http://localhost:38917/callback` (Claude Code)
+   - `https://claude.ai/api/mcp/auth_callback` (Claude Desktop / claude.ai)
+5. Save the client in 1Password as `google-workspace-mcp-oauth`, with
+   `username` = client ID and `credential` = client secret.
+
+#### Activate
+
+```bash
+chezmoi apply        # runs the registration script
+claude               # then /mcp → google-docs / google-sheets → Authenticate
+```
+
+For Claude Desktop, add each server under **Settings → Connectors → Add custom
+connector**, with the URL above and the same client ID/secret under *Advanced
+settings*. Connectors sync to your claude.ai account, so there's no config file
+to manage.
 
 ## LSP (Language Server Protocol) Configuration
 
