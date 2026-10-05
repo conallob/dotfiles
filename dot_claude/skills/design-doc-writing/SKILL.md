@@ -20,15 +20,17 @@ For reviewing someone else's doc, use `/design-doc-reviewing` instead.
 ## Step 1 — Pick the document type
 
 - **PRD / proposal**: starts a design process by defining a problem statement
-  and some ideas. Use it to:
-  - decide whether a problem is worth exploring further, or fail fast
-  - reach consensus with multiple stakeholders at several points in the design
-  - delegate a full design doc to somebody else (e.g. a new joiner)
-- **HLD (high-level design)**: a short (3-4 page) doc that lets a reader decide
-  quickly whether a proposed direction is right, with researched alternatives
-  and explicit trade-offs. Use it for technology selection, build-vs-buy, or
-  justifying a tool or platform. It is not a spec. **Follow the HLD section
-  below instead of Steps 2-3.**
+  and some ideas. It serves one of two purposes:
+  - **Explore and fail fast**: test an idea and stop early if it is not worth
+    pursuing, before anyone invests in a full design.
+  - **Set direction and delegate**: fix the direction, then hand the full
+    design task to someone else, usually a more junior team member.
+- **HLD (high-level design)**: lets a leader set a direction without going into
+  the weeds of one or more implementation details. It is a short (3-4 page)
+  doc that lets a reader decide quickly whether a proposed direction is right,
+  with researched alternatives and explicit trade-offs. Use it for technology
+  selection, build-vs-buy, or justifying a tool or platform. It is not a spec.
+  **Follow the HLD section below instead of Steps 2-3.**
 - **Detailed design doc**: describes the chosen solution precisely enough to
   implement and review.
 
@@ -88,10 +90,11 @@ Alternatives Considered; project plans need an explicit Risks section.
 
 # HLD workflow
 
-An HLD exists so a reader can decide, quickly, whether the proposed direction
-is right. It is not a spec. The usual failure modes are drafts that are too
-long, too deep into implementation, and hard to skim, so draft tight from the
-first pass instead of cutting later.
+An HLD exists so a leader can set a direction without going into the weeds of
+implementation details, and so a reader can decide quickly whether that
+direction is right. It is not a spec. The usual failure modes are drafts that
+are too long, too deep into implementation, and hard to skim, so draft tight
+from the first pass instead of cutting later.
 
 Differences from the PRD / design doc guidance above:
 
