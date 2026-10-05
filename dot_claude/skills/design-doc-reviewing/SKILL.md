@@ -1,15 +1,16 @@
 ---
 name: design-doc-reviewing
 description: |
-  Review a Product Requirements Doc (PRD / proposal) or a Detailed Design doc.
+  Review a Product Requirements Doc (PRD / proposal), a High-Level Design (HLD)
+  or a Detailed Design doc.
   Use when: the user asks for a review of, or feedback on, a design doc, PRD,
-  proposal or project plan, or wants a reviewer checklist. Covers choosing
+  HLD, proposal or project plan, or wants a reviewer checklist. Covers choosing
   reviewers, review fundamentals, evaluating Alternatives Considered and
   Detailed Design, and handling nits and wordsmithing without blocking authors.
 user-invocable: true
 ---
 
-# /design-doc-reviewing — Review a PRD or Design Doc
+# /design-doc-reviewing — Review a PRD, HLD or Design Doc
 
 Review the doc the user points to (file, link, or pasted text). To write one,
 use `/design-doc-writing`.
@@ -45,7 +46,9 @@ feedback**. Blind LGTMs that favour speed over substance do long-term harm.
 - Is all relevant context captured? Test: will this make sense to a new joiner
   in 12+ months? If it were code, what comments would you ask for?
 - Does it use the right template and sections? Design docs: Background,
-  Detailed Design, Alternatives Considered. Project plans: Risks Identified.
+  Detailed Design, Alternatives Considered. HLDs: Objective (Goals, Non Goals),
+  Problem Statement, Design Thoughts, Alternatives Considered. Project plans:
+  Risks Identified.
 - See an open comment thread you agree with? +1 it rather than piling on.
 
 ### Alternatives Considered
@@ -58,6 +61,21 @@ trade-offs transparent.
   confirm with the owning team.
 - Alternatives carried over from earlier designs should be refreshed so the
   trade-offs still hold.
+
+### HLD
+- Is it short (about 3-4 pages) and skimmable, or has it drifted into spec-level
+  detail that belongs in a later design?
+- Are requirements numbered, with phase (v1 / later) and kind (functional,
+  non-functional, nice to have) tagged, and does the comparison table cover
+  each of them?
+- Are open source versus paid or hosted editions treated as separate
+  alternatives, with claims tied to the right one?
+- Are a platform-native approach and a custom build included, not only
+  products?
+- Are Pros and Cons terse, one point each, with sources linked inline, and
+  unverified or secondhand claims labelled?
+- Do open questions include decisions the author must make, not just facts to
+  look up?
 
 ### Detailed Design
 - Are larger solutions broken into smaller components?
