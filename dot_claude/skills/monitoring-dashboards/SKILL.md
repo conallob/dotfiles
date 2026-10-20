@@ -78,8 +78,14 @@ Same thing in the same place, on every console, so muscle memory transfers.
 - Same colors for the same meaning everywhere: green/red reserved for good/bad,
   one fixed color per well-known series (e.g. 5xx always red).
 - Same units, same time-axis alignment, same naming convention for panels.
-- Use a shared template or library (Jsonnet/Grafonnet, Terraform, or
-  grafanalib) rather than hand-clicked panels, so consistency is enforced by code.
+- Use a shared template or library (Jsonnet/Grafonnet, Terraform, grafanalib, or
+  Jinja2 rendered to JSON) rather than hand-clicked panels, so consistency is
+  enforced by code.
+- Grafana has no native Jinja2 support. Render the templates to dashboard JSON in
+  CI, then load them via file provisioning or the HTTP API. Grafana's own
+  `{{label}}` legend syntax collides with Jinja2's default delimiters, so either
+  wrap those in `{% raw %}...{% endraw %}` or configure custom delimiters
+  (e.g. `variable_start_string="[["`).
 
 ### 6. Graceful Degradation
 
@@ -189,7 +195,7 @@ Use when reviewing or before declaring done.
 - [ ] Every panel has a tooltip/description on how to read it
 - [ ] Layout, colors, units match other consoles
 - [ ] Still useful with missing data / dead backend; "no data" is explicit
-- [ ] Defined as code (Jsonnet/Terraform/JSON in git), not hand-edited
+- [ ] Defined as code (Jsonnet/Jinja2/Terraform/JSON in git), not hand-edited
 
 ## Related Skills
 
