@@ -1,0 +1,199 @@
+---
+name: monitoring-dashboards
+description: |
+  Design, build, and review effective monitoring dashboards ("consoles") in Grafana
+  or similar tools. Covers design principles (one theme per console, visibility in
+  proportion to importance, graphs over raw data, graceful degradation), layout
+  (one wide graph per row, text column on the left), drilldown variables, power-user
+  variables such as num_items, and tooltips for new hires. Use when creating,
+  restructuring, or critiquing a dashboard, or generating Grafana dashboard JSON/
+  Jsonnet/Terraform.
+user-invocable: true
+---
+
+# /monitoring-dashboards — Build Dashboards People Can Actually Use
+
+Apply these rules when creating or reviewing a dashboard. When reviewing, report
+each violated rule with the panel or row it applies to and a concrete fix.
+
+Terminology: "console" and "dashboard" are interchangeable. In Grafana, a
+"drilldown control" is a dashboard **variable**.
+
+## Before You Start
+
+Answer these first; if the user hasn't said, ask:
+
+1. **What is the one theme?** (e.g. "Frontend request health", "Database
+   replication", "Batch pipeline freshness"). If the answer is a list joined by
+   "and", it is several dashboards.
+2. **Who is the audience?** A new hire with no context must be able to use it as
+   easily as an experienced engineer.
+3. **What question does it answer?** (Is it broken? Where is it broken? Why?)
+
+## Design Principles
+
+### 1. One Theme Per Console
+
+"All the things" is not a valid theme. A console covers one service, one
+subsystem, or one user journey. If it needs a second theme, split it and link the
+two with dashboard links that carry the time range and variables across.
+
+### 2. Visibility in Proportion with Importance
+
+The most important signals are the most prominent: top of the page, largest, and
+first in reading order. Typically that means user-facing symptoms (error ratio,
+latency, saturation, freshness) above causes (CPU, queue depth, GC), and causes
+above diagnostics. Don't give a debug counter the same real estate as the SLI.
+
+### 3. Graphs Over Raw Data
+
+Humans (SREs especially) are pattern-matching machines. Prefer time series,
+heatmaps, and histograms to tables and single numbers. A number without history
+can't show a trend, a cliff, a periodic spike, or a before/after.
+
+- Latency distributions: heatmap of the histogram buckets, or p50/p90/p99 lines,
+  never only an average.
+- Use a stat panel only for a value that is meaningful without history (e.g. SLO
+  budget remaining), and give it a sparkline.
+- Tables belong in the text column (see Layout) or behind a drilldown.
+
+### 4. One Theme Per Graph
+
+Each graph answers one question. Don't plot unrelated series together because
+they share a unit.
+
+- Keep series on one panel on one axis, in one unit, with comparable magnitude.
+- No dual-axis graphs. If two series need different axes, they are two graphs.
+- Cap series count to what's readable (roughly <= 10 lines). Use `topk` with the
+  `num_items` variable and aggregate the rest into "other".
+- Put thresholds (SLO, alert line, capacity limit) on the graph as a constant
+  line or threshold region so the reader sees "bad" without knowing the number.
+
+### 5. Consistent Layout
+
+Same thing in the same place, on every console, so muscle memory transfers.
+
+- Same order of rows across consoles (e.g. Traffic -> Errors -> Latency ->
+  Saturation -> Dependencies).
+- Same colors for the same meaning everywhere: green/red reserved for good/bad,
+  one fixed color per well-known series (e.g. 5xx always red).
+- Same units, same time-axis alignment, same naming convention for panels.
+- Use a shared template or library (Jsonnet/Grafonnet, Terraform, or
+  grafanalib) rather than hand-clicked panels, so consistency is enforced by code.
+
+### 6. Graceful Degradation
+
+The dashboard must remain useful when the system is on fire or the data is
+missing.
+
+- A dead or slow backend must not blank the page. Make panels independent; avoid
+  queries that fail entirely when one label value is absent.
+- Distinguish "zero" from "no data". Set "no value" text explicitly and, where it
+  matters, graph `absent()`/`up` so missing data is visible as a problem.
+- Cheap queries first: prefer recording rules over raw `rate()` across huge
+  cardinality, so the dashboard still loads during an incident when everyone has
+  it open.
+- Row-collapse expensive or diagnostic sections by default.
+- Handle label-set changes (new/removed pods, regions) without editing the
+  dashboard: use regex/`=~` on variables rather than hard-coded label values.
+
+## Layout and UX
+
+### One Wide Graph Per Row
+
+Lay graphs out **one per row, full width**, stacked vertically. The point is
+vertical correlation: with every graph sharing the same x-axis, the eye drops
+straight down from a spike in error rate to the latency, saturation, and
+dependency graphs at the same instant.
+
+- Do not tile graphs side by side in a grid.
+- Share the crosshair/tooltip across panels (Grafana: Dashboard settings ->
+  Graph tooltip -> *Shared crosshair* or *Shared tooltip*).
+- Same x-axis range on every panel; no per-panel time overrides.
+
+### Text Column on the Left
+
+Auxiliary text-based data (current values, version/build info, top-N tables,
+links to runbooks, alert status, owners) goes in a **single vertical column on
+the left-hand side**, plumbed into the same time controls as the graphs, so the
+text reflects the selected time range rather than "now".
+
+- Narrow fixed width; graphs take the rest.
+- Query the same variables as the graphs. Anything in the column that ignores the
+  time range or variables is a bug.
+- Order the column by importance, like the graphs.
+
+### Drilldown Controls (Dashboard Variables)
+
+Every console has drilldown variables, each defaulting to **All**, so that it
+works with zero configuration and narrows on demand.
+
+- Typical drilldowns: `cluster`, `namespace`, `service`, `region`, `instance`.
+- Chain them so each narrows the next (`namespace` options depend on `cluster`).
+- Enable multi-select with "Include All"; use `=~"$var"` in queries so All works.
+- Clicking a series or table row should set the matching variable where the
+  tool supports data links.
+- Variables must be in the URL so a filtered view can be shared in an incident.
+
+### Power-User Variables
+
+Add extra controls for advanced users with **sensible defaults**, hidden from the
+main control bar if they clutter it but always settable through URL GET
+arguments (`...&var-num_items=20&...` in Grafana; the URL parameter is
+`var-<name>`).
+
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `num_items` | `10` | N for `topk(N, ...)` panels |
+| `rate_interval` | `5m` | window for `rate()`/`increase()`; or prefer `$__rate_interval` |
+| `quantile` | `0.99` | which latency quantile to plot |
+| `min_threshold` | `0` | hide series below a value |
+
+Example:
+
+```promql
+topk($num_items, sum by (service) (rate(http_requests_total{cluster=~"$cluster", namespace=~"$namespace"}[$__rate_interval])))
+```
+
+A novice never needs to touch these; an experienced engineer can change them in
+the URL during an incident without editing the dashboard.
+
+### Audience: New Hire to Veteran
+
+Assume zero context. Make the dashboard self-explanatory.
+
+- **Tooltips / panel descriptions on every graph** explaining, in a sentence or
+  two, how to read it: what the axes are, what "bad" looks like, what the
+  threshold line means, and what to look at next. Example: *"Fraction of requests
+  returning 5xx. Healthy is under 0.1%. The red line is the SLO. If it is above
+  the line, check Latency below, then the Dependencies row."*
+- Title panels with what they show in plain words, with the unit
+  ("Request error ratio (%)"), not metric names.
+- Put a short text panel at the top: purpose, owner, runbook link, and the
+  escalation path.
+- Link each graph to the underlying alert and the runbook where one exists.
+- Avoid jargon or abbreviations unless defined in the tooltip.
+
+## Checklist
+
+Use when reviewing or before declaring done.
+
+- [ ] One theme; title states it
+- [ ] Most important signal is top and most prominent
+- [ ] Graphs, not raw numbers or tables, for anything with a time dimension
+- [ ] One theme, one unit, one axis per graph; thresholds drawn
+- [ ] One wide graph per row; shared crosshair; same x-axis everywhere
+- [ ] Text column on the left, wired to time range and variables
+- [ ] Drilldown variables default to All, chained, in the URL
+- [ ] Power-user variables (`num_items` etc.) with sensible defaults
+- [ ] Every panel has a tooltip/description on how to read it
+- [ ] Layout, colors, units match other consoles
+- [ ] Still useful with missing data / dead backend; "no data" is explicit
+- [ ] Defined as code (Jsonnet/Terraform/JSON in git), not hand-edited
+
+## Related Skills
+
+- `promql-fmt` — format and lint the PromQL inside panel queries
+- `label-check` — verify queries carry required labels
+- `autogen-promql-tests` / `alert-hysteresis` — if a graph's threshold line
+  corresponds to an alert, keep the alert and its tests in step
