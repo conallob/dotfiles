@@ -78,14 +78,34 @@ Same thing in the same place, on every console, so muscle memory transfers.
 - Same colors for the same meaning everywhere: green/red reserved for good/bad,
   one fixed color per well-known series (e.g. 5xx always red).
 - Same units, same time-axis alignment, same naming convention for panels.
-- Use a shared template or library (Jsonnet/Grafonnet, Terraform, grafanalib, or
-  Jinja2 rendered to JSON) rather than hand-clicked panels, so consistency is
-  enforced by code.
-- Grafana has no native Jinja2 support. Render the templates to dashboard JSON in
-  CI, then load them via file provisioning or the HTTP API. Grafana's own
-  `{{label}}` legend syntax collides with Jinja2's default delimiters, so either
-  wrap those in `{% raw %}...{% endraw %}` or configure custom delimiters
-  (e.g. `variable_start_string="[["`).
+- Define dashboards as code, never hand-clicked panels, so consistency is
+  enforced by the source.
+
+**Ideal: layout is templates plus CSS.** Preferably the layout (row order, the
+left text column, one full-width graph per row, spacing, colors, typography) is
+controlled by Jinja2 templates and CSS, with panels as reusable template
+macros/includes and the stylesheet as the single place that decides how things
+look. A layout change is then one edit in one place.
+
+**Reality: bludgeon the JSON.** Grafana has no native Jinja2 or CSS layout
+engine. Layout is positional JSON (`gridPos` with `x`/`y`/`w`/`h` on a 24-column
+grid), and styling is per-panel options. In an imperfect world, get as close to
+the ideal as the tooling allows:
+
+- Render Jinja2 (or Jsonnet/Grafonnet, grafanalib, Terraform) to dashboard JSON
+  in CI, and load it via file provisioning or the HTTP API. Never commit the
+  rendered JSON as the thing people edit.
+- Compute `gridPos` in the template, not by hand. For one wide graph per row,
+  every graph is `w: 24` (or the full width beside the text column) and `y`
+  accumulates by the previous panel's `h`.
+- Put the shared look (colors, units, thresholds, legend and tooltip options)
+  in one template macro/defaults block applied to every panel, as the stand-in
+  for a stylesheet.
+- Where Grafana can't express something, fall back to a text/HTML panel with
+  inline CSS, and keep that snippet in one shared include.
+- Grafana's `{{label}}` legend syntax collides with Jinja2's default
+  delimiters, so wrap those in `{% raw %}...{% endraw %}` or configure custom
+  delimiters (e.g. `variable_start_string="[["`).
 
 ### 6. Graceful Degradation
 
