@@ -1,0 +1,29 @@
+{{- /* Work and personal accounts keep their SSH signing key in different 1Password accounts */ -}}
+{{- $isWork := eq (includeTemplate "isWorkAccount" .) "true" -}}
+{{- $keyItem := "r74joco2pgzyvl7dkywtbqkt6a" -}}
+{{- if $isWork }}{{ $keyItem = "g6hke7hirfckny5oepuatf5p2i" }}{{ end -}}
+[user]
+	signingkey = {{ (index (onepasswordDetailsFields $keyItem) "public_key").value }}
+	email = {{ if $isWork }}conall@andromeda.ai{{ else }}conall@conall.net{{ end }}
+
+[gpg]
+	format = ssh
+
+{{- if eq .chezmoi.os "darwin" }}
+
+[gpg "ssh"]
+	program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+{{- end }}
+
+[commit]
+	gpgsign = true
+
+{{- if eq .chezmoi.os "darwin" }}
+
+[credential "https://github.com"]
+	helper =
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !/opt/homebrew/bin/gh auth git-credential
+{{- end }}
