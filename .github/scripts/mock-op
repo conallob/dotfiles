@@ -60,6 +60,18 @@ EOF
     "email":        "mock@example.com",
     "user_uuid":    "MOCKAUTOMATIONUUID000000000",
     "account_uuid": "dyz4dyfpyrte2nesqaerlhqlkq"
+  },
+  {
+    "url":          "andromedaclusterinc.1password.com",
+    "email":        "mock-work@example.com",
+    "user_uuid":    "MOCKSIGNINGWORKUUID00000000",
+    "account_uuid": "HFVBN72OBJBTBMXA2VLVX6YL3E"
+  },
+  {
+    "url":          "taku-ie.1password.com",
+    "email":        "mock@example.com",
+    "user_uuid":    "MOCKSIGNINGPERSONALUUID0000",
+    "account_uuid": "JD7WAP3FNZG4DDJPRBYAEG5VJM"
   }
 ]
 EOF
