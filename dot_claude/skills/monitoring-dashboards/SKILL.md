@@ -58,6 +58,9 @@ can't show a trend, a cliff, a periodic spike, or a before/after.
 - Distribution data (e.g. version counts, requests by status class) is best as a
   stacked graph with stacked fill: almost a histogram over time, showing both
   the total and how the mix shifts.
+- Avoid Grafana gauges. They show no history, so they are raw data that takes
+  up a large amount of dashboard real estate. Use a time series with a threshold
+  line instead.
 - Tables belong in the text column (see Layout) or behind a drilldown.
 
 ### 4. One Theme Per Graph
