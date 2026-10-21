@@ -8,6 +8,7 @@
 {{- $keyVault = "way3jp7pq3o64cew37dm7w3hbe" }}
 {{- end -}}
 [user]
+	name = Conall O'Brien
 	signingkey = {{ (index (onepasswordDetailsFields $keyItem $keyVault $keyAccount) "public_key").value }}
 	email = conall@{{ if $isWork }}andromeda.ai{{ else }}conall.net{{ end }}
 
@@ -22,6 +23,16 @@
 
 [commit]
 	gpgsign = true
+
+[branch "master"]
+	# Avoid mere bubbles: http://stevenharman.net/git-pull-with-automatic-rebase
+	rebase = true
+[branch "main"]
+	# Avoid mere bubbles: http://stevenharman.net/git-pull-with-automatic-rebase
+	rebase = true
+
+[rebase]
+	autostash = true
 
 {{- if eq .chezmoi.os "darwin" }}
 
