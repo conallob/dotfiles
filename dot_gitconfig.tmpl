@@ -4,7 +4,7 @@
 {{- if $isWork }}{{ $keyItem = "g6hke7hirfckny5oepuatf5p2i" }}{{ end -}}
 [user]
 	signingkey = {{ (index (onepasswordDetailsFields $keyItem) "public_key").value }}
-	email = {{ if $isWork }}conall@andromeda.ai{{ else }}conall@conall.net{{ end }}
+	email = conall@{{ if $isWork }}andromeda.ai{{ else }}conall.net{{ end }}
 
 [gpg]
 	format = ssh
