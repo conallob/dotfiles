@@ -7,7 +7,7 @@
 #   op document get <uuid> [--account <account>]
 #
 # We return a JSON item with every field name the templates access
-# (credential, hostname, username, notesPlain) populated with recognisable
+# (credential, hostname, username, notesPlain, public_key) populated with recognisable
 # stub values, so chezmoi execute-template can render templates fully.
 
 case "$1" in
@@ -24,7 +24,8 @@ case "$1" in
     {"id": "username",   "label": "username",   "value": "mock-user",        "type": "STRING"},
     {"id": "password",   "label": "password",   "value": "mock-password",    "type": "CONCEALED"},
     {"id": "token",      "label": "token",      "value": "mock-token",       "type": "CONCEALED"},
-    {"id": "notesPlain", "label": "notesPlain", "value": "mock-notes",       "type": "STRING"}
+    {"id": "notesPlain", "label": "notesPlain", "value": "mock-notes",       "type": "STRING"},
+    {"id": "public_key", "label": "public key", "value": "ssh-ed25519 AAAAMOCKPUBLICKEY", "type": "STRING"}
   ]
 }
 EOF
