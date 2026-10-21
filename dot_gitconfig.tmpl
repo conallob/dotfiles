@@ -1,12 +1,11 @@
-{{- /* The SSH signing keys live in 1Password accounts other than the default one chezmoi.toml selects, so pass vault and account explicitly */ -}}
+{{- /* Both SSH signing keys live in the taku-ie 1Password account, not the default one chezmoi.toml selects, so pass the vault and account explicitly */ -}}
 {{- $isWork := eq (includeTemplate "isWorkAccount" .) "true" -}}
+{{- $keyAccount := "JD7WAP3FNZG4DDJPRBYAEG5VJM" -}}
 {{- $keyItem := "r74joco2pgzyvl7dkywtbqkt6a" -}}
 {{- $keyVault := "jyacovhjsr2d4jjrgeomtzyuzm" -}}
-{{- $keyAccount := "JD7WAP3FNZG4DDJPRBYAEG5VJM" -}}
 {{- if $isWork }}
-{{- $keyItem = "g6hke7hirfckny5oepuatf5p2i" }}
-{{- $keyVault = "ioy74udpo4odjq3ecjx2cekpti" }}
-{{- $keyAccount = "HFVBN72OBJBTBMXA2VLVX6YL3E" }}
+{{- $keyItem = "c2svjoybrux4yu62ihcarwdf7e" }}
+{{- $keyVault = "way3jp7pq3o64cew37dm7w3hbe" }}
 {{- end -}}
 [user]
 	signingkey = {{ (index (onepasswordDetailsFields $keyItem $keyVault $keyAccount) "public_key").value }}
