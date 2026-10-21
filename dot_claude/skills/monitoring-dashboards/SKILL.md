@@ -16,8 +16,23 @@ user-invocable: true
 Apply these rules when creating or reviewing a dashboard. When reviewing, report
 each violated rule with the panel or row it applies to and a concrete fix.
 
+These rules come with reasons. Follow them, but not blindly: if the reason
+doesn't apply in a particular case, prefer the best behavior over slavish
+attention to the rules. When you deviate, say why in the panel description or
+the review.
+
 Terminology: "console" and "dashboard" are interchangeable. In Grafana, a
 "drilldown control" is a dashboard **variable**.
+
+## Rationale
+
+Every dashboard balances two audiences. System experts want the data they need
+as quickly and cleanly as possible. Everyone else is not familiar with every
+aspect of the system and needs some way to work out what is going on. A common
+style relieves that tension: experts and casual viewers alike know where to look,
+and a well-defined style can improve the expert view without taking affordances
+away from newcomers. That doesn't mean every dashboard is identical; different
+data is best explored in different ways.
 
 ## Before You Start
 
@@ -69,9 +84,15 @@ Each graph answers one question. Don't plot unrelated series together because
 they share a unit.
 
 - Keep series on one panel on one axis, in one unit, with comparable magnitude.
+- One grouping per graph. A graph with a lot of lines usually conflates two
+  groupings, such as errors by both location and error code. Make two graphs, one
+  by location and one by error code, and use drilldown for further refinement.
 - No dual-axis graphs. If two series need different axes, they are two graphs.
 - Cap series count to what's readable (roughly <= 10 lines). Use `topk` with the
   `num_items` variable and aggregate the rest into "other".
+- Exception: many lines are appropriate when the point is spotting outliers, where
+  a few lines standing out from many is the signal. There is still only one
+  grouping.
 - Put thresholds (SLO, capacity limit) on the graph as a constant
   line or threshold region so the reader sees "bad" without knowing the number.
 
