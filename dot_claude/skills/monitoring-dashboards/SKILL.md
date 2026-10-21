@@ -18,8 +18,9 @@ each violated rule with the panel or row it applies to and a concrete fix.
 
 These rules come with reasons. Follow them, but not blindly: if the reason
 doesn't apply in a particular case, prefer the best behavior over slavish
-attention to the rules. When you deviate, say why in the panel description or
-the review.
+attention to the rules. If a deviation seems warranted, ask for a human
+judgement call instead of deciding alone, and record the outcome and why in the
+panel description or the review.
 
 Terminology: "console" and "dashboard" are interchangeable. In Grafana, a
 "drilldown control" is a dashboard **variable**.
