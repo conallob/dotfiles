@@ -4,7 +4,7 @@ description: |
   Design, build, and review effective monitoring dashboards ("consoles") in Grafana
   or similar tools. Covers design principles (one theme per console, visibility in
   proportion to importance, graphs over raw data, graceful degradation), layout
-  (one wide graph per row, text column on the left), drilldown variables, power-user
+  (one wide graph per row, text column on the right), drilldown variables, power-user
   variables such as num_items, and tooltips for new hires. Use when creating,
   restructuring, or critiquing a dashboard, or generating Grafana dashboard JSON/
   Jsonnet/Terraform.
@@ -55,6 +55,9 @@ can't show a trend, a cliff, a periodic spike, or a before/after.
   never only an average.
 - Use a stat panel only for a value that is meaningful without history (e.g. SLO
   budget remaining), and give it a sparkline.
+- Distribution data (e.g. version counts, requests by status class) is best as a
+  stacked graph with stacked fill: almost a histogram over time, showing both
+  the total and how the mix shifts.
 - Tables belong in the text column (see Layout) or behind a drilldown.
 
 ### 4. One Theme Per Graph
@@ -66,7 +69,7 @@ they share a unit.
 - No dual-axis graphs. If two series need different axes, they are two graphs.
 - Cap series count to what's readable (roughly <= 10 lines). Use `topk` with the
   `num_items` variable and aggregate the rest into "other".
-- Put thresholds (SLO, alert line, capacity limit) on the graph as a constant
+- Put thresholds (SLO, capacity limit) on the graph as a constant
   line or threshold region so the reader sees "bad" without knowing the number.
 
 ### 5. Consistent Layout
@@ -82,7 +85,7 @@ Same thing in the same place, on every console, so muscle memory transfers.
   enforced by the source.
 
 **Ideal: layout is templates plus CSS.** Preferably the layout (row order, the
-left text column, one full-width graph per row, spacing, colors, typography) is
+right-hand text column, one full-width graph per row, spacing, colors, typography) is
 controlled by Jinja2 templates and CSS, with panels as reusable template
 macros/includes and the stylesheet as the single place that decides how things
 look. A layout change is then one edit in one place.
@@ -137,17 +140,19 @@ dependency graphs at the same instant.
   Graph tooltip -> *Shared crosshair* or *Shared tooltip*).
 - Same x-axis range on every panel; no per-panel time overrides.
 
-### Text Column on the Left
+### Text Column on the Right
 
 Auxiliary text-based data (current values, version/build info, top-N tables,
-links to runbooks, alert status, owners) goes in a **single vertical column on
-the left-hand side**, plumbed into the same time controls as the graphs, so the
+links to runbooks, owners) goes in a **single vertical column on
+the right-hand side**, plumbed into the same time controls as the graphs, so the
 text reflects the selected time range rather than "now".
 
 - Narrow fixed width; graphs take the rest.
 - Query the same variables as the graphs. Anything in the column that ignores the
   time range or variables is a bug.
 - Order the column by importance, like the graphs.
+- Don't display alerts (firing state, alert lists) on the dashboard. Alerts link
+  *to* dashboards, not the other way around.
 
 ### Drilldown Controls (Dashboard Variables)
 
@@ -197,7 +202,8 @@ Assume zero context. Make the dashboard self-explanatory.
   ("Request error ratio (%)"), not metric names.
 - Put a short text panel at the top: purpose, owner, runbook link, and the
   escalation path.
-- Link each graph to the underlying alert and the runbook where one exists.
+- Link to the runbook where one exists. Alerts should link to this dashboard;
+  the dashboard doesn't show or link back to alerts.
 - Avoid jargon or abbreviations unless defined in the tooltip.
 
 ## Checklist
@@ -209,9 +215,10 @@ Use when reviewing or before declaring done.
 - [ ] Graphs, not raw numbers or tables, for anything with a time dimension
 - [ ] One theme, one unit, one axis per graph; thresholds drawn
 - [ ] One wide graph per row; shared crosshair; same x-axis everywhere
-- [ ] Text column on the left, wired to time range and variables
+- [ ] Text column on the right, wired to time range and variables
 - [ ] Drilldown variables default to All, chained, in the URL
 - [ ] Power-user variables (`num_items` etc.) with sensible defaults
+- [ ] No alerts displayed; alerts link to the dashboard instead
 - [ ] Every panel has a tooltip/description on how to read it
 - [ ] Layout, colors, units match other consoles
 - [ ] Still useful with missing data / dead backend; "no data" is explicit
@@ -221,5 +228,5 @@ Use when reviewing or before declaring done.
 
 - `promql-fmt` — format and lint the PromQL inside panel queries
 - `label-check` — verify queries carry required labels
-- `autogen-promql-tests` / `alert-hysteresis` — if a graph's threshold line
-  corresponds to an alert, keep the alert and its tests in step
+- `autogen-promql-tests` / `alert-hysteresis` — for the alerts that link to this
+  dashboard; keep them separate from the dashboard itself
