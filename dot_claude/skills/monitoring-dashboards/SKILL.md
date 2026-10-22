@@ -54,6 +54,11 @@ Answer these first; if the user hasn't said, ask:
 subsystem, or one user journey. If it needs a second theme, split it and link the
 two with dashboard links that carry the time range and variables across.
 
+Mandate a theme, not a number of graphs. A fixed "N graphs per page" limit works
+only because it forces prioritisation, which pushes the author back to the
+theme; the theme is the rule. Every added panel and query still slows rendering,
+so each graph has to earn its place.
+
 ### 2. Visibility in Proportion with Importance
 
 The most important signals are the most prominent: top of the page, largest, and
@@ -150,6 +155,12 @@ missing.
 - Row-collapse expensive or diagnostic sections by default.
 - Handle label-set changes (new/removed pods, regions) without editing the
   dashboard: use regex/`=~` on variables rather than hard-coded label values.
+- Dynamic features must fail soft. If a variable query errors, a data link
+  breaks, a plugin is missing, or an HTML/CSS text panel is stripped by
+  sanitisation, the page must still render a usable display, even an ungainly
+  one. Give variables a static fallback (e.g. a constant or custom option) and
+  never put the only copy of a signal behind a dynamic feature. Ugly data is
+  far preferred to no data.
 
 ## Layout and UX
 
