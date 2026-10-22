@@ -114,13 +114,17 @@ Stages: 1. Intake, 2. Research, 3. Draft, 4. Iterate, 5. Verify.
   connector and fill the copy; never edit the original. Read
   `references/google-docs-mechanics.md` before the first Drive or Docs call.
   With no template, use `references/hld-structure.md`.
-- **Use the user's problem statement and requirements as given.** Number the
-  requirements so the comparison table can reference them. Do not invent
-  requirements; do mark which are v1 versus later, functional versus
-  non-functional (e.g. SSO), and nice to have. Users reclassify these during
-  review, so keep the classification easy to change.
+- **Use the user's problem statement and requirements as given.** Do not
+  number the requirements; refer to each by name (for example "the audit log
+  requirement"). Do not invent requirements; do group them as functional,
+  non-functional (e.g. SSO) and nice to have, and mark any that are not v1.
+  Users reclassify these during review, so keep the grouping easy to change.
 - **Named alternatives are mandatory.** If the user names one to research, it
   gets a full entry.
+- **Verify the current state across every instance.** Ask how the thing is
+  done today in each repo or team, not just the main one. Expect variation:
+  custom workflows, manual or laptop processes, shadow tooling. Do not
+  generalise from one example ("we run X from Y") without checking.
 - Ask at most one clarifying question, and only if the answer changes the
   research. Otherwise state the assumption in the doc and in your reply.
 
@@ -145,6 +149,9 @@ blogs, and cite them inline. Always check:
 - **Conflicting or thin evidence.** When sources disagree (a license, a
   version), say so in the doc and make it an open question. Label secondhand
   claims. Non-public pricing is a finding, not a gap to fill with guesses.
+  Treat a vendor's article about a competitor as secondhand even when it is
+  the only source, and label it. If vendor sites cannot be fetched, rely on
+  search excerpts and say so in the Alternatives intro.
 
 Never contact vendors, send enquiries or sign up for anything unless the user
 asks. If an enquiry is the next step, offer to draft it, and note any
@@ -156,19 +163,24 @@ Target 3-4 pages including all alternatives: roughly 1,600-2,000 words plus the
 table. Pageless docs cannot be measured, so estimate from word count and say so.
 Section details are in `references/hld-structure.md`.
 
-- **Goals and Non Goals:** short bullets. Non goals stop scope creep and record
-  deliberate deferrals. "The design must not block X" is the right phrasing for
-  something out of scope but anticipated.
-- **Problem statement:** the user's wording, tightened, then the numbered
-  requirements.
+- **Goals and Non Goals:** short bullets. Put the goal that motivates the
+  change first, and include organisational goals (for example discoverability
+  of changes, governance), not only technical ones. Non goals stop scope creep
+  and record deliberate deferrals. "The design must not block X" is the right
+  phrasing for something out of scope but anticipated.
+- **Problem statement:** the user's wording, tightened, then the requirements
+  as three bold bullets (Functional, Non-functional, Nice to have) with the
+  requirements as sub-bullets. No table and no numbering; say once that all are
+  v1 and tag only the exceptions.
 - **Design thoughts:** proposed direction (one paragraph, including what a
   proof of concept must still prove), architecture bullets, data model,
   delivery phases, open questions. Stay at HLD level; debates such as read
   versus write APIs belong in a later detailed design.
 - **Comparison table:** requirements as rows, candidates as columns, cells of a
-  few words. Number rows to match the requirements list and add non-functional
-  rows (e.g. SSO) at the end. Write "Define ourselves" or "Not verified"
-  instead of leaving cells vague. Drop rows that do not discriminate.
+  few words. Label each row with the requirement's name (no numbers) and add
+  non-functional rows (e.g. SSO) at the end. This is the only table in an
+  HLD. Write "Define ourselves" or "Not verified" instead of leaving cells
+  vague. Drop rows that do not discriminate.
 - **Alternative sections:** a heading, one or two sentences of description with
   key links inline, then two top-level bullets, **Pros** and **Cons**, each
   with terse sub-bullets, one point each. List length is the at-a-glance signal
@@ -191,7 +203,17 @@ whole doc, not only where they pointed:
 - **Skimmability.** Prefer structure (nesting, table rows, bullet counts) over
   prose.
 - **Requirement changes.** Update every place a requirement appears: goals,
-  requirements, table, delivery phases, open questions, pros and cons.
+  requirements, table, delivery phases, open questions, pros and cons. Search
+  by the requirement's name; never refer to one as R1, R2.
+- **Current-state corrections.** When the user corrects a claim about how
+  things work today, carry it to Background, goals, delivery phases (for
+  example an inventory step), open questions, and the cons of the
+  platform-native alternative.
+- **Document comments.** Read them with Drive `read_file_content` and
+  `includeComments: true`; each is anchored to text. Apply the edit without
+  deleting or re-inserting the commented text (to move a bullet, re-create its
+  neighbours around it) so the anchor survives. The connectors cannot reply to
+  or resolve comments; say so and leave the thread for the user.
 - **New alternatives or editions.** Add a table column, a section, and any open
   questions together.
 
@@ -204,8 +226,9 @@ could not verify. Do not claim you checked layout or page count if you did not.
 
 Read the doc back and check: section order matches the template, numbering and
 counts are consistent, every link is on the right phrase, no stray formatting,
-no leftover references to removed content (e.g. a requirement count in an intro
-sentence), and the length target is plausible.
+no leftover R-number references, no leftover references to removed content
+(e.g. a requirement count in an intro sentence), and the length target is
+plausible.
 
 ## HLD output
 
