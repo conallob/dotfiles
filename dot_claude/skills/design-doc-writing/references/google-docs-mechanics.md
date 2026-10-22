@@ -7,13 +7,14 @@ Read this before the first Drive or Docs call. If a `google-workspace` skill is 
 - **Drive `copy_file`:** copy the user's template. Give the copy a descriptive title. Never edit the original.
 - **Drive `read_file_content`:** returns the doc as Markdown. Use it to read content and to verify after edits. It is not index space, and it escapes formatting (bold paragraphs can show as `\*\*text\*\*` even though the doc contains no asterisks). If in doubt, check the `read_doc` JSON for literal `*`.
 - **Docs `read_doc`:** full JSON with indexes and `revisionId`. The result is large and is saved to a file. The saved file is a list whose first item has a `text` field holding a JSON string, so unwrap it: `json.loads(w[0]['text'])['content']`. Write that to a file before using helper scripts.
+- **Drive `create_file` with `text/html`:** converts `<h1>` to `<h3>`, nested `<ul>`, `<table>` and `<a>` natively, which is the fastest way to create a doc. Table header cells come out non-bold, so bold them afterwards.
 - **Docs `update_doc`:** takes `requests` and `writeControl: {requiredRevisionId}`. Pass the revision from your latest read so a concurrent user edit fails loudly instead of corrupting indexes.
 
 The user edits the doc between turns, so always re-read before editing by index.
 
 ## Prefer `replaceAllText` for wording changes
 
-It needs no indexes. Use text unique to the target (add neighboring words until it is), set `tabsCriteria` to the tab, and confirm `occurrencesChanged` is 1 for each request. A `\n` in `replaceText` creates a new paragraph that inherits the original's list formatting, which is the easiest way to add a bullet or numbered item. Text replaced inside a link inherits the link, so avoid replacing linked text unless you restyle afterward.
+It needs no indexes. Use text unique to the target (add neighboring words until it is), set `tabsCriteria` to the tab, and confirm `occurrencesChanged` is 1 for each request. A `\n` in `replaceText` creates a new paragraph that inherits the original's list formatting, which is the easiest way to add a bullet or numbered item. It changes lengths, so it shifts every index below it: do index-based structural edits first, or read again before them. Text replaced inside a link inherits the link, so avoid replacing linked text unless you restyle afterward.
 
 ## Index-based edits
 
@@ -40,6 +41,8 @@ Put one leading `\t` per nesting level in the inserted text, then call `createPa
 
 Numbered lists use `NUMBERED_DECIMAL_ALPHA_ROMAN`.
 
+If you re-bullet paragraphs that already had bullets, their old indent stays and nesting lands one level too deep (level 2, not 1). Run `deleteParagraphBullets`, reset `indentStart` and `indentFirstLine` to 0 with `updateParagraphStyle`, then add the tabs and `createParagraphBullets`.
+
 ## Tables
 
 - **New table:** `docs_index.py new-table --at <endIndex-1 of the preceding paragraph> --data rows.json --tab <tabId> --revision <rev> --bold-header`. Append its requests to your batch after all earlier styling (the table shifts everything after it).
@@ -47,12 +50,21 @@ Numbered lists use `NUMBERED_DECIMAL_ALPHA_ROMAN`.
 - **New row:** `insertTableRow` with `insertBelow: true`, read again, insert text per cell, and set `bold: false` if the row inherited header styling.
 - Keep cell text to a few words. Wide tables of six columns are fine at that length.
 
+## Replacing a table with bullets
+
+Delete exactly `[table startIndex, table endIndex]`, insert the text (with leading tabs for sub-bullets) at the preceding paragraph's `endIndex - 1` starting with a `\n`, bold any group labels, then call `createParagraphBullets` last.
+
+## Comments
+
+Drive `read_file_content` with `includeComments: true` shows each comment inline around its anchored text. The connectors cannot reply to or resolve comments. Do not delete or re-insert commented text, because that detaches the comment; to move a bullet, re-create its neighbours around it.
+
 ## Deleting a final section
 
 Delete from the previous paragraph's `endIndex - 1` to the last paragraph's `endIndex - 1`. Deleting `[start, end]` of the last paragraph is refused.
 
 ## Checks after editing
 
+- Check nesting from the `read_doc` JSON (`bullet.nestingLevel`), not from Drive's Markdown, which flattens it. The JSON is too large to read inline, so save it and inspect it with a short script.
 - Read back with Drive `read_file_content`: headings, list nesting, links on the right phrases, table cells, counts mentioned in prose (for example "the seven requirements").
 - Check `documentStyle.documentFormat.documentMode` in the `read_doc` JSON. If it is `PAGELESS`, page count cannot be measured; estimate from word count and say you could not confirm it. Never claim you checked the rendering unless you did.
 - A person smart chip (for example in an Author field) cannot be edited as text; leave it as is.
