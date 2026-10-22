@@ -1,3 +1,7 @@
 # Ignore markdown documentation files that should stay in the repository
 # but not be applied to the home directory
 *.md
+
+# Claude marketplace and cloud-session bootstrap: live in the repo, not in $HOME
+plugins
+cloud
