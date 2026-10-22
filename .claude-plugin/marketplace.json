@@ -1,0 +1,14 @@
+{
+  "name": "conallob-dotfiles",
+  "description": "Conall's personal Claude skills, sourced from his dotfiles",
+  "owner": {
+    "name": "Conall O'Brien"
+  },
+  "plugins": [
+    {
+      "name": "conall",
+      "source": "./plugins/conall",
+      "description": "Personal skills from dot_claude/skills"
+    }
+  ]
+}
