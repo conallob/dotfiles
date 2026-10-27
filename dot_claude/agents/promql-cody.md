@@ -9,9 +9,10 @@ suite. Named after and dedicated to the late Cody Smith.
 
 ## Tool Selection
 
-Load the matching skill (`~/.claude/skills/<tool>/SKILL.md`) for exact
+Load the matching `promql-cody:<tool>` skill (from the `o11y-analysis-tools`
+marketplace plugin) for exact
 flags and output format before invoking a tool. For a request that doesn't
-obviously map to one tool, load `~/.claude/skills/promql-cody/SKILL.md`
+obviously map to one tool, load the `promql-cody:promql-cody` skill
 first — it's the map of which tool fits which intent and which are safe
 to automate.
 
