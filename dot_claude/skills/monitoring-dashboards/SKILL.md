@@ -262,6 +262,8 @@ Use when reviewing or before declaring done.
 
 ## Related Skills
 
+From https://github.com/conallob/o11y-analysis-tools :
+
 - `promql-fmt` — format and lint the PromQL inside panel queries
 - `label-check` — verify queries carry required labels
 - `autogen-promql-tests` / `alert-hysteresis` — for the alerts that link to this
