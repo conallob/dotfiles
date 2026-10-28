@@ -8,6 +8,16 @@ repo_dir=$(cd "$(dirname "$0")/.." && pwd)
 mkdir -p ~/.claude
 cp "$repo_dir/cloud/CLAUDE.md" ~/.claude/CLAUDE.md || echo "setup: could not install CLAUDE.md"
 
+# Pick up the shared git and shell settings from the clone. include.path keeps the VM's own
+# ~/.gitconfig (identity, harness signing key) intact.
+git config --global --get-all include.path | grep -qxF "$repo_dir/cloud/gitconfig.claude-ai" \
+  || git config --global --add include.path "$repo_dir/cloud/gitconfig.claude-ai" \
+  || echo "setup: could not include gitconfig.claude-ai"
+bashrc_line=". \"$repo_dir/cloud/bashenv.claude-ai\""
+grep -qxF "$bashrc_line" ~/.bashrc 2>/dev/null \
+  || echo "$bashrc_line" >> ~/.bashrc \
+  || echo "setup: could not hook bashenv.claude-ai into ~/.bashrc"
+
 # Register the clone itself as a local marketplace. Adding conallob/dotfiles from
 # GitHub would also clone its submodules, including the private dot_ssh, and fail.
 if command -v claude >/dev/null 2>&1 \

@@ -1,0 +1,14 @@
+# Environment variables for Claude Code cloud sessions, sourced from ~/.bashrc by cloud/setup.sh.
+# A no-op anywhere else: my own machines get their git identity from chezmoi.
+# No templating: the cloud VM has no chezmoi.
+if [ "${CLAUDE_CODE_REMOTE:-}" = true ]; then
+  # CLAUDE_CODE_USER_EMAIL is the Claude login, which tells the work account from the personal one
+  case "${CLAUDE_CODE_USER_EMAIL:-}" in
+    *@andromeda.ai) claude_ai_domain=andromeda.ai ;;
+    *) claude_ai_domain=conall.net ;;
+  esac
+  export GIT_AUTHOR_NAME="Conall O'Brien"
+  export GIT_AUTHOR_EMAIL="conall@${claude_ai_domain}"
+  export GIT_COMMITTER_EMAIL="conall@${claude_ai_domain}"
+  unset claude_ai_domain
+fi
