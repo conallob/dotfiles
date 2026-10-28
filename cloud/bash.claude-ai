@@ -1,3 +1,0 @@
-# Shell settings for Claude cloud sessions, sourced from ~/.bashrc by cloud/setup.sh.
-# Keep this portable: no chezmoi templating, it runs on a VM that has no chezmoi.
-alias vim="vim -X"

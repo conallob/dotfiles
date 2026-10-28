@@ -49,11 +49,18 @@
     }
   },
   "env": {
-    {{- /* Git identity for commits made by Claude */}}
+    {{- /* Env vars (git identity for commits made by Claude) come from cloud/bashenv.claude-ai */}}
     {{- $isWork := eq (includeTemplate "isWorkAccount" .) "true" }}
-    "GIT_AUTHOR_NAME": "Conall O'Brien",
-    "GIT_AUTHOR_EMAIL": "conall@{{ if $isWork }}andromeda.ai{{ else }}conall.net{{ end }}",
-    "GIT_COMMITTER_EMAIL": "conall@{{ if $isWork }}andromeda.ai{{ else }}conall.net{{ end }}"
+    {{- $pairs := list }}
+    {{- range $line := splitList "\n" (include "cloud/bashenv.claude-ai") }}
+    {{- if regexMatch `^export [A-Z_]+="` $line }}
+    {{- $key := regexReplaceAll `^export ([A-Z_]+)=.*$` $line "${1}" }}
+    {{- $value := regexReplaceAll `^export [A-Z_]+="(.*)"$` $line "${1}" }}
+    {{- if $isWork }}{{ $value = replace "@conall.net" "@andromeda.ai" $value }}{{ end }}
+    {{- $pairs = append $pairs (printf "%s: %s" (toJson $key) (toJson $value)) }}
+    {{- end }}
+    {{- end }}
+    {{ join ",\n    " $pairs }}
   },
   "hooks": {
     {{- /* Native system notifications when Claude is waiting for input */}}

@@ -13,10 +13,10 @@ cp "$repo_dir/cloud/CLAUDE.md" ~/.claude/CLAUDE.md || echo "setup: could not ins
 git config --global --get-all include.path | grep -qxF "$repo_dir/cloud/gitconfig.claude-ai" \
   || git config --global --add include.path "$repo_dir/cloud/gitconfig.claude-ai" \
   || echo "setup: could not include gitconfig.claude-ai"
-bashrc_line=". \"$repo_dir/cloud/bash.claude-ai\""
+bashrc_line=". \"$repo_dir/cloud/bashenv.claude-ai\""
 grep -qxF "$bashrc_line" ~/.bashrc 2>/dev/null \
   || echo "$bashrc_line" >> ~/.bashrc \
-  || echo "setup: could not hook bash.claude-ai into ~/.bashrc"
+  || echo "setup: could not hook bashenv.claude-ai into ~/.bashrc"
 
 # Register the clone itself as a local marketplace. Adding conallob/dotfiles from
 # GitHub would also clone its submodules, including the private dot_ssh, and fail.

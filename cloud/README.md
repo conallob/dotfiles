@@ -21,7 +21,7 @@ It registers the clone as a local marketplace and installs the `conall` plugin (
 `dot_claude/skills/` into `~/.claude/skills/` instead.
 
 `setup.sh` also includes `gitconfig.claude-ai` from `~/.gitconfig` (`include.path`) and sources
-`bash.claude-ai` from `~/.bashrc`. `dot_gitconfig.tmpl` pulls in the same `gitconfig.claude-ai`
+`bashenv.claude-ai` from `~/.bashrc`. `dot_gitconfig.tmpl` pulls in the same `gitconfig.claude-ai`
 with chezmoi's `include`, so those git settings are defined once. Keep both files free of
 templating: the VM has no chezmoi.
 
