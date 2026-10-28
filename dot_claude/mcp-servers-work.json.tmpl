@@ -1,11 +1,5 @@
 {{- /* Work Related MCP Servers */ -}}
 {{- if eq (includeTemplate "isWorkAccount" .) "true" -}}
-"incidentio": {
-  "command": "/Users/{{ .chezmoi.username }}/bin/incident-io-mcp-server",
-  "env": {
-    "INCIDENT_IO_API_KEY": "{{ (onepasswordDetailsFields "jqnzasyqfhkqf7iza5vspjwboa").credential.value }}"
-  }
-},
 "obsidian-mcp-tools": {
   "command": "/Users/{{- .chezmoi.username -}}/Documents/Multiverse/.obsidian/plugins/mcp-tools/bin/mcp-server",
   "env": {
