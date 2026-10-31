@@ -20,6 +20,9 @@ evidence, and "what would change X have saved us?" by replaying history.
 This skill is the method. The per-tool flags live in the o11y-analysis-tools
 skills (`alert-hysteresis`, `stale-alerts-analyzer`, ...); load `promql-cody`
 first if available, since it decides which tool and mode (interactive vs. CI) to use.
+The history gives the quantitative evidence; the `review-alerts` skill (from the
+`sre-alerting-guidelines` plugin, https://github.com/conallob/SRE-Alerting-Guidelines)
+gives the qualitative judgement of whether each alert is well designed.
 
 The SQL below is a template adapted from queries that worked in a real analysis,
 but each snippet is **untested in placeholder form**. Substitute the placeholders,
@@ -60,8 +63,10 @@ Confirm with the user before querying (these change the answer):
 - Window length and whether a change date splits it into before/after.
 - Which alerts: all, one team's, or one severity.
 - Goal: cut noise, find dead alerts, or evaluate a specific change.
-- Whether alerting guidelines exist (use an alerting-guidelines skill if available)
-  to judge each alert against.
+- That alerts will also be judged against the SRE Alerting Guidelines (section 5).
+  If the `review-alerts` skill is not installed, install the `sre-alerting-guidelines`
+  plugin from `conallob/SRE-Alerting-Guidelines`; if that is not possible, say the
+  qualitative pass was skipped rather than improvising guidelines.
 
 ## 2. Inventory the rules
 
@@ -316,7 +321,15 @@ archive but "stale" in Prometheus has probably been renamed.
 
 ## 5. Classify and recommend
 
-Per alert, assign one primary verdict, with the number that justifies it:
+First run the `review-alerts` skill over the alerts with the highest volume or
+worst metrics from 3b (not all of them; it fetches the live guide each time, so
+keep the batch small). Its findings (symptom vs. cause, redundancy, error-budget
+thresholds, actionability) explain *why* an alert behaves as the data shows and often
+point at a better fix than retuning, such as deleting a redundant cause-based alert.
+Cite guideline names exactly as that skill reports them, and keep its findings
+separate from the data-driven ones in the sheet.
+
+Then, per alert, assign one primary verdict, with the number that justifies it:
 
 | Verdict | Evidence | Typical action |
 |---|---|---|
@@ -325,6 +338,7 @@ Per alert, assign one primary verdict, with the number that justifies it:
 | Add hysteresis | High `frac_under_5m`; 3c shows large `frac_prevented` | Raise `for:` and/or add `keep_firing_for` |
 | Silence-manager | Many fires collapsing into few episodes (3d) | Enrol in auto-silence; pick gap from sensitivity |
 | Fix the cause | Chronic, long, recurring real incidents | Bug / capacity work, not alerting work |
+| Redesign | Data looks noisy *and* `review-alerts` finds a design flaw (e.g. cause-based, redundant) | Replace or merge per the guideline, then re-measure |
 | Keep | Rare, actionable, short time to ack | No change |
 
 Quote the union saving from 3e, not the sum of 3c and 3d. Prefer the smallest
@@ -350,7 +364,7 @@ concern; keep raw query output separate from judgement so reruns are mechanical:
 - `Per-alert`: 3b metrics joined to the rules inventory (owner, severity, `for:`).
 - `Hysteresis replay`: 3c.
 - `Silence episodes`: 3d, plus 3e overlap.
-- `Recommendations`: verdict, proposed change, justification, owner.
+- `Recommendations`: verdict, proposed change, justification, owner, and the guideline cited (if any).
 - `Before/After`: only for change-evaluation studies.
 
 Lead the summary with total fires, the union saving, and the top 5 alerts by
