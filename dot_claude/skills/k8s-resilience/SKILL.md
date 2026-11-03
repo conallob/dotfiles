@@ -13,6 +13,7 @@ This is about availability and recovery, not security (use a separate review for
 
 - **Toil reduction.** Kubernetes is powerful enough that humans should not have to remember its quirks (drain order, "don't delete that pod", "re-run this after the secret rotates"). The system must be robust to both humans and unexpected events, not rely on people behaving.
 - **Defence in depth.** If two paths are equally good and cost about the same to implement, do both rather than picking one. Examples: preloaded image cache *and* `IfNotPresent`; GitOps `selfHeal` *and* an admission policy; a PDB *and* topology spread; a self-healing control *and* an alert that fires when it fails. Layers should fail independently. Still apply "smallest change" (below) to each layer: depth means redundant mechanisms for the same named failure, not extra settings for failures nobody named.
+- **Trust, but verify.** Assume the platform, operators, charts and people mostly do the right thing, but never rely on that without evidence. A setting is not a guarantee until you have seen it work. Verify the rendered manifest and CRD schema rather than the chart values or docs, verify the live object matches Git, and verify each self-healing path by exercising it (delete the pod, drain the node, revoke the secret) and observing recovery, not by reading the config. Verify the backstop too: confirm the alert actually fires when the self-healing fails.
 
 ## Process
 
@@ -21,7 +22,7 @@ This is about availability and recovery, not security (use a separate review for
 2. **Map each X to the checklist below.** One or more settings per failure mode; skip settings that answer no named failure. For each failure mode, look for a second, independent layer (defence in depth) and include it unless its cost is clearly out of proportion.
 3. **Read the real spec.** Check the rendered manifest (`helm template`) and, for operator CRDs, the CRD schema (`kubectl explain`, or the chart's CRDs). Never assume a CRD field exists.
 4. **Prefer the smallest change** that removes the manual step, per layer. Note the blast radius (which clusters/nodes) and whether pods roll on sync.
-5. **Close the loop**: say how you would test it (delete a pod, drain a node, revoke the secret) and what alert tells you when self-healing is not enough.
+5. **Close the loop**: say how you would test it (delete a pod, drain a node, revoke the secret) and what alert tells you when self-healing is not enough. Where you have cluster access and the user approves, run the test and report what you observed; otherwise mark the change as unverified.
 
 ## Checklist
 
@@ -73,7 +74,8 @@ This is about availability and recovery, not security (use a separate review for
 - Runbooks that say "remember to...". If a human must remember, automate it or enforce it.
 - Flipping a privileged or node-wide change on without stating blast radius.
 - Guessing CRD fields that were not verified.
+- Declaring a workload "self-healing" because the config looks right, without exercising the failure or confirming the alert fires.
 
 ## Output format
 
-Report a table: **Failure mode** | **Today** | **Layers** (primary, plus independent backup) | **Change** | **Blast radius** | **How to test**. Then list what you did not change and why, and any decision the user must make.
+Report a table: **Failure mode** | **Today** | **Layers** (primary, plus independent backup) | **Change** | **Blast radius** | **How to test** | **Verified?** (tested and observed, or not yet). Then list what you did not change and why, and any decision the user must make.
