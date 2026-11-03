@@ -1,0 +1,35 @@
+#!/bin/bash
+# chezmoi modify script for Claude Desktop's claude_desktop_config.json.
+#
+# Claude Desktop rewrites this file itself (preferences, UI state, session
+# grants, ...), so chezmoi manages only the `mcpServers` key and leaves every
+# other key exactly as the app wrote it. chezmoi feeds the current file on
+# stdin and takes the new contents from stdout.
+#
+# - Managed servers (the partials below) are merged over `mcpServers`: they
+#   win on conflict, servers added by hand or by the app are kept.
+# - Removing a server from the partials does NOT remove it from the live file;
+#   delete it from the file by hand (or add a `del(.mcpServers.<name>)` here).
+# - Output has no trailing newline, to match what the app writes, so an
+#   unchanged file produces no diff.
+#
+# https://www.chezmoi.io/user-guide/manage-different-types-of-file/#manage-part-but-not-all-of-a-file
+set -euo pipefail
+
+MCP_SERVERS=$(mktemp)
+trap 'rm -f "$MCP_SERVERS"' EXIT
+
+cat > "$MCP_SERVERS" << 'MCPEOF'
+{
+{{- includeTemplate "dot_claude/mcp-servers-personal.json.tmpl" . | indent 2 }}
+{{- if eq (includeTemplate "isWorkAccount" .) "true" }},
+{{ includeTemplate "dot_claude/mcp-servers-work.json.tmpl" . | indent 2 }}
+{{- end }}
+}
+MCPEOF
+
+INPUT=$(cat)
+[ -z "$INPUT" ] && INPUT="{}"
+echo "$INPUT" | jq -j \
+  --slurpfile servers "$MCP_SERVERS" \
+  '.mcpServers = ((.mcpServers // {}) + $servers[0])'
