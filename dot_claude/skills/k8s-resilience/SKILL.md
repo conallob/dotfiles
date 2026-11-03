@@ -1,6 +1,6 @@
 ---
 name: k8s-resilience
-description: Evaluate and improve a Kubernetes workload so it keeps working, and recovers on its own, regardless of human actions (drains, deletes, edits, rotations) or unexpected events (node loss, pressure, expired credentials). Use when asked to "harden", make resilient or self-healing, or reduce manual intervention for a Deployment, DaemonSet, StatefulSet, Job or operator CRD (e.g. WekaClient), or after an incident where someone had to fix a workload by hand.
+description: Evaluate and improve a Kubernetes workload so it keeps working, and recovers on its own, regardless of human actions (drains, deletes, edits, rotations) or unexpected events (node loss, pressure, expired credentials). Use when asked to "harden", make resilient or self-healing, or reduce manual intervention for a Deployment, DaemonSet, StatefulSet, Job or operator CRD (e.g. WekaClient), or after an incident where someone had to fix a workload by hand. Also covers probes, PodDisruptionBudgets, rollout strategy, load balancer and ingress health checks, and identifying HPA/VPA autoscaling candidates.
 user-invocable: true
 ---
 
@@ -94,6 +94,30 @@ The aim is a check that fails when real users would fail, from where real users 
 - Timeouts and retries: check that LB and Ingress timeouts, idle timeouts and retry budgets are consistent with the app's (idle timeout shorter than the LB's causes intermittent resets) and that retries can't amplify an outage.
 - Detection: alert on LB backends unhealthy or zero healthy, Ingress 5xx rate, certificate expiry, and the remote probe failing. For each alert, the response should be something Kubernetes or the LB does automatically (eject, reroute, roll back) before it is a human.
 
+### Autoscaling (HPA / VPA candidates)
+Humans bumping replica counts or resource requests by hand after a load change or an OOMKill is toil, and a resilience gap. For every workload, decide explicitly: HPA, VPA, both (on different signals), or neither, and record why.
+- **Find candidates from evidence, not guesses.** Look for a fixed replica count with usage that varies over time (HPA candidate), requests far from real usage or CPU throttling or OOMKills (VPA candidate), and incidents where someone scaled or resized by hand. Example PromQL (verify metric and label names against your kube-state-metrics and cAdvisor versions first):
+  - Over-provisioned CPU: `sum by (namespace, pod, container) (rate(container_cpu_usage_seconds_total{container!=""}[1h])) / sum by (namespace, pod, container) (kube_pod_container_resource_requests{resource="cpu"})`
+  - CPU throttling: `rate(container_cpu_cfs_throttled_periods_total[5m]) / rate(container_cpu_cfs_periods_total[5m])`
+  - Memory headroom: `max by (namespace, pod, container) (container_memory_working_set_bytes{container!=""}) / max by (namespace, pod, container) (kube_pod_container_resource_limits{resource="memory"})`
+  - OOMKills: `kube_pod_container_status_last_terminated_reason{reason="OOMKilled"}`
+  - Peak-to-trough load per workload (e.g. `max_over_time` vs `min_over_time` of request rate over a week) shows whether horizontal scaling would pay off.
+- **HPA candidates** (`autoscaling/v2`): stateless, horizontally scalable workloads with 2+ replicas whose load varies, where adding replicas adds capacity.
+  - Pick a signal that tracks load: CPU utilisation is the default; prefer request rate, queue depth or latency (custom/external metrics, or KEDA for event-driven; confirm the CRD) where CPU is a poor proxy. Memory is rarely a good scaling signal because it doesn't fall when load does.
+  - HPA utilisation is measured against `requests`, so requests must be set and realistic. A missing or wrong request makes HPA scale wrongly or not at all.
+  - `minReplicas` is a floor sized for the failure you must survive (at least 2, and enough for zone spread and the PDB), not the cheapest value. If the metrics pipeline fails, HPA holds the current replica count rather than scaling to zero, so the floor is your backstop.
+  - `maxReplicas` bounded by what the cluster, quota and downstream dependencies can take. Scaling out into a shared dependency can turn a spike into an outage.
+  - Set `behavior` deliberately: scale up fast, scale down slowly (`stabilizationWindowSeconds`, `policies`) to avoid flapping and to avoid dropping in-flight work. Scale-down needs graceful shutdown (`preStop`, `terminationGracePeriodSeconds`) and a working `readinessProbe`; startup behaviour needs `startupProbe` so cold pods aren't counted as busy or ready too early.
+  - Don't let GitOps fight the HPA: omit `spec.replicas` from the manifest (or `ignoreDifferences` on it) so `selfHeal` doesn't reset the count on every sync.
+  - Scaling pods needs node capacity: pair with Cluster Autoscaler or Karpenter (or deliberate headroom), or the new replicas just sit `Pending`.
+- **VPA candidates** (`VerticalPodAutoscaler`, an add-on: confirm it is installed and its version and CRD): workloads that can't scale horizontally (singletons, many StatefulSets, leader-elected components), batch and Jobs, and anything whose requests are guesses.
+  - Start with `updateMode: "Off"` to collect recommendations, review them against the evidence above, then move to `Initial` or an applying mode once trusted. Applying modes evict pods to resize (check whether your version supports in-place resize), so they need 2+ replicas and a `PodDisruptionBudget`, or accept the restart.
+  - Constrain it with `resourcePolicy` (`minAllowed`, `maxAllowed`, `controlledResources`) so a bad recommendation can't starve or bloat a pod, and keep requests == limits where Guaranteed QoS is needed.
+  - **Don't run HPA and VPA on the same resource metric** (e.g. both on CPU): they fight. Use VPA for memory (and CPU requests) with HPA on a custom or external metric, or VPA in `Off` mode purely as a right-sizing aid.
+- **Usually neither**: DaemonSets (VPA at most; there is no horizontal axis), workloads whose replica count is fixed by design (sharded, quorum-based, licence-bound), and operator-managed workloads where the operator owns replicas and resources. Check whether the CRD exposes a `scale` subresource before pointing an HPA at it, and prefer the operator's own scaling knobs.
+- **Defence in depth**: HPA with a sensible `minReplicas` floor, plus VPA recommendations for right-sizing, plus node autoscaling, plus a PDB, plus an alert when the HPA is pinned at `maxReplicas` or reports `ScalingLimited` / `AbleToScale=False` or missing metrics (`kube_horizontalpodautoscaler_*`). The alert says when autoscaling isn't enough.
+- **Trust, but verify**: prove it by generating load (or replaying traffic) and watching scale-out, scale-in and the absence of flapping, and by killing the metrics source to confirm the workload holds at its floor.
+
 ### Config and node state
 - GitOps `selfHeal` reverts live edits; confirm it's on for the app and that `ignoreDifferences` doesn't hide the drift you care about.
 - Node-level settings (sysctl, hugepages, modules) should be enforced by a DaemonSet or node config, not set by hand. Privileged pods are a tradeoff: state it and get approval.
@@ -113,6 +137,8 @@ The aim is a check that fails when real users would fail, from where real users 
 - Relying on a single layer of health checking (only `readinessProbe`, or only an external check) when both are cheap.
 - LB or Ingress health checks left on platform defaults that were never confirmed to reflect real app health.
 - Rollout settings (`maxUnavailable`, `minReadySeconds`) that depend on a readiness probe which does not exist or always passes.
+- A hand-set `replicas` or hand-tuned requests on a workload whose load varies, with no HPA/VPA decision recorded.
+- HPA and VPA both acting on CPU or memory for the same workload; an HPA with no requests, `minReplicas: 1` on something that must survive a node loss, or a GitOps-managed `replicas` field fighting the HPA.
 - `system-node-critical` on everything.
 - PDBs that forbid any disruption (`minAvailable` == replicas, `maxUnavailable: 0`, or a single replica with `minAvailable: 1`).
 - Adding every setting "just in case". Each one should answer a named failure mode. (Redundant layers for the *same* named failure are fine; unrelated settings are not.)
@@ -124,4 +150,4 @@ The aim is a check that fails when real users would fail, from where real users 
 
 ## Output format
 
-Report a table: **Failure mode** | **Today** | **Layers** (primary, plus independent backup) | **Change** | **Blast radius** | **How to test** | **Verified?** (tested and observed, or not yet). Then list what you did not change and why, and any decision the user must make.
+Report a table: **Failure mode** | **Today** | **Layers** (primary, plus independent backup) | **Change** | **Blast radius** | **How to test** | **Verified?** (tested and observed, or not yet). Include an **autoscaling candidates** list (workload, HPA / VPA / both / neither, signal, and why). Then list what you did not change and why, and any decision the user must make.
