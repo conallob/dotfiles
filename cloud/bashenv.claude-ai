@@ -8,10 +8,10 @@ if [ "${CLAUDE_CODE_REMOTE:-}" = true ]; then
       claude_ai_domain=andromeda.ai
       # git config files cannot test an env var, so the work signing key is switched on here
       # through GIT_CONFIG_*, which beats the harness's ~/.gitconfig. The key is whichever secret
-      # key setup.sh imported from CLAUDE_AI_GPG_KEY, so rotating it needs no change here. With no
-      # key in the keyring, keep the harness's signing rather than fail every commit.
-      # The harness already uses GIT_CONFIG_COUNT, so append to its entries.
-      claude_ai_gpg_key=$(gpg --list-secret-keys --with-colons 2>/dev/null | awk -F: '/^fpr/{print $10; exit}')
+      # key setup.sh imported from CLAUDE_AI_GPG_KEY (the last one listed, if several), so rotating
+      # it needs no change here. With no key in the keyring, keep the harness's signing rather
+      # than fail every commit. The harness already uses GIT_CONFIG_COUNT, so append to its entries.
+      claude_ai_gpg_key=$(gpg --list-secret-keys --with-colons 2>/dev/null | awk -F: '/^sec/{primary=1} /^fpr/ && primary{fingerprint=$10; primary=0} END{print fingerprint}')
       if [ -n "$claude_ai_gpg_key" ]; then
         claude_ai_n=${GIT_CONFIG_COUNT:-0}
         export "GIT_CONFIG_KEY_$claude_ai_n=gpg.format" "GIT_CONFIG_VALUE_$claude_ai_n=openpgp"

@@ -29,7 +29,8 @@ For the work account, signing with a GPG key (UID `conall@andromeda.ai`) needs t
 environment variable `CLAUDE_AI_GPG_KEY`: the base64 of `gpg --armor --export-secret-keys <key id>`,
 from a key with no passphrase. `setup.sh` imports it, and `bashenv.claude-ai` then points git at the
 imported key, whatever its ID, when `CLAUDE_CODE_USER_EMAIL` ends in `@andromeda.ai`. Without the
-variable the harness's signing stays in place.
+variable the harness's signing stays in place. If the keyring holds several secret keys, the last
+primary key listed wins.
 
 The clone is deliberately shallow and submodule-free. Adding `conallob/dotfiles` from GitHub as a
 marketplace would also clone the private `dot_ssh` submodule, which a cloud VM can't read.
