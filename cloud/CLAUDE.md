@@ -32,6 +32,6 @@
   - Have a terse description that is to the point, with no additional context unless instructed
 
 # Git Usage
-* When performing git operations, all commits must be signed with my SSH signing key (the one in git's `user.signingkey`), not any other SSH key
+* When performing git operations, all commits must be signed with the key configured in git (`user.signingkey`), not any other key: SSH through my ssh-agent when one is available (local or forwarded); in a remote cloud environment with no ssh access, git is configured for GPG signing instead. Never generate or substitute a key
 * When working in a git repository, if the most recently opened PR/MR for the current branch has already been merged and further instructions are given, always create a new branch before making further changes — never stack new commits onto a branch whose PR has already merged
   - Base the new branch on the latest default branch (e.g. `main`)
