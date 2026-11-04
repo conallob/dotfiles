@@ -1,18 +1,18 @@
 # Environment variables for Claude Code cloud sessions, sourced from ~/.bashrc by cloud/setup.sh.
 # A no-op anywhere else: my own machines get their git identity from chezmoi.
 # No templating: the cloud VM has no chezmoi.
-claude_ai_gpg_key=4C84AD91CF8793FF
-
 if [ "${CLAUDE_CODE_REMOTE:-}" = true ]; then
   # CLAUDE_CODE_USER_EMAIL is the Claude login, which tells the work account from the personal one
   case "${CLAUDE_CODE_USER_EMAIL:-}" in
     *@andromeda.ai)
       claude_ai_domain=andromeda.ai
       # git config files cannot test an env var, so the work signing key is switched on here
-      # through GIT_CONFIG_*, which beats the harness's ~/.gitconfig. Only once setup.sh has
-      # imported the key; otherwise keep the harness's signing rather than fail every commit.
+      # through GIT_CONFIG_*, which beats the harness's ~/.gitconfig. The key is whichever secret
+      # key setup.sh imported from CLAUDE_AI_GPG_KEY, so rotating it needs no change here. With no
+      # key in the keyring, keep the harness's signing rather than fail every commit.
       # The harness already uses GIT_CONFIG_COUNT, so append to its entries.
-      if gpg --list-secret-keys "$claude_ai_gpg_key" >/dev/null 2>&1; then
+      claude_ai_gpg_key=$(gpg --list-secret-keys --with-colons 2>/dev/null | awk -F: '/^fpr/{print $10; exit}')
+      if [ -n "$claude_ai_gpg_key" ]; then
         claude_ai_n=${GIT_CONFIG_COUNT:-0}
         export "GIT_CONFIG_KEY_$claude_ai_n=gpg.format" "GIT_CONFIG_VALUE_$claude_ai_n=openpgp"
         export "GIT_CONFIG_KEY_$((claude_ai_n + 1))=user.signingkey" \

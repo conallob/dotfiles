@@ -25,10 +25,11 @@ It registers the clone as a local marketplace and installs the `conall` plugin (
 with chezmoi's `include`, so those git settings are defined once. Keep both files free of
 templating: the VM has no chezmoi.
 
-For the work account, signing with a GPG key (`4C84AD91CF8793FF`, UID `conall@andromeda.ai`) needs the
-environment variable `CLAUDE_AI_GPG_KEY`: the base64 of `gpg --armor --export-secret-keys 4C84AD91CF8793FF`,
-from a key with no passphrase. `setup.sh` imports it, and `bashenv.claude-ai` then points git at it when
-`CLAUDE_CODE_USER_EMAIL` ends in `@andromeda.ai`. Without the variable the harness's signing stays in place.
+For the work account, signing with a GPG key (UID `conall@andromeda.ai`) needs the
+environment variable `CLAUDE_AI_GPG_KEY`: the base64 of `gpg --armor --export-secret-keys <key id>`,
+from a key with no passphrase. `setup.sh` imports it, and `bashenv.claude-ai` then points git at the
+imported key, whatever its ID, when `CLAUDE_CODE_USER_EMAIL` ends in `@andromeda.ai`. Without the
+variable the harness's signing stays in place.
 
 The clone is deliberately shallow and submodule-free. Adding `conallob/dotfiles` from GitHub as a
 marketplace would also clone the private `dot_ssh` submodule, which a cloud VM can't read.
