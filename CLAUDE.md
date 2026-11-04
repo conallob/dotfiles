@@ -189,6 +189,22 @@ GET http://localhost:8080/health HTTP/1.1
 
 Response appears in a split buffer, auto-formatted as JSON.
 
+## cloud/ — Claude Code Cloud Sessions
+
+`cloud/` and `plugins/conall/` set up Claude Code cloud sessions (claude.ai/code, mobile), which run on a fresh VM with no chezmoi. See `cloud/README.md`.
+
+### Changes only reach cloud sessions after the environment's setup script is edited
+
+The environment caches the result of its **Setup script** (including the `/opt/conallob-dotfiles` clone) and only re-runs it when the script's text changes. After merging anything under `cloud/` or `plugins/conall/`, edit the pasted script in the environment settings (cloud environment menu, then Edit), for example by changing a `# rerun` comment line, then start a new session. A session started without that edit boots from the old snapshot, however long ago the merge was.
+
+Check a session got the new version: the session's setup list shows a "Ran setup script" step, and `git -C /opt/conallob-dotfiles log --oneline -1` shows the merge commit.
+
+### Gotchas
+
+- The setup script cannot read the environment's saved variables or secrets (e.g. `CLAUDE_AI_GPG_KEY`). The session can.
+- The tool's shell does not source `~/.bashrc`, so `cloud/bashenv.claude-ai` does not reach commands Claude runs. The `conall` plugin's SessionStart hook runs in the session and can, which is why work-account GPG signing lives there.
+- The harness resets `GIT_CONFIG_*` for each command. Persistent git settings go in the global git config.
+
 ## Important Files
 
 - **Brewfile.tmpl**: Package dependencies for macOS (Homebrew bundle). Templated to gate personal-use apps (`isWorkAccount` false) and append a 1Password secure note (`isWorkAccount` true) — `assimilate.sh` renders it via `chezmoi execute-template` before running `brew bundle`, since Homebrew Bundle can't parse Go template syntax directly
