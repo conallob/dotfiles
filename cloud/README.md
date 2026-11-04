@@ -27,8 +27,8 @@ templating: the VM has no chezmoi.
 
 For the work account, signing with a GPG key (UID `conall@andromeda.ai`) needs the
 environment variable `CLAUDE_AI_GPG_KEY`: the base64 of `gpg --armor --export-secret-keys <key id>`,
-from a key with no passphrase. `setup.sh` imports it, and `bashenv.claude-ai` then points git at the
-imported key, whatever its ID, when `CLAUDE_CODE_USER_EMAIL` ends in `@andromeda.ai`. Without the
+from a key with no passphrase. `bashenv.claude-ai` imports it on the first shell start (the setup script cannot read the
+environment's variables) and points git at the imported key, whatever its ID, when `CLAUDE_CODE_USER_EMAIL` ends in `@andromeda.ai`. Without the
 variable the harness's signing stays in place. If the keyring holds several secret keys, the last
 primary key listed wins. Use a primary-only key: the lookup reads primary fingerprints only, so avoid
 subkeys, which would leave gpg to choose the signing key.
