@@ -18,13 +18,6 @@ grep -qxF "$bashrc_line" ~/.bashrc 2>/dev/null \
   || echo "$bashrc_line" >> ~/.bashrc \
   || echo "setup: could not hook bashenv.claude-ai into ~/.bashrc"
 
-# Import my work GPG signing key from the environment (base64 of `gpg --armor --export-secret-keys`).
-# bashenv.claude-ai switches git over to it once it is in the keyring.
-if [ -n "${CLAUDE_AI_GPG_KEY:-}" ]; then
-  printf '%s' "$CLAUDE_AI_GPG_KEY" | base64 -d | gpg --batch --import >/dev/null 2>&1 \
-    || echo "setup: could not import CLAUDE_AI_GPG_KEY"
-fi
-
 # Register the clone itself as a local marketplace. Adding conallob/dotfiles from
 # GitHub would also clone its submodules, including the private dot_ssh, and fail.
 if command -v claude >/dev/null 2>&1 \
