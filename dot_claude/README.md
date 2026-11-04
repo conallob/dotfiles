@@ -11,7 +11,7 @@ This directory contains unified configuration for both **Claude Code** (CLI) and
 | `config.json.tmpl` | MCP servers + LSP configuration | Claude Code (CLI) |
 | `settings.json.tmpl` | Basic CLI settings | Claude Code (CLI) |
 | `plugins/config.json.tmpl` | Plugin-specific settings | Claude Code plugins |
-| `../Library/.../claude_desktop_config.json.tmpl` | MCP server configuration | Claude Desktop (GUI) |
+| `../Library/.../modify_private_claude_desktop_config.json.tmpl` | MCP server configuration (modify script: manages only `mcpServers`) | Claude Desktop (GUI) |
 
 ### Shared MCP Server Templates
 
@@ -209,8 +209,10 @@ op item get "Item Name" --format json
 # Test Claude Code config
 chezmoi execute-template < dot_claude/config.json.tmpl | jq .
 
-# Test Claude Desktop config
-chezmoi execute-template < Library/private_Application\ Support/private_Claude/claude_desktop_config.json.tmpl | jq .
+# Test Claude Desktop config. This is a modify script, so execute-template
+# renders a shell script, not JSON; use chezmoi cat to see the merged result
+# for the live file.
+chezmoi cat ~/Library/Application\ Support/Claude/claude_desktop_config.json | jq .
 ```
 
 ### Apply Configuration
@@ -274,7 +276,7 @@ chezmoi execute-template '{{ includeTemplate "isWorkAccount" . }}'
 | `dot_claude/config.json.tmpl` | `~/.claude/config.json` |
 | `dot_claude/settings.json.tmpl` | `~/.claude/settings.json` |
 | `dot_claude/plugins/config.json.tmpl` | `~/.claude/plugins/config.json` |
-| `Library/.../claude_desktop_config.json.tmpl` | `~/Library/Application Support/Claude/claude_desktop_config.json` |
+| `Library/.../modify_private_claude_desktop_config.json.tmpl` | `~/Library/Application Support/Claude/claude_desktop_config.json` (only the `mcpServers` key is managed) |
 
 ## References
 

@@ -113,7 +113,9 @@ to confirm field names without exposing values in this file.
 
 ### Claude Desktop MCP Configuration
 
-The main MCP configuration is at `Library/private_Application Support/private_Claude/claude_desktop_config.json.tmpl`:
+The main MCP configuration is at `Library/private_Application Support/private_Claude/modify_private_claude_desktop_config.json.tmpl`:
+- This is a chezmoi **modify script** ([manage part but not all of a file](https://www.chezmoi.io/user-guide/manage-different-types-of-file/#manage-part-but-not-all-of-a-file)), not a whole-file template. Claude Desktop rewrites `claude_desktop_config.json` itself (preferences, UI state, grants), so chezmoi owns only the `mcpServers` key and leaves everything else as the app wrote it. Managed servers are merged over the live `mcpServers` (managed wins, hand-added servers are kept); removing a server from the partials does not remove it from the live file.
+- Preview what it would do with `chezmoi diff ~/Library/Application\ Support/Claude/claude_desktop_config.json`, or the full result with `chezmoi cat` on the same path. `chezmoi execute-template` renders the script, not the JSON.
 - Contains multiple MCP servers (Obsidian, OmniFocus, Home Assistant, JetBrains, incident.io, ssh-wingman)
 - Work-specific MCPs are conditionally included based on username
 - Custom MCPs installed via personal Homebrew tap: `conallob/tap`
