@@ -39,6 +39,7 @@ Files and directories use chezmoi's special prefix naming:
 Files with `.tmpl` extension are processed by chezmoi using Go templates:
 - **1Password Integration**: Uses `onepasswordDetailsFields` and `onepasswordDocument` functions to inject secrets
 - **Conditional Logic**: `{{- if eq (includeTemplate "isWorkAccount" .) "true" }}` gates work-specific configurations. `isWorkAccount` is a shared template partial (`.chezmoitemplates/isWorkAccount`) computed by checking whether the hostname starts with `andromeda` (case-insensitive), rather than checking username
+- **Split partials**: MCP servers (`dot_claude/mcp-servers-{personal,work}.json.tmpl`) and Claude Code skill marketplaces (`dot_claude/skill-marketplaces-{common,work}.json.tmpl`) are kept in separate partials and pulled in with `includeTemplate`. Put machine-independent entries in the common/personal partial and work-only entries in the work partial; the caller gates the work partial on `isWorkAccount` and handles the joining comma. The skill-marketplace partials are listed in `.chezmoiignore` so they are not deployed as stray files under `~/.claude/`
 - **JSON Template Files**: Files ending in `.json.tmpl` use Go `text/template` syntax:
   - Use `{{/* comment */}}` for template comments (not JSON comments)
   - Be mindful of trailing whitespace in the rendered output - use `{{-` and `-}}` to trim whitespace

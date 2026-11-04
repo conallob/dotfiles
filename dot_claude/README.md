@@ -20,6 +20,17 @@ This directory contains unified configuration for both **Claude Code** (CLI) and
 | `mcp-servers-personal.json.tmpl` | Personal & third-party MCP servers (always included) |
 | `mcp-servers-work.json.tmpl` | Work-specific MCP servers (included when `isWorkAccount` is true) |
 
+### Skill Marketplace Templates
+
+The `extraKnownMarketplaces` block in `settings.json.tmpl` is assembled from two partials, the same way the MCP servers are:
+
+| File | Description |
+|------|-------------|
+| `skill-marketplaces-common.json.tmpl` | Marketplaces for every machine (`conallob`, `o11y-analysis-tools`, `ponytail`, `superpowers`, `beads`) |
+| `skill-marketplaces-work.json.tmpl` | Work-account marketplaces (included when `isWorkAccount` is true): `andromeda-ai-skills` (`andromeda-ai/ai-skills`) |
+
+The key of each entry is the marketplace `name` from its `.claude-plugin/marketplace.json`, which is also the suffix used in `enabledPlugins` (`<plugin>@<marketplace>`). Registering a marketplace does not enable any of its plugins; add those to `enabledPlugins` separately.
+
 ## Architecture
 
 The configuration uses a **unified template approach** where MCP server definitions are maintained once and shared across both Claude Code and Claude Desktop:

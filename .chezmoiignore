@@ -5,3 +5,6 @@
 # Claude marketplace and cloud-session bootstrap: live in the repo, not in $HOME
 plugins
 cloud
+
+# JSON fragments that are only included by dot_claude/settings.json.tmpl, never deployed
+.claude/skill-marketplaces-*.json
