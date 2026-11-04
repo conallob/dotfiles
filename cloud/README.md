@@ -20,6 +20,19 @@ It registers the clone as a local marketplace and installs the `conall` plugin (
 `~/.claude/CLAUDE.md` from `CLAUDE.md` in this directory. If the plugin install fails it copies
 `dot_claude/skills/` into `~/.claude/skills/` instead.
 
+`setup.sh` also includes `gitconfig.claude-ai` from `~/.gitconfig` (`include.path`) and sources
+`bashenv.claude-ai` from `~/.bashrc`. `dot_gitconfig.tmpl` pulls in the same `gitconfig.claude-ai`
+with chezmoi's `include`, so those git settings are defined once. Keep both files free of
+templating: the VM has no chezmoi.
+
+For the work account, signing with a GPG key (UID `conall@andromeda.ai`) needs the
+environment variable `CLAUDE_AI_GPG_KEY`: the base64 of `gpg --armor --export-secret-keys <key id>`,
+from a key with no passphrase. `setup.sh` imports it, and `bashenv.claude-ai` then points git at the
+imported key, whatever its ID, when `CLAUDE_CODE_USER_EMAIL` ends in `@andromeda.ai`. Without the
+variable the harness's signing stays in place. If the keyring holds several secret keys, the last
+primary key listed wins. Use a primary-only key: the lookup reads primary fingerprints only, so avoid
+subkeys, which would leave gpg to choose the signing key.
+
 The clone is deliberately shallow and submodule-free. Adding `conallob/dotfiles` from GitHub as a
 marketplace would also clone the private `dot_ssh` submodule, which a cloud VM can't read.
 

@@ -1,0 +1,15 @@
+# Git settings shared by my machines and Claude cloud sessions.
+# Included by dot_gitconfig.tmpl (chezmoi `include`) and by cloud/setup.sh (git include.path).
+# Identity, signing and credentials stay out: the cloud harness sets its own signing key.
+[branch "master"]
+	# Avoid mere bubbles: http://stevenharman.net/git-pull-with-automatic-rebase
+	rebase = true
+[branch "main"]
+	# Avoid mere bubbles: http://stevenharman.net/git-pull-with-automatic-rebase
+	rebase = true
+
+[push]
+	autoSetupRemote = true
+
+[rebase]
+	autostash = true

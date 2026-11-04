@@ -24,19 +24,7 @@
 [commit]
 	gpgsign = true
 
-[branch "master"]
-	# Avoid mere bubbles: http://stevenharman.net/git-pull-with-automatic-rebase
-	rebase = true
-[branch "main"]
-	# Avoid mere bubbles: http://stevenharman.net/git-pull-with-automatic-rebase
-	rebase = true
-
-[push]
-	autoSetupRemote = true
-
-[rebase]
-	autostash = true
-
+{{ include "cloud/gitconfig.claude-ai" }}
 {{- if eq .chezmoi.os "darwin" }}
 
 [credential "https://github.com"]
