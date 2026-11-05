@@ -26,7 +26,7 @@ The `extraKnownMarketplaces` block in `settings.json.tmpl` is assembled from two
 
 | File | Description |
 |------|-------------|
-| `skill-marketplaces-common.json.tmpl` | Marketplaces for every machine (`conallob`, `o11y-analysis-tools`, `ponytail`, `superpowers`, `beads`) |
+| `skill-marketplaces-common.json.tmpl` | Marketplaces for every machine (`conall` (`conallob/dotfiles`), `conallob`, `o11y-analysis-tools`, `ponytail`, `superpowers`, `beads`) |
 | `skill-marketplaces-work.json.tmpl` | Work-account marketplaces (included when `isWorkAccount` is true): `andromeda` (`andromeda-ai/ai-skills`) |
 
 The key of each entry is the marketplace name, which is also the suffix used in `enabledPlugins` (`<plugin>@<marketplace>`). It normally matches the `name` in the marketplace's `.claude-plugin/marketplace.json`; the work marketplace is keyed `andromeda`, so set `name` to `andromeda` in `andromeda-ai/ai-skills` as well (it is currently `andromeda-ai-skills`). Registering a marketplace does not enable any of its plugins; add those to `enabledPlugins` separately.
