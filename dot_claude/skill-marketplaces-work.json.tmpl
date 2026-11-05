@@ -1,0 +1,9 @@
+{{- /* Work account skill / plugin marketplaces (short name, used as the marketplace part of plugin@marketplace) */ -}}
+{{- if eq (includeTemplate "isWorkAccount" .) "true" -}}
+"andromeda": {
+  "source": {
+    "source": "github",
+    "repo": "andromeda-ai/ai-skills"
+  }
+}
+{{- end -}}

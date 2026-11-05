@@ -17,36 +17,10 @@
     "promql-cody@o11y-analysis-tools": true
   },
   "extraKnownMarketplaces": {
-    "conallob": {
-      "source": {
-        "source": "github",
-        "repo": "conallob/SRE-Alerting-Guidelines"
-      }
-    },
-    "o11y-analysis-tools": {
-      "source": {
-        "source": "github",
-        "repo": "conallob/o11y-analysis-tools"
-      }
-    },
-    "ponytail": {
-      "source": {
-        "source": "github",
-        "repo": "dietrichgebert/ponytail"
-      }
-    },
-    "superpowers": {
-      "source": {
-        "source": "github",
-        "repo": "smartwatermelon/superpowers-marketplace"
-      }
-    },
-    "beads": {
-      "source": {
-        "source": "github",
-        "repo": "gastownhall/beads"
-      }
-    }
+{{ includeTemplate "dot_claude/skill-marketplaces-common.json.tmpl" . | trim | indent 4 }}
+{{- if eq (includeTemplate "isWorkAccount" .) "true" }},
+{{ includeTemplate "dot_claude/skill-marketplaces-work.json.tmpl" . | trim | indent 4 }}
+{{- end }}
   },
   "env": {
     {{- /* Git identity for commits made by Claude */}}
