@@ -89,6 +89,9 @@ cask "ghostty"
 brew "tmux"
 brew "zellij"
 
+# Hotkey automation (keyboard-triggered OmniFocus scripts, etc.)
+brew "skhd"
+
 # ZSH & Shell Environment
 
 brew "atuin"
