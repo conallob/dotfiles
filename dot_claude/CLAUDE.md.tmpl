@@ -47,6 +47,10 @@
   - This keeps history clean and allows a subsequent PR/MR to be opened for the new work
   - Base the new branch on the latest default branch (e.g. `main`)
   - In effect, this produces a stacked-diff workflow: each PR/MR builds on the previous, already-merged one rather than piling unrelated changes onto a single long-lived branch
+* Don't request approval to create a branch — branches are cheap to remove again if not needed
+* When making larger changes across a code base, use stacked PRs/MRs
+  - Limit a single stack to 4 - 5 PRs/MRs
+  - If the work needs more, create a second stack instead of scoping the PRs in the first stack to be larger
 
 # Agents
 
