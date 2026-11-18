@@ -11,7 +11,7 @@ jobs:
     name: YAML
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install yamllint
         run: pip install yamllint
@@ -39,7 +39,7 @@ jobs:
     name: JSON
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Validate JSON files
         run: |
@@ -67,7 +67,7 @@ jobs:
     name: Templates
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install chezmoi
         run: curl -fsLS https://chezmoi.io/get | sh -s -- -b /usr/local/bin
@@ -156,7 +156,7 @@ jobs:
     name: Shell
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install shellcheck
         run: sudo apt-get install -y shellcheck
@@ -226,7 +226,7 @@ jobs:
     name: vimrc
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install vim
         run: sudo apt-get install -y --no-install-recommends vim
@@ -278,7 +278,7 @@ jobs:
     name: UltiSnips snippets
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Validate snippet structure
         run: python3 .github/scripts/check-snippets.py dot_vim/UltiSnips
