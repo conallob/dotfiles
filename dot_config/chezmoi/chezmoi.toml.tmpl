@@ -3,5 +3,10 @@
   autoCommit = true
 [onepassword]
   command = "op"
+{{- if eq .chezmoi.os "linux" }}
+  # Linux machines use the homelab 1Password Connect server (OP_CONNECT_HOST is set in shell.d/env.Linux)
+  mode = "connect"
+{{- else }}
   mode = "account"
 	account = {{ if $isWorkAccount }}"FUJ74MTVQVCN5DXVK4PSF5HKU4"{{ else }}"ZVA4BFN3HZDBJM2HNAKREAS22M"{{ end }}
+{{- end }}
