@@ -8,3 +8,9 @@ cloud
 
 # JSON fragments that are only included by dot_claude/settings.json.tmpl, never deployed
 .claude/skill-marketplaces-*.json
+
+# Library/ is macOS-only (Claude Desktop MCP config, ghostty, LaunchAgents):
+# never apply it on Linux or FreeBSD
+{{ if ne .chezmoi.os "darwin" -}}
+Library
+{{ end -}}
