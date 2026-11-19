@@ -4,8 +4,8 @@ argument-hint: "[--repo owner/name] [--author login] [--branch-prefix prefix] [-
 ---
 
 Produce a list of my open pull requests that I can paste into Slack to ask for review.
-This command only prints text. Never post to Slack and never comment on, approve, or edit
-any PR.
+This command prints text. Never send a Slack message and never comment on, approve, or edit
+any PR. The only optional Slack action is creating an unsent draft (see Slack draft below).
 
 ## Arguments
 
@@ -18,6 +18,7 @@ Parse `$ARGUMENTS` (all optional):
 - `--exclude a,b,c`: PR numbers or title/branch substrings to leave out. There are no
   default exclusions: only exclude what is passed here.
 - `--status`: append a terse blocker note to a PR (see Status below). Off by default.
+- `--slack <link or channel name>`: also create a Slack draft (see Slack draft below).
 
 ## Find the PRs
 
@@ -65,3 +66,10 @@ PRs with nothing blocking.
 Print one line, then the list in a single fenced code block so it copies cleanly. The line
 says how many PRs were included, which were excluded (by number), and any fallback used
 (e.g. Linear unavailable). Print nothing else. If no PRs match, say so in that one line.
+
+## Slack draft (optional)
+
+Only when `--slack` is given a Slack link or a channel name, and Slack tools are available
+(load them with ToolSearch), create a **draft** of the same list in that channel or thread.
+Never send it: I review and send it myself. If no Slack tools are available, or the draft
+cannot be created, print the list as usual and say so in the summary line.
