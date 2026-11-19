@@ -1,0 +1,5 @@
+# Include fragmented configs
+Include ~/.ssh/config.d/*
+
+# Include configs managed by 1Password
+Include ~/.ssh/1Password/config
