@@ -1,6 +1,6 @@
 ---
 description: Print a Slack-pasteable list of my open PRs awaiting review, grouped by umbrella effort
-argument-hint: "[--repo owner/name] [--author login] [--branch-prefix prefix] [--exclude 123,substring] [--status]"
+argument-hint: "[--repo owner/name] [--author login] [--branch-prefix prefix] [--exclude 123,substring] [--status] [--slack link-or-channel]"
 ---
 
 Produce a list of my open pull requests that I can paste into Slack to ask for review.
