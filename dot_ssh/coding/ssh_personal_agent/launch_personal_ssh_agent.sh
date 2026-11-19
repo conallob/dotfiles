@@ -9,5 +9,5 @@
 /usr/bin/ssh-agent >~/.ssh/personal-ssh-agent 
 source ~/.ssh/personal-ssh-agent
 # SSH key should be named after the hostname of the device
-/usr/bin/ssh-add -K .ssh/$(hostname -s )
+/usr/bin/ssh-add -K ".ssh/$(hostname -s)"
 
