@@ -84,10 +84,15 @@ reacts to that keystroke and performs the actual application logic.
 
 Implemented using that pattern:
 
-- **Activator**: `layer0[6]` (physical key previously bound to `LEDEffect
-  Next`, code `17152` — a cosmetic, rarely-used key) is now
-  `ShiftToLayer(3)` (`code 17453`). Hold it to momentarily shift into the
-  OmniFocus layer; release to fall back to whatever layer was active.
+- **Activator**: the base layer has two physical keys bound to
+  `ShiftToLayer(2)` (bottom row, innermost position of each half,
+  flanking the two Shift keys) — a deliberate left/right duplicate so the
+  Fn-equivalent layer is reachable from either hand. The right-hand one
+  (`layer0[57]`) is now `ShiftToLayer(3)` (`code 17453`) instead; the
+  left-hand one (`layer0[54]`) still reaches layer 2. `LEDEffect Next`
+  (`layer0[6]`) was **not** touched — it stays in everyday use. Hold
+  `layer0[57]` to momentarily shift into the OmniFocus layer; release to
+  fall back to whatever layer was active.
 - **Actions**: on layer 3, the `1`/`2`/`3` key positions (`layer3[1..3]`)
   are bound to the standalone HID keys `F13`/`F14`/`F15` (codes
   `104`/`105`/`106`) — real, unused-by-macOS keys, not macros. Everything
@@ -101,6 +106,6 @@ Implemented using that pattern:
   skhd` (added to `Brewfile`) and macOS Accessibility permission for
   `skhd`; start it with `brew services start skhd`.
 
-To revert: restore `layer0[6]` to the `LEDEffect Next` binding and the
-`layer3[1..3]` entries to `Transparent` (git history has the exact prior
-values), then remove/disable the skhd config.
+To revert: restore `layer0[57]` to `ShiftToLayer(2)` and the `layer3[1..3]`
+entries to `Transparent` (git history has the exact prior values), then
+remove/disable the skhd config.
