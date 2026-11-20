@@ -2,12 +2,12 @@
 name: status-update
 description: |
   Compile and format a periodic (usually weekly) status update for a project or effort,
-  from the previous update, the issue tracker and GitHub, and save it as a Slack draft
+  from the previous update, the issue tracker and source control, and save it as a Slack draft
   for the user to review and send. Never sends. Works interactively or unattended in a
   scheduled session with nobody to escalate to.
   Use when: the user asks for a status update, weekly update, project update or
   "what landed this week" write-up, or a scheduled task invokes it with project inputs.
-  Takes the project specifics (channel, tracker query, umbrella issues, repos, audience)
+  Takes the project specifics (channel, tracker system and query, source control host and org, repos, audience)
   as inputs, so the same skill serves any project.
 user-invocable: true
 ---
@@ -17,7 +17,7 @@ user-invocable: true
 Draft a status update for one project or effort, in the same shape as the previous
 update, and save it as a **Slack draft**. The user reviews and sends it themselves.
 
-**Never send the message. Never post anywhere else. Never edit the tracker or GitHub.**
+**Never send the message. Never post anywhere else. Never edit the tracker or source control.**
 This skill is read-only apart from saving one draft.
 
 ## Inputs
@@ -28,11 +28,13 @@ described in "Interactive vs scheduled".
 | Input | Meaning | Example |
 |-------|---------|---------|
 | `project` | Display name | Project Phoenix |
-| `author` | Whose voice; whose update it is; GitHub handle | Jane Doe, `janedoe` |
+| `author` | Whose voice; whose update it is; their handle in the source control system | Jane Doe, `janedoe` |
 | `channel` | Slack channel name and id to read and to save the draft in | #project-phoenix, C0123456789 |
 | `post_marker` | First line of the author's previous updates, used to find them | `Weekly Status Update:` |
-| `tracker_query` | Which tracker issues are in scope: label/team and umbrella issues whose children count | Linear label `phoenix`, team Platform, umbrellas PLT-100 and PLT-200 |
-| `repos` | GitHub repos to check for PRs (read-only; never clone) | acme/service-a, acme/service-b |
+| `tracker` | Ticketing system, and how to reach it (MCP server, CLI or URL base) | Linear; Jira at `acme.atlassian.net`; GitHub Issues |
+| `tracker_query` | Which tracker issues are in scope: label/team/project and umbrella issues whose children count | Linear label `phoenix`, team Platform, umbrellas PLT-100 and PLT-200 |
+| `source_control` | Source control system, host and org/namespace | github.com/acme; gitlab.example.com/acme; bitbucket.org/acme |
+| `repos` | Repos under `source_control` to check for change requests (read-only; never clone) | service-a, service-b (or acme/service-a, acme/service-b) |
 | `audience` | Who reads it and what that means for tone | Partly non-technical stakeholders |
 | `standing_sections` | Sections that must appear every time, and the message they carry | Keep Blocked every week: most remaining work is waiting on other teams |
 | `counts` | Project-specific tallies to compute and how to count them | New alert rules in PRs under umbrella PLT-200 |
@@ -43,13 +45,13 @@ described in "Interactive vs scheduled".
 Decide which mode applies before starting.
 
 - **Interactive** (a person is in the session): ask once, up front and together, for any
-  required input you cannot find (`channel`, `tracker_query`, `repos`). Offer your best
+  required input you cannot find (`channel`, `tracker`, `tracker_query`, `source_control`, `repos`). Offer your best
   guess for each so they can just confirm. Do not ask about things you can resolve by
   reading the channel or tracker.
 - **Scheduled / unattended** (the prompt says so, or there is no way to get an answer):
   never ask a question and never wait. Proceed with what you have. Every place you would
   have asked becomes a `[CHECK: ...]` marker in the draft and a line in the final reply.
-  If a required input is genuinely absent (no channel, no tracker scope), stop and say
+  If a required input is genuinely absent (no channel, no tracker or tracker scope, no source control), stop and say
   exactly what was missing in the final reply rather than guessing.
 
 In both modes the rules below are identical. Interactive mode just lets the person
@@ -70,20 +72,30 @@ resolve `[CHECK]` items before the draft is saved, if they are there to do it.
 
 ### 2. Read the tracker
 
+Use whatever tooling reaches `tracker` (an MCP server, CLI or API). Map its terms onto the
+ones below: "state" is the workflow status, "Done" is the tracker's completed state,
+"completedAt" is its resolution date.
+
 - List issues in `tracker_query` scope, including children of any umbrella issues.
   Fetch state, completedAt and updatedAt.
 - Read the full issue (not just the list row) for anything Blocked or ambiguous.
 - Tracker output is often large. Save it to a file in the scratchpad and parse it with a
   script rather than reading it raw into context.
 
-### 3. Read GitHub
+### 3. Read source control
 
-- For each repo in `repos`: open and recently merged PRs by `author`, with review state.
+Use whatever tooling reaches `source_control` (an MCP server, the host's CLI such as `gh` or
+`glab`, or its API). "PR" below means the host's change request: pull request, merge
+request, etc.
+
+- For each repo in `repos` (resolved against the `source_control` host and org): open and
+  recently merged PRs by `author`, with review state.
 - **A PR closed without merging is abandoned.** Do not list it under Landed or Out for
   Review. A tracker issue closed to tidy up after an abandoned PR is housekeeping, not a
   landing.
-- If a repo is not in scope for your GitHub tools, attach it with `add_repo` (read-only).
-  Never clone.
+- If a repo is not reachable with your current tools, attach or authorise it read-only by
+  whatever mechanism the host offers (for GitHub in a cloud session, `add_repo`). Never
+  clone.
 
 ### 4. Compute `counts`
 
@@ -167,4 +179,4 @@ Always give:
 3. A short list of every `[CHECK]` item (also left inline in the draft).
 
 In scheduled mode, make the reply self-contained: it may be the only thing anyone reads.
-Do not post anywhere else, do not edit the tracker or GitHub, and do not send the message.
+Do not post anywhere else, do not edit the tracker or source control, and do not send the message.
