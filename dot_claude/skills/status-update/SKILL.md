@@ -36,6 +36,7 @@ described in "Interactive vs scheduled".
 | `source_control` | Source control system, host and org/namespace | github.com/acme; gitlab.example.com/acme; bitbucket.org/acme |
 | `repos` | Repos under `source_control` to check for change requests (read-only; never clone) | service-a, service-b (or acme/service-a, acme/service-b) |
 | `audience` | Who reads it and what that means for tone | Partly non-technical stakeholders |
+| `include_tldr` | Whether to include the `TL; DR:` summary section. Defaults to `true` when not given | `true`, `false` |
 | `standing_sections` | Sections that must appear every time, and the message they carry | Keep Blocked every week: most remaining work is waiting on other teams |
 | `counts` | Project-specific tallies to compute and how to count them | New alert rules in PRs under umbrella PLT-200 |
 | `people` | Names with resolved Slack user ids for mentions | Alex `<@U0000000001>` |
@@ -107,10 +108,12 @@ a dependency exists).
 
 ### 5. Write the update
 
-Sections, in this order. Omit a section only where noted.
+Sections, in this order. Omit a section only where noted. If `include_tldr` is `false`,
+leave out section 2 entirely; do not copy a `TL; DR:` from the previous post, and do not
+mention that it was omitted.
 
 1. First line: the `post_marker` text, exactly.
-2. `TL; DR:` (keep that spelling). 3-5 plain-language bullets: what is built, what is
+2. `TL; DR:` (keep that spelling; only when `include_tldr` is true or not given). 3-5 plain-language bullets: what is built, what is
    waiting on others, any data caveat. No jargon, no ticket IDs.
 3. `Landed:` only what finished **since the last post**: tracker Done after its date, or
    PR merged since. Never repeat earlier Landed items.
