@@ -99,12 +99,18 @@ Implemented using that pattern:
   else on layer 3 stays `Transparent`, so all other keys behave exactly
   as they do on the base layer while the activator is held.
 - **Host side**: `dot_config/skhd/skhdrc` binds `f13`/`f14`/`f15` to
-  `osascript` calls against the three scripts in
-  `dot_config/omnifocus-shortcuts/`, which set the `due date` of the
-  selected OmniFocus item(s) to today / tomorrow / the next working day
-  (Mon–Fri), preserving the existing time-of-day. Requires `brew install
-  skhd` (added to `Brewfile`) and macOS Accessibility permission for
-  `skhd`; start it with `brew services start skhd`.
+  `osascript` calls against
+  `reschedule-selection/reschedule_selection.applescript` from
+  [conallob/omnifocus-scripts](https://github.com/conallob/omnifocus-scripts),
+  installed via the `conallob/tap` Homebrew tap (see `Brewfile.tmpl`) and
+  located through `brew --prefix` at call time. That script sets the
+  `due date` of the selected OmniFocus item(s) to today / tomorrow / the
+  next working day (Mon–Fri), preserving the existing time-of-day.
+  Requires `brew install skhd` and `brew install conallob/tap/omnifocus-scripts`
+  (both added to `Brewfile.tmpl`) plus macOS Accessibility permission for
+  `skhd`; start it with `brew services start skhd`. The AppleScript itself
+  lives in the `omnifocus-scripts` repo, not here, so it can be reused and
+  versioned independently of this keyboard layout.
 
 To revert: restore `layer0[57]` to `ShiftToLayer(2)` and the `layer3[1..3]`
 entries to `Transparent` (git history has the exact prior values), then
