@@ -1,4 +1,0 @@
-[submodule "dot_ssh"]
-	path = dot_ssh
-	url = git@github.com:conallob/ssh.git
-	branch = main
