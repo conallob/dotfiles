@@ -25,9 +25,10 @@ if command -v claude >/dev/null 2>&1 \
   && claude plugin install conall@conallob-dotfiles; then
   echo "setup: installed conall@conallob-dotfiles"
 else
-  echo "setup: plugin install failed, copying skills into ~/.claude/skills instead"
-  mkdir -p ~/.claude/skills
+  echo "setup: plugin install failed, copying skills and commands into ~/.claude instead"
+  mkdir -p ~/.claude/skills ~/.claude/commands
   cp -rL "$repo_dir/dot_claude/skills/." ~/.claude/skills/ || echo "setup: could not copy skills"
+  cp -rL "$repo_dir/dot_claude/commands/." ~/.claude/commands/ || echo "setup: could not copy commands"
 fi
 
 exit 0
