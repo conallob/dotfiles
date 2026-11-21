@@ -16,9 +16,9 @@ exit 0
 ```
 
 It registers the clone as a local marketplace and installs the `conall` plugin (skills appear as
-`/conall:<skill>`), and writes
+`/conall:<skill>`, and the slash commands from `dot_claude/commands/` as `/conall:<command>`), and writes
 `~/.claude/CLAUDE.md` from `CLAUDE.md` in this directory. If the plugin install fails it copies
-`dot_claude/skills/` into `~/.claude/skills/` instead.
+`dot_claude/skills/` and `dot_claude/commands/` into `~/.claude/` instead.
 
 `setup.sh` also includes `gitconfig.claude-ai` from `~/.gitconfig` (`include.path`) and sources
 `bashenv.claude-ai` from `~/.bashrc`. `dot_gitconfig.tmpl` pulls in the same `gitconfig.claude-ai`
