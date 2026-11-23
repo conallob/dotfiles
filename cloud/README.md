@@ -24,7 +24,10 @@ It registers the clone as a local marketplace and installs the `conall` plugin (
 `claude-code-env.sh` (repo root) from `~/.bashrc`. That script loads `shell.d/env.claude-ai`, then
 `shell.d/env.claude-ai.<login username>` if present, and appends them to `CLAUDE_ENV_FILE` when set.
 It can also be fetched and evaluated on its own as a session startup script, falling back to the
-clone in `/opt/conallob-dotfiles` (override with `CLAUDE_DOTFILES_DIR`). `dot_config/git/config.tmpl` pulls in the same `gitconfig.claude-ai`
+clone in `/opt/conallob-dotfiles` (override with `CLAUDE_DOTFILES_DIR`).
+The `conall` plugin's SessionStart hook (`plugins/conall/hooks/claude-code-env.sh`) runs it in the
+session, where `CLAUDE_ENV_FILE` is set, so the variables also reach the commands Claude runs, which
+skip `~/.bashrc`. `dot_config/git/config.tmpl` pulls in the same `gitconfig.claude-ai`
 with chezmoi's `include`, so those git settings are defined once. Keep both files free of
 templating: the VM has no chezmoi.
 
