@@ -1,9 +1,9 @@
 #!/bin/bash
 #
-# Claude-code-env.sh - load my shell environment into a Claude Code cloud session.
+# claude-code-env.sh - load my shell environment into a Claude Code cloud session.
 #
 # Meant to be fetched and evaluated as a session startup script, e.g.
-#   eval "$(curl -fsSL https://raw.githubusercontent.com/conallob/dotfiles/main/Claude-code-env.sh)"
+#   eval "$(curl -fsSL https://raw.githubusercontent.com/conallob/dotfiles/main/claude-code-env.sh)"
 # or sourced from ~/.bashrc. It must not exit the calling shell, so it never calls `exit`.
 #
 # Sources, in order, from shell.d/ in the dotfiles clone:
@@ -26,7 +26,7 @@ claude_code_env() {
     dir="${CLAUDE_DOTFILES_DIR:-/opt/conallob-dotfiles}"
   fi
   if [ ! -d "$dir/shell.d" ]; then
-    echo "Claude-code-env: no shell.d in $dir" >&2
+    echo "claude-code-env: no shell.d in $dir" >&2
     return 0
   fi
 
