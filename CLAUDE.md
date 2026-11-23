@@ -205,7 +205,7 @@ Check a session got the new version: the session's setup list shows a "Ran setup
 ### Gotchas
 
 - The setup script cannot read the environment's saved variables or secrets (e.g. `CLAUDE_AI_GPG_KEY`). The session can.
-- The tool's shell does not source `~/.bashrc`, so `cloud/bashenv.claude-ai` does not reach commands Claude runs. The `conall` plugin's SessionStart hook runs in the session and can, which is why work-account GPG signing lives there.
+- The tool's shell does not source `~/.bashrc`, so `shell.d/env.claude-ai` (loaded by `Claude-code-env.sh`) does not reach commands Claude runs. The `conall` plugin's SessionStart hook runs in the session and can, which is why work-account GPG signing lives there.
 - The harness resets `GIT_CONFIG_*` for each command. Persistent git settings go in the global git config.
 
 ## Important Files
