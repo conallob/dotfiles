@@ -1,0 +1,2 @@
+# Superseded by dot_config/git/config.tmpl (~/.config/git/config); git would otherwise merge both
+.gitconfig
