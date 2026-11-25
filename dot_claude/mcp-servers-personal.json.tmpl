@@ -29,11 +29,25 @@
     "TOSHL_TOKEN": "{{- (onepasswordDetailsFields "toshl-api-token").credential.value }}"
   }
 },
-"jetkvm": {
+"jetkvm-homelab-ctrl-1": {
   "command": "/opt/homebrew/bin/mcp-jetkvm",
   "env": {
     "JETKVM_HOST": "{{- (onepasswordDetailsFields "iezautmwtooqxovmvtkssl5z4a").hostname.value }}",
     "JETKVM_PASSWORD": "{{- (onepasswordDetailsFields "iezautmwtooqxovmvtkssl5z4a").credential.value }}"
+  }
+},
+"jetkvm-homelab-ctrl-2": {
+  "command": "/opt/homebrew/bin/mcp-jetkvm",
+  "env": {
+    "JETKVM_HOST": "{{- (onepasswordDetailsFields "lmpnjnmjeiod65us6lllqyt3rm").hostname.value }}",
+    "JETKVM_PASSWORD": "{{- (onepasswordDetailsFields "lmpnjnmjeiod65us6lllqyt3rm").credential.value }}"
+  }
+},
+"jetkvm-homelab-ctrl-3": {
+  "command": "/opt/homebrew/bin/mcp-jetkvm",
+  "env": {
+    "JETKVM_HOST": "{{- (onepasswordDetailsFields "mfl67luikesid6znykliffhsvu").hostname.value }}",
+    "JETKVM_PASSWORD": "{{- (onepasswordDetailsFields "mfl67luikesid6znykliffhsvu").credential.value }}"
   }
 },
 "superlogical": {

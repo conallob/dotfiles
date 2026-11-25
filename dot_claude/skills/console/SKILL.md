@@ -2,8 +2,8 @@
 name: console
 description: |
   Access the terminal/console of a local or remote machine. Picks the right
-  method from five options: mcp-ssh-wingman (SSH), mcp-jetkvm (KVM over IP for
-  lab-ctrl-1), mcp-redfish (Serial-Over-LAN via BMC), ser2net (UART over network),
+  method from five options: mcp-ssh-wingman (SSH), mcp-jetkvm (KVM over IP via one
+  of the homelab-ctrl JetKVMs), mcp-redfish (Serial-Over-LAN via BMC), ser2net (UART over network),
   or screen on a local USB serial device. Use when you need a shell, serial
   console, SOL session, or out-of-band access to any node.
 user-invocable: true
@@ -24,9 +24,9 @@ Work through these questions in order — stop at the first match.
 2. Does the machine have a BMC (iDRAC, iLO, IPMI, Redfish)?
    → mcp-redfish  (Serial-Over-LAN)
 
-3. Is the target lab-ctrl-1 / 192.168.6.200, or do you need
-   KVM / BIOS / pre-boot access to that machine?
-   → mcp-jetkvm
+3. Is the target attached to a homelab JetKVM (lab-ctrl-1 / 192.168.6.200 or
+   another jetkvm-homelab-ctrl-N), or do you need KVM / BIOS / pre-boot access?
+   → mcp-jetkvm (pick the right JetKVM server, see below)
 
 4. Is it a homelab node with a UART port wired to a ser2net server?
    → ser2net
@@ -56,11 +56,23 @@ The `mcp-ssh-wingman` MCP server manages SSH sessions. It uses the session name
 
 ### mcp-jetkvm — KVM over IP
 
-**Use for:** lab-ctrl-1 (`192.168.6.200`), or any machine that needs keyboard/
-video/mouse access (BIOS, boot menu, OS installer, hung console).
+**Use for:** machines attached to a homelab JetKVM (lab-ctrl-1 is
+`192.168.6.200`), or any machine that needs keyboard/video/mouse access (BIOS,
+boot menu, OS installer, hung console).
 
-The `mcp-jetkvm` MCP server connects to the JetKVM device. Credentials are
-injected via 1Password at apply time.
+`mcp-jetkvm` talks to one JetKVM per server instance, so each JetKVM is its own
+MCP server. Hostname and password come from 1Password at apply time
+(`dot_claude/mcp-servers-personal.json.tmpl`):
+
+| MCP server | JetKVM |
+|---|---|
+| `jetkvm-homelab-ctrl-1` | homelab ctrl 1 |
+| `jetkvm-homelab-ctrl-2` | homelab ctrl 2 |
+| `jetkvm-homelab-ctrl-3` | homelab ctrl 3 |
+
+Use only the server for the JetKVM that is attached to the target machine. If
+you don't know which JetKVM that is, ask the user: never try each one in turn,
+since a keystroke sent to the wrong machine is not harmless.
 
 Key capabilities:
 - Send keystrokes (including Ctrl-Alt-Del, function keys, arrow keys)
