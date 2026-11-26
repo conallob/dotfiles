@@ -14,3 +14,6 @@ cloud
 {{ if ne .chezmoi.os "darwin" -}}
 Library
 {{ end -}}
+
+# Legacy ssh helper scripts kept for history; not deployed to ~/.ssh
+.ssh/coding
