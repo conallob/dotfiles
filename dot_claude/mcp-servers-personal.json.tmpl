@@ -32,8 +32,13 @@
 "jetkvm": {
   "command": "/opt/homebrew/bin/mcp-jetkvm",
   "env": {
-    "JETKVM_HOST": "{{- (onepasswordDetailsFields "iezautmwtooqxovmvtkssl5z4a").hostname.value }}",
-    "JETKVM_PASSWORD": "{{- (onepasswordDetailsFields "iezautmwtooqxovmvtkssl5z4a").credential.value }}"
+    "JETKVM_DEVICES": "homelab-ctrl-1,homelab-ctrl-2,homelab-ctrl-3",
+    "JETKVM_HOMELAB_CTRL_1_HOST": "{{- (onepasswordDetailsFields "iezautmwtooqxovmvtkssl5z4a" "fl33eg5ivoh6lbdazliyisrg54").hostname.value }}",
+    "JETKVM_HOMELAB_CTRL_1_PASSWORD": "{{- (onepasswordDetailsFields "iezautmwtooqxovmvtkssl5z4a" "fl33eg5ivoh6lbdazliyisrg54").credential.value }}",
+    "JETKVM_HOMELAB_CTRL_2_HOST": "{{- (onepasswordDetailsFields "lmpnjnmjeiod65us6lllqyt3rm" "fl33eg5ivoh6lbdazliyisrg54").hostname.value }}",
+    "JETKVM_HOMELAB_CTRL_2_PASSWORD": "{{- (onepasswordDetailsFields "lmpnjnmjeiod65us6lllqyt3rm" "fl33eg5ivoh6lbdazliyisrg54").credential.value }}",
+    "JETKVM_HOMELAB_CTRL_3_HOST": "{{- (onepasswordDetailsFields "mfl67luikesid6znykliffhsvu" "fl33eg5ivoh6lbdazliyisrg54").hostname.value }}",
+    "JETKVM_HOMELAB_CTRL_3_PASSWORD": "{{- (onepasswordDetailsFields "mfl67luikesid6znykliffhsvu" "fl33eg5ivoh6lbdazliyisrg54").credential.value }}"
   }
 },
 "superlogical": {
