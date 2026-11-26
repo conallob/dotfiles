@@ -60,19 +60,25 @@ The `mcp-ssh-wingman` MCP server manages SSH sessions. It uses the session name
 `192.168.6.200`), or any machine that needs keyboard/video/mouse access (BIOS,
 boot menu, OS installer, hung console).
 
-`mcp-jetkvm` talks to one JetKVM per server instance, so each JetKVM is its own
-MCP server. Hostname and password come from 1Password at apply time
-(`dot_claude/mcp-servers-personal.json.tmpl`):
+One `jetkvm` MCP server covers all the homelab JetKVMs. Their hostnames and
+passwords come from 1Password at apply time
+(`dot_claude/mcp-servers-personal.json.tmpl`), each under its own ID:
 
-| MCP server | JetKVM |
+| `kvm` argument | JetKVM |
 |---|---|
-| `jetkvm-homelab-ctrl-1` | homelab ctrl 1 |
-| `jetkvm-homelab-ctrl-2` | homelab ctrl 2 |
-| `jetkvm-homelab-ctrl-3` | homelab ctrl 3 |
+| `homelab-ctrl-1` | homelab ctrl 1 |
+| `homelab-ctrl-2` | homelab ctrl 2 |
+| `homelab-ctrl-3` | homelab ctrl 3 |
 
-Use only the server for the JetKVM that is attached to the target machine. If
-you don't know which JetKVM that is, ask the user: never try each one in turn,
+Every tool takes a `kvm` argument naming the JetKVM to act on, and it is
+required because more than one is configured. The `list_devices` tool shows the
+configured IDs. Use only the ID of the JetKVM attached to the target machine.
+If you don't know which that is, ask the user: never try each one in turn,
 since a keystroke sent to the wrong machine is not harmless.
+
+This needs an `mcp-jetkvm` release with several-device support (the
+`JETKVM_DEVICES` setting); an older binary ignores it and reports that
+`JETKVM_HOST` is required.
 
 Key capabilities:
 - Send keystrokes (including Ctrl-Alt-Del, function keys, arrow keys)
