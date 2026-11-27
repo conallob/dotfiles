@@ -1,6 +1,29 @@
+#!/bin/bash
+# chezmoi modify script for ~/.claude/settings.json.
+#
+# Claude Code rewrites this file itself (permissions, plugins it installs,
+# changes made with /config, ...), so chezmoi manages only part of it and leaves
+# the rest as the app wrote it. chezmoi feeds the current file on stdin and
+# takes the new contents from stdout.
+#
+# - enabledPlugins, extraKnownMarketplaces and env: the managed entries are
+#   merged over the live ones. A managed entry wins on conflict; entries added
+#   by hand or by the app are kept.
+# - hooks: each event listed below is replaced by the managed list, and events
+#   not listed here are kept.
+# - $schema and alwaysThinkingEnabled: set only when the file has no value, so
+#   a change made in the app sticks.
+# - Removing an entry from this file does NOT remove it from the live file;
+#   delete it there by hand.
+#
+# https://www.chezmoi.io/user-guide/manage-different-types-of-file/#manage-part-but-not-all-of-a-file
+set -euo pipefail
+
+MANAGED=$(mktemp)
+trap 'rm -f "$MANAGED"' EXIT
+
+cat > "$MANAGED" << 'MANAGEDEOF'
 {
-  "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  "alwaysThinkingEnabled": false,
   "enabledPlugins": {
     {{- /* Github API plugin */}}
     "github@claude-plugins-official": true,
@@ -66,13 +89,13 @@
     ],
     "PreCompact": [
       {
+        "matcher": "",
         "hooks": [
           {
-            "command": "bd prime",
-            "type": "command"
+            "type": "command",
+            "command": "bd prime"
           }
-        ],
-        "matcher": ""
+        ]
       }
     ],
     {{- /* Re-inject CLAUDE.md after context compaction to restore critical instructions */}}
@@ -89,14 +112,26 @@
     ],
     "SessionStart": [
       {
+        "matcher": "",
         "hooks": [
           {
-            "command": "bd prime",
-            "type": "command"
+            "type": "command",
+            "command": "bd prime"
           }
-        ],
-        "matcher": ""
+        ]
       }
     ]
   }
 }
+MANAGEDEOF
+
+INPUT=$(cat)
+[ -z "$INPUT" ] && INPUT="{}"
+echo "$INPUT" | jq --indent 2 \
+  --slurpfile managed "$MANAGED" \
+  '$managed[0] as $m
+   | {"$schema": "https://json.schemastore.org/claude-code-settings.json", "alwaysThinkingEnabled": false} + .
+   | .enabledPlugins = ((.enabledPlugins // {}) + $m.enabledPlugins)
+   | .extraKnownMarketplaces = ((.extraKnownMarketplaces // {}) + $m.extraKnownMarketplaces)
+   | .env = ((.env // {}) + $m.env)
+   | .hooks = ((.hooks // {}) + $m.hooks)'

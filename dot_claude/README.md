@@ -9,9 +9,22 @@ This directory contains unified configuration for both **Claude Code** (CLI) and
 | File | Purpose | Used By |
 |------|---------|---------|
 | `config.json.tmpl` | MCP servers + LSP configuration | Claude Code (CLI) |
-| `settings.json.tmpl` | Basic CLI settings | Claude Code (CLI) |
+| `modify_settings.json.tmpl` | Basic CLI settings (modify script: manages only `enabledPlugins`, `extraKnownMarketplaces`, `env` and some `hooks`) | Claude Code (CLI) |
 | `plugins/config.json.tmpl` | Plugin-specific settings | Claude Code plugins |
 | `../Library/.../modify_private_claude_desktop_config.json.tmpl` | MCP server configuration (modify script: manages only `mcpServers`) | Claude Desktop (GUI) |
+
+### `settings.json` is managed in part
+
+Claude Code rewrites `~/.claude/settings.json` itself (permissions, plugins it installs, `/config` changes), so `modify_settings.json.tmpl` is a [chezmoi modify script](https://www.chezmoi.io/user-guide/manage-different-types-of-file/#manage-part-but-not-all-of-a-file) and not a whole-file template. A whole-file template made `chezmoi apply` stop with "`.claude/settings.json` has changed since chezmoi last wrote it?" whenever the app had edited the file. The script merges into the live file:
+
+- `enabledPlugins`, `extraKnownMarketplaces` and `env`: the managed entries are merged over the live ones. A managed entry wins on conflict; entries added by hand or by the app are kept.
+- `hooks`: each event the script lists is replaced by the managed list; other events are kept.
+- `$schema` and `alwaysThinkingEnabled`: set only when the file has no value, so a change made in the app sticks.
+- Everything else (`permissions`, `model`, ...) is left as the app wrote it.
+
+Removing an entry from the script does not remove it from the live file; delete it there by hand. An existing file that is not valid JSON makes `chezmoi apply` fail rather than overwrite it.
+
+Preview with `chezmoi diff ~/.claude/settings.json`, or the full result with `chezmoi cat ~/.claude/settings.json`.
 
 ### Shared MCP Server Templates
 
@@ -22,7 +35,7 @@ This directory contains unified configuration for both **Claude Code** (CLI) and
 
 ### Skill Marketplace Templates
 
-The `extraKnownMarketplaces` block in `settings.json.tmpl` is assembled from two partials, the same way the MCP servers are:
+The `extraKnownMarketplaces` block in `modify_settings.json.tmpl` is assembled from two partials, the same way the MCP servers are:
 
 | File | Description |
 |------|-------------|
